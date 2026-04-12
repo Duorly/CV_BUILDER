@@ -485,32 +485,6 @@ input[type="range"] {
   background: #fef2f2;
 }
 
-@media print {
-
-  .no-print,
-  .editor-sidebar,
-  .controls {
-    display: none !important;
-  }
-
-  .app-container {
-    padding: 0;
-    background: white;
-  }
-
-  .main-layout {
-    display: block;
-    max-width: none;
-    padding: 0;
-  }
-
-  .resume-container {
-    box-shadow: none;
-    margin: 0;
-    width: 100%;
-    transform: none !important;
-  }
-}
 
 
 .print-btn:hover {
@@ -806,37 +780,60 @@ h1 {
 
 /* Print Overrides */
 @media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100%;
+    overflow: hidden !important;
+  }
+
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .no-print {
+  .no-print, 
+  .editor-sidebar, 
+  .controls, 
+  .action-buttons {
     display: none !important;
   }
 
-  body {
-    background: none;
-    padding: 0;
-  }
-
   .app-container {
-    padding: 0;
-  }
-
-  .resume-container {
-    box-shadow: none;
-    margin: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white;
     width: 210mm;
     height: 297mm;
   }
 
-  .sidebar {
-    background-color: var(--sidebar-bg) !important;
+  .main-layout {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
-  @page {
-    size: A4;
-    margin: 0;
+  .resume-container {
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    border: none !important;
+    transform: none !important;
+    padding-right: 5mm !important; /* Safety margin for certain printers */
+  }
+
+  .sidebar {
+    background-color: var(--sidebar-bg) !important;
+    -webkit-print-color-adjust: exact;
   }
 }
