@@ -1,0 +1,112 @@
+{
+  "personalInfo": {
+    "name": "Duorli Réjouis Nebel MASSENGO",
+    "title": "Développeur Full Stack",
+    "email": "nebel.mass@gmail.com",
+    "phone": "+33 7 75 72 55 82",
+    "location": "Andrésy",
+    "objective": "Développeur Full Stack expérimenté avec 5 ans d'expérience, expert en technologies front-end (VueJS, React, Nuxt) et back-end (NestJS, Laravel), ainsi qu'en intégration cloud (AWS, Google Cloud) et déploiement CI/CD. Passionné de création et d'innovation technologique."
+  },
+  "mainSkills": [
+    "Vue.js",
+    "React.js",
+    "Laravel",
+    "Symfony",
+    "NestJS",
+    "Méthodologie Scrum",
+    "Java",
+    "Framework Spring"
+  ],
+  "socialLinks": [
+    {
+      "name": "Linkedin",
+      "url": "https://linkedin.com/in/nebel-mass/",
+      "label": "linkedin.com/in/nebel-mass/",
+      "icon": "Link"
+    },
+    {
+      "name": "Github",
+      "url": "https://github.com/Duorly",
+      "label": "github.com/Duorly",
+      "icon": "CodeXml"
+    }
+  ],
+  "languages": [
+    {
+      "name": "Anglais",
+      "level": "Intermédiaire (B1-B2)"
+    },
+    {
+      "name": "Français",
+      "level": "Langue maternelle"
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Apprenti expert en informatique",
+      "company": "Xksgroup",
+      "location": "Andrésy",
+      "period": "10/2024 - Présent",
+      "details": [
+        "Conception architecturale et analyse technique approfondie suivies de révisions de code.",
+        "Maîtrise de la dette technique via des choix technologiques stratégiques.",
+        "Mentorat des collègues sur les optimisations de performance et l'automatisation des tests.",
+        "Création et maintenance de la documentation technique et coordination d'équipes multidisciplinaires.",
+        "Utilisation de technologies telles que NestJS, NextJS, Laravel, AWS, MariaDB et Tailwind."
+      ]
+    },
+    {
+      "title": "Tech Lead Backend",
+      "company": "Faseya",
+      "location": "Sénégal",
+      "period": "05/2024 - 09/2024",
+      "details": [
+        "Conception architecturale et revue de code approfondie.",
+        "Gestion proactive de la dette technique et pilotage des orientations technologiques.",
+        "Mentorat des équipes, optimisation des performances système.",
+        "Automatisation des processus de tests, résolution efficace des incidents.",
+        "Rédaction de documentation technique, veille continue et coordination d'équipe.",
+        "Développement backend et gestion de l'infrastructure cloud AWS.",
+        "Maîtrise des technologies NestJS, NextJS, AWS, MariaDB, Tailwind."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "title": "Architecte Logiciel",
+      "school": "OpenClassrooms",
+      "degree": "Diplôme de niveau 7 (bac +5)",
+      "period": "À venir",
+      "objectives": [
+        "Analyser les besoins et auditer une architecture",
+        "Concevoir et présenter des solutions d'architecture",
+        "Définir une roadmap et gérer la dette technique",
+        "Développer un POC pour valider une solution",
+        "Piloter l'évolution et la gouvernance d'un projet"
+      ],
+      "tools": [
+        "Git / GitHub",
+        "Archi",
+        "Java",
+        "Gestion de projet Gantt",
+        "Trello",
+        "TOGAF"
+      ],
+      "link": "#"
+    },
+    {
+      "title": "EXPERT LEAD DÉVELOPPEUR FULLSTACK",
+      "school": "ITIC Paris",
+      "degree": "Bac +5",
+      "period": "09/2026",
+      "details": []
+    },
+    {
+      "title": "DEVELOPPEUR CONCEPTEUR LOGICIEL",
+      "school": "OpenClassrooms",
+      "degree": "Bac +3/4",
+      "period": "12/2023",
+      "details": []
+    }
+  ]
+}
