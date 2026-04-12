@@ -17,7 +17,7 @@ const Resume = ({ data }) => {
             <aside className="sidebar">
                 <div className="profile-section">
                     <div className="profile-img">
-                        <img src={photo} alt={personalInfo.name} />
+                         <img src={photo} alt={personalInfo.name} />
                     </div>
                     <h1>{personalInfo.name}</h1>
                     <div className="contact-info">
@@ -33,6 +33,17 @@ const Resume = ({ data }) => {
                             <span key={index} className="tag">{skill}</span>
                         ))}
                     </div>
+                </section>
+
+                <section className="sidebar-section">
+                    <h2>Soft Skills</h2>
+                    <ul className="soft-skills-list">
+                        {data.softSkills && data.softSkills.map((skill, index) => (
+                            <li key={index}>
+                                <Icon name="CheckCircle2" size={14} className="icon-inline" /> {skill}
+                            </li>
+                        ))}
+                    </ul>
                 </section>
 
                 <section className="sidebar-section">

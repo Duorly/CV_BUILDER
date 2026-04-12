@@ -16,6 +16,72 @@ function App() {
     window.print();
   };
 
+  const handleDownloadPDF = () => {
+    const element = document.querySelector('.resume-container');
+    
+    // Inject current variable values DIRECTLY into the element style so html2canvas sees them
+    element.style.setProperty('--font-scale', fontScale);
+    element.style.setProperty('--primary-color', primaryColor);
+    element.style.setProperty('--sidebar-bg', sidebarBg);
+    element.style.setProperty('--text-dark', textColor);
+
+    const opt = {
+      margin: 0,
+      filename: 'mon_cv.pdf',
+      image: { type: 'png', quality: 1 },
+      html2canvas: { 
+        scale: 5, 
+        useCORS: true,
+        letterRendering: true,
+        allowTaint: true,
+        logging: false,
+        imageTimeout: 0
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Charger dynamiquement html2pdf si non présent
+    const generate = (lib) => {
+      lib().set(opt).from(element).save().then(() => {
+        // Optionnel: nettoyer les styles injectés si nécessaire
+      });
+    };
+
+    if (window.html2pdf) {
+      generate(window.html2pdf);
+    } else {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+      script.onload = () => {
+        generate(window.html2pdf);
+      };
+      document.head.appendChild(script);
+    }
+  };
+
+  const handleExport = () => {
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify(data, null, 2)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = "cv_data.json";
+    link.click();
+  };
+
+  const handleImport = (e) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = (e) => {
+      try {
+        const json = JSON.parse(e.target.result);
+        setData(json);
+      } catch (err) {
+        alert("Erreur lors de la lecture du fichier JSON");
+      }
+    };
+  };
+
   return (
     <div 
       className={`app-container ${showEditor ? 'with-editor' : ''}`} 
@@ -55,12 +121,33 @@ function App() {
           </div>
         </div>
 
+        <div className="action-buttons">
+          <input
+            type="file"
+            id="json-import"
+            accept=".json"
+            style={{ display: 'none' }}
+            onChange={handleImport}
+          />
+          <button onClick={() => document.getElementById('json-import').click()} className="secondary-btn icon-btn" title="Importer un fichier JSON">
+            <span>Importer JSON</span>
+          </button>
+          
+          <button onClick={handleExport} className="secondary-btn icon-btn" title="Exporter les données en JSON">
+             <span>Exporter JSON</span>
+          </button>
+        </div>
+
         <button onClick={() => setShowEditor(!showEditor)} className="secondary-btn">
           {showEditor ? 'Masquer éditeur' : 'Afficher éditeur'}
         </button>
 
-        <button onClick={handlePrint} className="print-btn">
-          Exporter en PDF
+        <button onClick={handlePrint} className="secondary-btn">
+          Impression A4
+        </button>
+
+        <button onClick={handleDownloadPDF} className="print-btn">
+          Direct PDF
         </button>
       </div>
       
