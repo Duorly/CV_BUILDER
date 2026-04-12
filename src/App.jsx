@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import Resume from './components/Resume'
+import Editor from './components/Editor'
+import initialData from './data/resumeData.json'
 import './App.css'
 
 function App() {
+  const [data, setData] = useState(initialData);
   const [fontScale, setFontScale] = useState(0.8);
   const [primaryColor, setPrimaryColor] = useState('#2563eb');
   const [sidebarBg, setSidebarBg] = useState('#f9fafb');
   const [textColor, setTextColor] = useState('#111827');
+  const [showEditor, setShowEditor] = useState(true);
 
   const handlePrint = () => {
     window.print();
@@ -14,7 +18,7 @@ function App() {
 
   return (
     <div 
-      className="app-container" 
+      className={`app-container ${showEditor ? 'with-editor' : ''}`} 
       style={{ 
         '--font-scale': fontScale,
         '--primary-color': primaryColor,
@@ -51,12 +55,21 @@ function App() {
           </div>
         </div>
 
+        <button onClick={() => setShowEditor(!showEditor)} className="secondary-btn">
+          {showEditor ? 'Masquer éditeur' : 'Afficher éditeur'}
+        </button>
+
         <button onClick={handlePrint} className="print-btn">
           Exporter en PDF
         </button>
       </div>
       
-      <Resume />
+      <div className="main-layout">
+        {showEditor && (
+          <Editor data={data} setData={setData} />
+        )}
+        <Resume data={data} />
+      </div>
     </div>
   )
 }

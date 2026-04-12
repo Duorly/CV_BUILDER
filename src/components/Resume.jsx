@@ -1,10 +1,9 @@
-import React from 'react';
 import photo from '../images/photo-cv.jpg';
-import resumeData from '../data/resumeData.json';
 import * as Icons from 'lucide-react';
 
-const Resume = () => {
-    const { personalInfo, mainSkills, socialLinks, languages, experiences, education } = resumeData;
+const Resume = ({ data }) => {
+    if (!data) return null;
+    const { personalInfo, mainSkills, socialLinks, languages, experiences, education } = data;
 
     // Helper to render Lucide icons dynamically
     const Icon = ({ name, size = 12, className = "icon" }) => {
