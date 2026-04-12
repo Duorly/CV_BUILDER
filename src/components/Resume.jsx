@@ -27,12 +27,17 @@ const Resume = ({ data }) => {
                 </div>
 
                 <section className="sidebar-section">
-                    <h2>Compétences principales</h2>
-                    <div className="tag-cloud">
-                        {mainSkills.map((skill, index) => (
-                            <span key={index} className="tag">{skill}</span>
-                        ))}
-                    </div>
+                    <h2>Compétences Techniques</h2>
+                    {mainSkills.map((group, index) => (
+                        <div key={index} className="skills-category-group">
+                            <h3 className="sidebar-sub-title">{group.category}</h3>
+                            <div className="tag-cloud">
+                                {group.skills.map((skill, sIdx) => (
+                                    <span key={sIdx} className="tag">{skill}</span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </section>
 
                 <section className="sidebar-section">

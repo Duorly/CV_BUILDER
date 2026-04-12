@@ -12,9 +12,26 @@ const Editor = ({ data, setData }) => {
         });
     };
 
-    const handleSkillsChange = (e) => {
-        const skillsArray = e.target.value.split(',').map(skill => skill.trim());
-        setData({ ...data, mainSkills: skillsArray });
+    const handleSkillsChange = (categoryIndex, value) => {
+        const newMainSkills = [...data.mainSkills];
+        newMainSkills[categoryIndex].skills = value.split(',').map(s => s.trim());
+        setData({ ...data, mainSkills: newMainSkills });
+    };
+
+    const handleCategoryNameChange = (categoryIndex, value) => {
+        const newMainSkills = [...data.mainSkills];
+        newMainSkills[categoryIndex].category = value;
+        setData({ ...data, mainSkills: newMainSkills });
+    };
+
+    const addSkillCategory = () => {
+        const newMainSkills = [...data.mainSkills, { category: "Nouvelle catégorie", skills: ["Compétence"] }];
+        setData({ ...data, mainSkills: newMainSkills });
+    };
+
+    const removeSkillCategory = (index) => {
+        const newMainSkills = data.mainSkills.filter((_, i) => i !== index);
+        setData({ ...data, mainSkills: newMainSkills });
     };
 
     const handleSoftSkillsChange = (e) => {
@@ -169,18 +186,39 @@ const Editor = ({ data, setData }) => {
             </div>
 
             <div className="editor-section">
-                <div className="section-header-icon">
-                    <Award size={18} className="header-icon" />
-                    <h3>Compétences Techniques</h3>
+                <div className="section-header-flex section-header-icon">
+                    <div className="title-with-icon">
+                        <Award size={18} className="header-icon" />
+                        <h3>Compétences Techniques</h3>
+                    </div>
+                    <button className="add-btn-round" onClick={addSkillCategory} title="Ajouter une catégorie">
+                        <Plus size={16} />
+                    </button>
                 </div>
-                <div className="form-group">
-                    <p className="field-hint">Séparez par des virgules</p>
-                    <textarea 
-                        rows="3"
-                        value={data.mainSkills.join(', ')} 
-                        onChange={handleSkillsChange} 
-                    />
-                </div>
+
+                {data.mainSkills.map((categoryGroup, index) => (
+                    <div key={index} className="editor-item-box elegant mini-box">
+                        <div className="item-controls-top">
+                             <input 
+                                type="text" 
+                                className="item-label-input"
+                                value={categoryGroup.category} 
+                                onChange={(e) => handleCategoryNameChange(index, e.target.value)} 
+                            />
+                            <button className="remove-btn-icon" onClick={() => removeSkillCategory(index)}>
+                                <Trash2 size={12} />
+                            </button>
+                        </div>
+                        <div className="form-group no-margin">
+                             <p className="field-hint">Séparez par des virgules</p>
+                             <textarea 
+                                rows="2"
+                                value={categoryGroup.skills.join(', ')} 
+                                onChange={(e) => handleSkillsChange(index, e.target.value)} 
+                            />
+                        </div>
+                    </div>
+                ))}
             </div>
 
             <div className="editor-section">

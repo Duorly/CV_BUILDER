@@ -635,9 +635,46 @@ h1 {
   color: var(--text-medium);
 }
 
-.soft-skills-list li .icon-inline {
+.sidebar-sub-title {
+  font-size: calc(0.7rem * var(--font-scale));
+  text-transform: uppercase;
+  color: var(--text-light);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  margin-top: 15px;
+}
+
+.skills-category-group {
+  margin-bottom: 20px;
+}
+
+/* Editor additions */
+.mini-box {
+  padding: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+.item-label-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed #d1d5db;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--primary-color);
-  opacity: 0.8;
+  text-transform: uppercase;
+  padding: 2px 0;
+  width: auto;
+  outline: none;
+}
+
+.item-label-input:focus {
+  border-bottom-color: var(--primary-color);
+  background: #f9fafb;
+}
+
+.no-margin {
+  margin-bottom: 0 !important;
 }
 
 .social-links li,

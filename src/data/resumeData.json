@@ -8,14 +8,18 @@
     "objective": "Développeur Full Stack expérimenté avec 5 ans d'expérience, expert en technologies front-end (VueJS, React, Nuxt) et back-end (NestJS, Laravel), ainsi qu'en intégration cloud (AWS, Google Cloud) et déploiement CI/CD. Passionné de création et d'innovation technologique."
   },
   "mainSkills": [
-    "Vue.js",
-    "React.js",
-    "Laravel",
-    "Symfony",
-    "NestJS",
-    "Méthodologie Scrum",
-    "Java",
-    "Framework Spring"
+    {
+      "category": "Frontend",
+      "skills": ["Vue.js", "React.js", "TypeScript", "Tailwind CSS"]
+    },
+    {
+      "category": "Backend",
+      "skills": ["Laravel", "NestJS", "Symfony", "Node.js", "Java", "Spring Boot"]
+    },
+    {
+      "category": "Cloud & DevOps",
+      "skills": ["AWS", "Google Cloud", "Docker", "CI/CD"]
+    }
   ],
   "softSkills": [
     "Travail en équipe",
