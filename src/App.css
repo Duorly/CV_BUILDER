@@ -528,7 +528,13 @@ input[type="range"] {
   justify-content: center;
 }
 
-/* profile photo rendered via background-image — no img tag needed */
+.profile-img img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+}
 
 /* Dynamic Scaling using var(--font-scale) */
 h1 {
