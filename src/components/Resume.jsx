@@ -16,9 +16,14 @@ const Resume = ({ data }) => {
         <div className="resume-container">
             <aside className="sidebar">
                 <div className="profile-section">
-                    <div className="profile-img">
-                         <img src={photo} alt={personalInfo.name} />
-                    </div>
+                    <div
+                        className="profile-img"
+                        style={{
+                            backgroundImage: `url(${photo})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                        }}
+                    />
                     <h1>{personalInfo.name}</h1>
                     <div className="contact-info">
                         <p><Icon name="Mail" /> <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></p>
