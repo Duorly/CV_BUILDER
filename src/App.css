@@ -590,6 +590,11 @@ h1 {
   color: #374151;
 }
 
+.skills-category-group .tag {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
 .social-links,
 .lang-list {
   list-style: none;
@@ -608,6 +613,10 @@ h1 {
   gap: 8px;
   font-size: calc(0.78rem * var(--font-scale));
   color: var(--text-medium);
+}
+
+.soft-skills-list li .icon-inline {
+  color: var(--primary-color);
 }
 
 .sidebar-sub-title {
