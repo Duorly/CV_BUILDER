@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { Sparkles } from 'lucide-react'
 import Resume from './components/Resume'
 import Editor from './components/Editor'
+import ATSOptimizer from './components/ATSOptimizer'
 import initialData from './data/resumeData.json'
 import './App.css'
 
@@ -11,6 +13,7 @@ function App() {
   const [sidebarBg, setSidebarBg] = useState('#f9fafb');
   const [textColor, setTextColor] = useState('#111827');
   const [showEditor, setShowEditor] = useState(true);
+  const [showATSOptimizer, setShowATSOptimizer] = useState(false);
 
   const handlePrint = () => {
     window.print();
@@ -149,8 +152,25 @@ function App() {
         <button onClick={handleDownloadPDF} className="print-btn">
           Direct PDF
         </button>
+
+        <button
+          onClick={() => setShowATSOptimizer(true)}
+          className="ats-trigger-btn"
+          title="Optimiser le CV pour une offre d'emploi via IA"
+        >
+          <Sparkles size={15} />
+          Optimiser pour l'offre
+        </button>
       </div>
-      
+
+      {showATSOptimizer && (
+        <ATSOptimizer
+          data={data}
+          setData={setData}
+          onClose={() => setShowATSOptimizer(false)}
+        />
+      )}
+
       <div className="main-layout">
         {showEditor && (
           <Editor data={data} setData={setData} />
