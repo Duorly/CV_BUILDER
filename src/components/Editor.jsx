@@ -149,6 +149,29 @@ const Editor = ({ data, setData }) => {
         setData({ ...data, education: newEducation });
     };
 
+    const updateCertification = (index, field, value) => {
+        const newCertifications = [...(data.certifications || [])];
+        newCertifications[index] = { ...newCertifications[index], [field]: value };
+        setData({ ...data, certifications: newCertifications });
+    };
+
+    const addCertification = () => {
+        const newCertifications = [
+            {
+                name: "Nouvelle certification",
+                issuer: "Organisme",
+                date: "2024"
+            },
+            ...(data.certifications || [])
+        ];
+        setData({ ...data, certifications: newCertifications });
+    };
+
+    const removeCertification = (index) => {
+        const newCertifications = data.certifications.filter((_, i) => i !== index);
+        setData({ ...data, certifications: newCertifications });
+    };
+
     return (
         <aside className="editor-sidebar no-print">
             <div className="editor-header">
@@ -508,6 +531,55 @@ const Editor = ({ data, setData }) => {
                                 </div>
                             </div>
                         )}
+                    </div>
+                ))}
+            </div>
+            <div className="editor-section">
+                <div className="section-header-flex section-header-icon">
+                    <div className="title-with-icon">
+                        <Award size={18} className="header-icon" />
+                        <h3>Certifications</h3>
+                    </div>
+                    <button className="add-btn-round" onClick={addCertification} title="Ajouter une certification">
+                        <Plus size={16} />
+                    </button>
+                </div>
+                {(data.certifications || []).map((cert, index) => (
+                    <div key={index} className="editor-item-box elegant mini-box">
+                        <div className="item-controls-top">
+                            <span className="item-label">CERTIFICATION {index + 1}</span>
+                            <button className="remove-btn-icon" onClick={() => removeCertification(index)} title="Supprimer la certification">
+                                <Trash2 size={12} />
+                            </button>
+                        </div>
+
+                        <div className="form-group mini">
+                            <label>Nom de la certification</label>
+                            <input
+                                type="text"
+                                value={cert.name}
+                                onChange={(e) => updateCertification(index, 'name', e.target.value)}
+                            />
+                        </div>
+
+                        <div className="editor-grid">
+                            <div className="form-group mini">
+                                <label>Organisme émetteur</label>
+                                <input
+                                    type="text"
+                                    value={cert.issuer}
+                                    onChange={(e) => updateCertification(index, 'issuer', e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group mini">
+                                <label>Date</label>
+                                <input
+                                    type="text"
+                                    value={cert.date}
+                                    onChange={(e) => updateCertification(index, 'date', e.target.value)}
+                                />
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>

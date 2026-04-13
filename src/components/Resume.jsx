@@ -76,6 +76,23 @@ const Resume = ({ data }) => {
                         ))}
                     </ul>
                 </section>
+
+                {data.certifications && data.certifications.length > 0 && (
+                    <section className="sidebar-section">
+                        <h2>Certifications</h2>
+                        <ul className="social-links">
+                            {data.certifications.map((cert, index) => (
+                                <li key={index} className="cert-item">
+                                    <Icon name="Award" size={14} className="icon-inline" />
+                                    <div className="cert-info">
+                                        <strong>{cert.name}</strong>
+                                        <span>{cert.issuer} • {cert.date}</span>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
             </aside>
 
             <main className="main-content">

@@ -1589,3 +1589,34 @@ h1 {
   font-size: 0.75rem;
   color: #6b7280;
 }
+/* ── Certifications Layout ─────────────────────────────────────────── */
+.cert-item {
+  display: flex !important;
+  gap: 10px !important;
+  align-items: flex-start !important;
+  margin-bottom: 12px;
+}
+
+.cert-item svg {
+  margin-top: 3px;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.cert-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cert-info strong {
+  font-size: calc(0.78rem * var(--font-scale));
+  line-height:1.2;
+  color: var(--text-dark);
+}
+
+.cert-info span {
+  font-size: calc(0.68rem * var(--font-scale));
+  color: var(--text-light);
+  line-height: 1.2;
+}

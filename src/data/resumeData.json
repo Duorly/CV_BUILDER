@@ -11,15 +11,32 @@
   "mainSkills": [
     {
       "category": "Frontend",
-      "skills": ["Vue.js", "React.js", "TypeScript", "Tailwind CSS"]
+      "skills": [
+        "Vue.js",
+        "React.js",
+        "TypeScript",
+        "Tailwind CSS"
+      ]
     },
     {
       "category": "Backend",
-      "skills": ["Laravel", "NestJS", "Symfony", "Node.js", "Java", "Spring Boot"]
+      "skills": [
+        "Laravel",
+        "NestJS",
+        "Symfony",
+        "Node.js",
+        "Java",
+        "Spring Boot"
+      ]
     },
     {
       "category": "Cloud & DevOps",
-      "skills": ["AWS", "Google Cloud", "Docker", "CI/CD"]
+      "skills": [
+        "AWS",
+        "Google Cloud",
+        "Docker",
+        "CI/CD"
+      ]
     }
   ],
   "softSkills": [
@@ -119,6 +136,13 @@
       "degree": "Bac +3/4",
       "period": "12/2023",
       "details": []
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Developer - Associate",
+      "issuer": "Amazon Web Services",
+      "date": "2023"
     }
   ]
 }
