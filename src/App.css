@@ -638,23 +638,22 @@
   inset: 0;
   pointer-events: none;
   z-index: 20;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    /* ── zone contenu ── */
-    transparent               0,
-    transparent               287mm,
-    /* ── marge basse (10 mm) ── */
-    rgba(226, 232, 240, 0.65) 287mm,
-    rgba(226, 232, 240, 0.65) calc(297mm - 1.5px),
-    /* ── ligne séparatrice ── */
-    #94a3b8                   calc(297mm - 1.5px),
-    #94a3b8                   297mm
-  );
+  background-image: repeating-linear-gradient(to bottom,
+      /* ── zone contenu ── */
+      transparent 0,
+      transparent 287mm,
+      /* ── marge basse (10 mm) ── */
+      rgba(226, 232, 240, 0.65) 287mm,
+      rgba(226, 232, 240, 0.65) calc(297mm - 1.5px),
+      /* ── ligne séparatrice ── */
+      #94a3b8 calc(297mm - 1.5px),
+      #94a3b8 297mm);
 }
 
 .sidebar {
   width: 32%;
-  background: transparent; /* géré par le gradient du container */
+  background: transparent;
+  /* géré par le gradient du container */
   padding: 30px 20px;
   border-right: 1px solid #eeeeee;
 }
@@ -1149,7 +1148,9 @@ h1 {
 }
 
 @keyframes ats-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Preview step */
@@ -1426,7 +1427,8 @@ h1 {
     margin: 0;
   }
 
-  html, body {
+  html,
+  body {
     margin: 0 !important;
     padding: 0 !important;
     width: 210mm !important;
@@ -1458,7 +1460,8 @@ h1 {
   }
 
   .main-layout {
-    display: block !important;   /* block évite les artefacts flex en print */
+    display: block !important;
+    /* block évite les artefacts flex en print */
     width: 210mm !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -1503,8 +1506,86 @@ h1 {
 
   /* Le titre d'une section reste collé à ce qui suit */
   .exp-header,
-  .main-section > h2 {
+  .main-section>h2 {
     break-after: avoid;
     page-break-after: avoid;
   }
+}
+
+/* ── Photo Upload UI ─────────────────────────────────────────────────── */
+.photo-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  background: #f9fafb;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #f3f4f6;
+}
+
+.photo-preview-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
+  background: #e5e7eb;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.photo-preview-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.photo-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+}
+
+.photo-upload-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s;
+  gap: 4px;
+}
+
+.photo-preview-wrapper:hover .photo-upload-overlay {
+  opacity: 1;
+}
+
+.photo-upload-info label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.photo-upload-info p {
+  font-size: 0.75rem;
+  color: #6b7280;
 }

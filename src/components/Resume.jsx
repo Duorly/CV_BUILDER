@@ -19,7 +19,7 @@ const Resume = ({ data }) => {
             <aside className="sidebar">
                 <div className="profile-section">
                     <div className="profile-img">
-                        <img src={photo} alt={personalInfo.name} />
+                        <img src={personalInfo.photo || photo} alt={personalInfo.name} />
                     </div>
                     <h1>{personalInfo.name}</h1>
                     <div className="contact-info">

@@ -1,4 +1,4 @@
-import { User, Briefcase, GraduationCap, Languages, Award, Heart, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Languages, Award, Heart, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle, Camera, Image } from 'lucide-react';
 
 const Editor = ({ data, setData }) => {
     const handlePersonalInfoChange = (e) => {
@@ -10,6 +10,23 @@ const Editor = ({ data, setData }) => {
                 [name]: value
             }
         });
+    };
+
+    const handlePhotoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setData({
+                    ...data,
+                    personalInfo: {
+                        ...data.personalInfo,
+                        photo: reader.result
+                    }
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSkillsChange = (categoryIndex, value) => {
@@ -144,43 +161,72 @@ const Editor = ({ data, setData }) => {
                     <User size={18} className="header-icon" />
                     <h3>Informations personnelles</h3>
                 </div>
+
+                <div className="photo-upload-container">
+                    <div className="photo-preview-wrapper" onClick={() => document.getElementById('photo-input').click()}>
+                        {data.personalInfo.photo ? (
+                            <img src={data.personalInfo.photo} alt="Profile Preview" className="photo-preview-img" />
+                        ) : (
+                            <div className="photo-placeholder">
+                                <Camera size={24} />
+                            </div>
+                        )}
+                        <div className="photo-upload-overlay">
+                            <Image size={16} />
+                            <span>Changer</span>
+                        </div>
+                    </div>
+                    <input
+                        type="file"
+                        id="photo-input"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={handlePhotoChange}
+                    />
+                    <div className="photo-upload-info">
+                        <label>Photo de profil</label>
+                        <p>Cliquez sur l'image pour la modifier</p>
+                        <small style={{ color: "red", fontSize: "8px" }}>L'image doit avoir un ratio de 1:1 et être au format JPG, PNG ou WEBP.</small>
+                    </div>
+                </div>
+
                 <div className="form-group floating">
                     <label>Nom complet</label>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        value={data.personalInfo.name} 
-                        onChange={handlePersonalInfoChange} 
+                    <input
+                        type="text"
+                        name="name"
+                        value={data.personalInfo.name}
+                        onChange={handlePersonalInfoChange}
                     />
                 </div>
 
                 <div className="editor-grid">
                     <div className="form-group mini">
                         <label>Email</label>
-                        <input 
-                            type="email" 
-                            name="email" 
-                            value={data.personalInfo.email} 
-                            onChange={handlePersonalInfoChange} 
+                        <input
+                            type="email"
+                            name="email"
+                            value={data.personalInfo.email}
+                            onChange={handlePersonalInfoChange}
                         />
                     </div>
                     <div className="form-group mini">
                         <label>Téléphone</label>
-                        <input 
-                            type="text" 
-                            name="phone" 
-                            value={data.personalInfo.phone} 
-                            onChange={handlePersonalInfoChange} 
+                        <input
+                            type="text"
+                            name="phone"
+                            value={data.personalInfo.phone}
+                            onChange={handlePersonalInfoChange}
                         />
                     </div>
                 </div>
                 <div className="form-group">
                     <label>Objectif professionnel</label>
-                    <textarea 
-                        name="objective" 
+                    <textarea
+                        name="objective"
                         rows="4"
-                        value={data.personalInfo.objective} 
-                        onChange={handlePersonalInfoChange} 
+                        value={data.personalInfo.objective}
+                        onChange={handlePersonalInfoChange}
                     />
                 </div>
             </div>
@@ -199,22 +245,22 @@ const Editor = ({ data, setData }) => {
                 {data.mainSkills.map((categoryGroup, index) => (
                     <div key={index} className="editor-item-box elegant mini-box">
                         <div className="item-controls-top">
-                             <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 className="item-label-input"
-                                value={categoryGroup.category} 
-                                onChange={(e) => handleCategoryNameChange(index, e.target.value)} 
+                                value={categoryGroup.category}
+                                onChange={(e) => handleCategoryNameChange(index, e.target.value)}
                             />
                             <button className="remove-btn-icon" onClick={() => removeSkillCategory(index)}>
                                 <Trash2 size={12} />
                             </button>
                         </div>
                         <div className="form-group no-margin">
-                             <p className="field-hint">Séparez par des virgules</p>
-                             <textarea 
+                            <p className="field-hint">Séparez par des virgules</p>
+                            <textarea
                                 rows="2"
-                                value={categoryGroup.skills.join(', ')} 
-                                onChange={(e) => handleSkillsChange(index, e.target.value)} 
+                                value={categoryGroup.skills.join(', ')}
+                                onChange={(e) => handleSkillsChange(index, e.target.value)}
                             />
                         </div>
                     </div>
@@ -228,10 +274,10 @@ const Editor = ({ data, setData }) => {
                 </div>
                 <div className="form-group">
                     <p className="field-hint">Séparez par des virgules</p>
-                    <textarea 
+                    <textarea
                         rows="3"
-                        value={data.softSkills ? data.softSkills.join(', ') : ''} 
-                        onChange={handleSoftSkillsChange} 
+                        value={data.softSkills ? data.softSkills.join(', ') : ''}
+                        onChange={handleSoftSkillsChange}
                     />
                 </div>
             </div>
@@ -259,11 +305,11 @@ const Editor = ({ data, setData }) => {
                             <label>Poste</label>
                             <div className="icon-input-group">
                                 <Briefcase size={14} className="input-icon" />
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     placeholder="Ex: Lead Développeur"
-                                    value={exp.title} 
-                                    onChange={(e) => updateExperience(index, 'title', e.target.value)} 
+                                    value={exp.title}
+                                    onChange={(e) => updateExperience(index, 'title', e.target.value)}
                                 />
                             </div>
                         </div>
@@ -273,11 +319,11 @@ const Editor = ({ data, setData }) => {
                                 <label>Entreprise</label>
                                 <div className="icon-input-group">
                                     <Building size={14} className="input-icon" />
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         placeholder="Nom"
-                                        value={exp.company} 
-                                        onChange={(e) => updateExperience(index, 'company', e.target.value)} 
+                                        value={exp.company}
+                                        onChange={(e) => updateExperience(index, 'company', e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -285,11 +331,11 @@ const Editor = ({ data, setData }) => {
                                 <label>Lieu</label>
                                 <div className="icon-input-group">
                                     <MapPin size={14} className="input-icon" />
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         placeholder="Ville"
-                                        value={exp.location} 
-                                        onChange={(e) => updateExperience(index, 'location', e.target.value)} 
+                                        value={exp.location}
+                                        onChange={(e) => updateExperience(index, 'location', e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -297,16 +343,16 @@ const Editor = ({ data, setData }) => {
                                 <label>Période</label>
                                 <div className="icon-input-group">
                                     <Calendar size={14} className="input-icon" />
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         placeholder="Ex: 2021 - 2023"
-                                        value={exp.period} 
-                                        onChange={(e) => updateExperience(index, 'period', e.target.value)} 
+                                        value={exp.period}
+                                        onChange={(e) => updateExperience(index, 'period', e.target.value)}
                                     />
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="details-editor">
                             <div className="section-header-flex mini-header">
                                 <label>Bullet points</label>
@@ -322,7 +368,7 @@ const Editor = ({ data, setData }) => {
                                     <div className="detail-bullet">
                                         <Circle size={6} fill="currentColor" strokeWidth={3} />
                                     </div>
-                                    <textarea 
+                                    <textarea
                                         className="detail-input"
                                         rows="1"
                                         value={detail}
@@ -373,11 +419,11 @@ const Editor = ({ data, setData }) => {
                                 <label>Diplôme / Spécialité</label>
                                 <div className="icon-input-group">
                                     <GraduationCap size={14} className="input-icon" />
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         placeholder="Ex: Architecte Logiciel"
-                                        value={edu.title} 
-                                        onChange={(e) => updateEducation(index, 'title', e.target.value)} 
+                                        value={edu.title}
+                                        onChange={(e) => updateEducation(index, 'title', e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -385,11 +431,11 @@ const Editor = ({ data, setData }) => {
                                 <label>École / Université</label>
                                 <div className="icon-input-group">
                                     <Building size={14} className="input-icon" />
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         placeholder="Nom"
-                                        value={edu.school} 
-                                        onChange={(e) => updateEducation(index, 'school', e.target.value)} 
+                                        value={edu.school}
+                                        onChange={(e) => updateEducation(index, 'school', e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -397,11 +443,11 @@ const Editor = ({ data, setData }) => {
                                 <label>Période</label>
                                 <div className="icon-input-group">
                                     <Calendar size={14} className="input-icon" />
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         placeholder="Ex: 2023"
-                                        value={edu.period} 
-                                        onChange={(e) => updateEducation(index, 'period', e.target.value)} 
+                                        value={edu.period}
+                                        onChange={(e) => updateEducation(index, 'period', e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -419,7 +465,7 @@ const Editor = ({ data, setData }) => {
                                     <div key={oIdx} className="detail-row premium">
                                         <div className="detail-drag-handle"><GripVertical size={14} /></div>
                                         <div className="detail-bullet"><Circle size={6} fill="currentColor" strokeWidth={3} /></div>
-                                        <textarea 
+                                        <textarea
                                             className="detail-input"
                                             rows="1"
                                             value={obj}
@@ -450,7 +496,7 @@ const Editor = ({ data, setData }) => {
                                 </div>
                                 <div className="tag-input-area" style={{ marginTop: '10px' }}>
                                     <p className="field-hint">Séparez par des virgules</p>
-                                    <textarea 
+                                    <textarea
                                         rows="2"
                                         style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #f3f4f6', fontSize: '0.8rem' }}
                                         value={edu.tools.join(', ')}
