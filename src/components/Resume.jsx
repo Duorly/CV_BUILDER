@@ -5,26 +5,34 @@ const Resume = ({ data }) => {
     if (!data) return null;
     const { personalInfo, mainSkills, socialLinks, languages, experiences, education } = data;
 
-    // Helper to render Lucide icons dynamically
-    const Icon = ({ name, size = 12, className = "icon" }) => {
+    // Helper to render Lucide icons dynamically with optional accessibility label
+    const Icon = ({ name, size = 12, className = "icon", label }) => {
         const LucideIcon = Icons[name];
         if (!LucideIcon) return null;
-        return <LucideIcon size={size} className={className} />;
+        return (
+            <>
+                {label && <span className="sr-only">{label}:</span>}
+                <LucideIcon size={size} className={className} aria-hidden="true" />
+            </>
+        );
     };
 
     return (
-        <div className="resume-container">
+        <div className="resume-container" id="resume-root">
             {/* Visual page-break indicator — screen only, hidden on print */}
             <div className="page-break-overlay" aria-hidden="true" />
             <aside className="sidebar">
                 <div className="profile-section">
                     <div className="profile-img">
-                        <img src={personalInfo.photo || photo} alt={personalInfo.name} />
+                        <img src={personalInfo.photo || photo} alt={`Photo de profil de ${personalInfo.name}`} />
                     </div>
                     <h1>{personalInfo.name}</h1>
                     <div className="contact-info">
-                        <p><Icon name="Mail" /> <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></p>
-                        <p><Icon name="Phone" /> <a href={`tel:${personalInfo.phone.replace(/\s/g, '')}`}>{personalInfo.phone}</a></p>
+                        <p><Icon name="Mail" label="Email" /> <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></p>
+                        <p><Icon name="Phone" label="Téléphone" /> <a href={`tel:${personalInfo.phone.replace(/\s/g, '')}`}>{personalInfo.phone}</a></p>
+                        {personalInfo.location && (
+                            <p><Icon name="MapPin" label="Localisation" /> {personalInfo.location}</p>
+                        )}
                     </div>
                 </div>
 
@@ -47,7 +55,7 @@ const Resume = ({ data }) => {
                     <ul className="soft-skills-list">
                         {data.softSkills && data.softSkills.map((skill, index) => (
                             <li key={index}>
-                                <Icon name="CheckCircle2" size={14} className="icon-inline" /> {skill}
+                                <Icon name="CheckCircle2" size={14} className="icon-inline" label="Point fort" /> {skill}
                             </li>
                         ))}
                     </ul>
@@ -59,7 +67,7 @@ const Resume = ({ data }) => {
                         {socialLinks.map((link, index) => (
                             <li key={index}>
                                 <a href={link.url} target="_blank" rel="noreferrer">
-                                    <Icon name={link.icon} /> {link.label}
+                                    <Icon name={link.icon || "Link"} label={link.name} /> {link.label}
                                 </a>
                             </li>
                         ))}
@@ -71,7 +79,7 @@ const Resume = ({ data }) => {
                     <ul className="lang-list">
                         {languages.map((lang, index) => (
                             <li key={index}>
-                                <Icon name="Globe" /> <strong>{lang.name}:</strong> {lang.level}
+                                <Icon name="Globe" label="Langage" /> <strong>{lang.name}:</strong> {lang.level}
                             </li>
                         ))}
                     </ul>
@@ -83,7 +91,7 @@ const Resume = ({ data }) => {
                         <ul className="social-links">
                             {data.certifications.map((cert, index) => (
                                 <li key={index} className="cert-item">
-                                    <Icon name="Award" size={14} className="icon-inline" />
+                                    <Icon name="Award" size={14} className="icon-inline" label="Certification" />
                                     <div className="cert-info">
                                         <strong>{cert.name}</strong>
                                         <span>{cert.issuer} • {cert.date}</span>
@@ -101,16 +109,20 @@ const Resume = ({ data }) => {
                     <p>{personalInfo.objective}</p>
                 </section>
 
-                <section className="main-section">
+                <section className="main-section" aria-label="Expériences professionnelles">
                     <h2>Expériences professionnelles</h2>
                     {experiences.map((exp, index) => (
-                        <div key={index} className="experience-item">
+                        <article key={index} className="experience-item">
                             <div className="exp-header">
                                 <h3>{exp.title}</h3>
                                 <div className="exp-meta">
                                     <span><strong>{exp.company}</strong></span>
-                                    <span className="meta-item"><Icon name="MapPin" className="icon-inline" /> {exp.location}</span>
-                                    <span className="meta-item"><Icon name="Calendar" className="icon-inline" /> {exp.period}</span>
+                                    <span className="meta-item">
+                                        <Icon name="MapPin" className="icon-inline" label="Lieu" /> {exp.location}
+                                    </span>
+                                    <span className="meta-item">
+                                        <Icon name="Calendar" className="icon-inline" label="Période" /> {exp.period}
+                                    </span>
                                 </div>
                             </div>
                             <ul className="exp-details">
@@ -118,25 +130,27 @@ const Resume = ({ data }) => {
                                     <li key={idx}>{detail}</li>
                                 ))}
                             </ul>
-                        </div>
+                        </article>
                     ))}
                 </section>
 
-                <section className="main-section">
+                <section className="main-section" aria-label="Formations">
                     <h2>Formations</h2>
                     {education.map((edu, index) => (
-                        <div key={index} className="formation-item">
+                        <article key={index} className="formation-item">
                             <div className="exp-header">
                                 <h3>{edu.title}</h3>
                                 <div className="exp-meta">
                                     <span><strong>{edu.school}</strong></span>
-                                    <span>{edu.degree}</span>
-                                    <span className="meta-item"><Icon name="Calendar" className="icon-inline" /> {edu.period}</span>
+                                    {edu.degree && <span>{edu.degree}</span>}
+                                    <span className="meta-item">
+                                        <Icon name="Calendar" className="icon-inline" label="Date" /> {edu.period}
+                                    </span>
                                 </div>
                             </div>
                             {edu.objectives && (
                                 <div className="formation-objectives">
-                                    <p><strong>Les objectifs de la formation :</strong></p>
+                                    <p><strong>Objectifs :</strong></p>
                                     <div className="tag-cloud objectives-tags">
                                         {edu.objectives.map((obj, idx) => (
                                             <span key={idx} className="tag">{obj}</span>
@@ -146,7 +160,7 @@ const Resume = ({ data }) => {
                             )}
                             {edu.tools && (
                                 <div className="formation-tools">
-                                    <p><strong>Les outils et les méthodologies :</strong></p>
+                                    <p><strong>Outils et méthodes :</strong></p>
                                     <div className="tag-cloud small-tags">
                                         {edu.tools.map((tool, idx) => (
                                             <span key={idx} className="tag">{tool}</span>
@@ -157,11 +171,11 @@ const Resume = ({ data }) => {
                             {edu.link && (
                                 <div className="program-link">
                                     <a href={edu.link} target="_blank" rel="noreferrer">
-                                        Télécharger le programme <Icon name="ExternalLink" className="icon-inline" />
+                                        Programme détaillé <Icon name="ExternalLink" className="icon-inline" label="Lien externe" />
                                     </a>
                                 </div>
                             )}
-                        </div>
+                        </article>
                     ))}
                 </section>
             </main>
