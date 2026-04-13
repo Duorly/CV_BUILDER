@@ -619,12 +619,33 @@
 /* Resume Core Layout */
 .resume-container {
   width: 210mm;
-  height: 297mm;
+  min-height: 297mm;
   background: white;
   display: flex;
-  overflow: hidden;
+  align-items: stretch;
+  position: relative;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   font-family: 'Inter', sans-serif;
+}
+
+/* Page-break indicator — visible on screen only, drawn every 297mm */
+.page-break-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent               0,
+    transparent               calc(297mm - 6px),
+    rgba(148, 163, 184, 0.12) calc(297mm - 6px),
+    rgba(148, 163, 184, 0.25) calc(297mm - 1px),
+    #94a3b8                   calc(297mm - 1px),
+    #94a3b8                   calc(297mm + 1px),
+    rgba(148, 163, 184, 0.25) calc(297mm + 1px),
+    rgba(148, 163, 184, 0.12) calc(297mm + 6px),
+    transparent               calc(297mm + 6px)
+  );
 }
 
 .sidebar {
@@ -1404,8 +1425,8 @@ h1 {
   html, body {
     margin: 0 !important;
     padding: 0 !important;
-    height: 100%;
-    overflow: hidden !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   * {
@@ -1413,9 +1434,10 @@ h1 {
     print-color-adjust: exact !important;
   }
 
-  .no-print, 
-  .editor-sidebar, 
-  .controls, 
+  .no-print,
+  .page-break-overlay,
+  .editor-sidebar,
+  .controls,
   .action-buttons {
     display: none !important;
   }
@@ -1425,13 +1447,13 @@ h1 {
     margin: 0 !important;
     background: white;
     width: 210mm;
-    height: 297mm;
+    height: auto !important;
   }
 
   .main-layout {
     display: flex !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     padding: 0 !important;
     margin: 0 !important;
   }
@@ -1440,9 +1462,10 @@ h1 {
     box-shadow: none !important;
     margin: 0 !important;
     width: 210mm !important;
-    height: 297mm !important;
-    max-height: 297mm !important;
-    overflow: hidden !important;
+    min-height: 297mm !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
     border: none !important;
     transform: none !important;
   }
@@ -1454,5 +1477,22 @@ h1 {
   .sidebar {
     background-color: var(--sidebar-bg) !important;
     -webkit-print-color-adjust: exact;
+  }
+
+  /* Avoid splitting individual items across pages */
+  .experience-item,
+  .formation-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .exp-header {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .main-section h2 {
+    break-after: avoid;
+    page-break-after: avoid;
   }
 }

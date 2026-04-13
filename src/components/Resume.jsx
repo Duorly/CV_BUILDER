@@ -14,6 +14,8 @@ const Resume = ({ data }) => {
 
     return (
         <div className="resume-container">
+            {/* Visual page-break indicator — screen only, hidden on print */}
+            <div className="page-break-overlay" aria-hidden="true" />
             <aside className="sidebar">
                 <div className="profile-section">
                     <div className="profile-img">

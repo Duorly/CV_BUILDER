@@ -21,45 +21,71 @@ function App() {
 
   const handleDownloadPDF = () => {
     const element = document.querySelector('.resume-container');
-    
-    // Inject current variable values DIRECTLY into the element style so html2canvas sees them
+
+    // Injecter les variables CSS directement pour que html2canvas les lise
     element.style.setProperty('--font-scale', fontScale);
     element.style.setProperty('--primary-color', primaryColor);
     element.style.setProperty('--sidebar-bg', sidebarBg);
     element.style.setProperty('--text-dark', textColor);
 
-    const opt = {
-      margin: 0,
-      filename: 'mon_cv.pdf',
-      image: { type: 'png', quality: 1 },
-      html2canvas: { 
-        scale: 5, 
+    const generatePDF = async () => {
+      const canvas = await window.html2canvas(element, {
+        scale: 4,
         useCORS: true,
-        letterRendering: true,
         allowTaint: true,
         logging: false,
-        imageTimeout: 0
-      },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    // Charger dynamiquement html2pdf si non présent
-    const generate = (lib) => {
-      lib().set(opt).from(element).save().then(() => {
-        // Optionnel: nettoyer les styles injectés si nécessaire
+        imageTimeout: 0,
+        backgroundColor: '#ffffff',
       });
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+
+      const pdfW = 210;
+      const pdfH = 297;
+
+      // Hauteur d'une page A4 en pixels canvas (ratio exact 297/210)
+      const pageHeightPx = Math.round((pdfH / pdfW) * canvas.width);
+      const totalPages = Math.ceil(canvas.height / pageHeightPx);
+
+      for (let page = 0; page < totalPages; page++) {
+        if (page > 0) pdf.addPage();
+
+        const srcY = page * pageHeightPx;
+        const srcH = Math.min(pageHeightPx, canvas.height - srcY);
+
+        // Créer une tranche canvas de hauteur exactement une page A4
+        const slice = document.createElement('canvas');
+        slice.width = canvas.width;
+        slice.height = pageHeightPx;
+        const ctx = slice.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, slice.width, slice.height);
+        ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
+
+        pdf.addImage(slice.toDataURL('image/jpeg', 0.97), 'JPEG', 0, 0, pdfW, pdfH);
+      }
+
+      pdf.save('mon_cv.pdf');
     };
 
-    if (window.html2pdf) {
-      generate(window.html2pdf);
-    } else {
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-      script.onload = () => {
-        generate(window.html2pdf);
-      };
-      document.head.appendChild(script);
-    }
+    const loadScript = (src) =>
+      new Promise((resolve) => {
+        if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        document.head.appendChild(s);
+      });
+
+    Promise.all([
+      window.html2canvas
+        ? Promise.resolve()
+        : loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+      window.jspdf
+        ? Promise.resolve()
+        : loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),
+    ]).then(generatePDF);
   };
 
   const handleExport = () => {
