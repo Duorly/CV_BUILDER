@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, PanelLeft, Type, Palette, Upload, Download, Printer, FileDown, FileText } from 'lucide-react'
 import Resume from './components/Resume'
 import Editor from './components/Editor'
 import ATSOptimizer from './components/ATSOptimizer'
@@ -96,71 +96,126 @@ function App() {
       }}
     >
       <div className="controls no-print">
-        <div className="control-group">
-          <label htmlFor="fontScale">Taille : {(fontScale * 100).toFixed(0)}%</label>
-          <input 
-            id="fontScale"
-            type="range" 
-            min="0.5" 
-            max="1.5" 
-            step="0.01" 
-            value={fontScale} 
-            onChange={(e) => setFontScale(parseFloat(e.target.value))} 
-          />
+
+        {/* Brand */}
+        <div className="ctrl-brand">
+          <FileText size={16} />
+          <span>CV Builder</span>
         </div>
 
-        <div className="control-group mini">
-          <label>Couleurs</label>
-          <div className="color-pickers">
-            <div className="color-item" title="Couleur primaire">
-              <input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
-            </div>
-            <div className="color-item" title="Fond latéral">
-              <input type="color" value={sidebarBg} onChange={(e) => setSidebarBg(e.target.value)} />
-            </div>
-            <div className="color-item" title="Couleur texte">
-              <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} />
+        <span className="ctrl-sep" />
+
+        {/* Groupe Vue */}
+        <div className="ctrl-group">
+          <span className="ctrl-group-label">Vue</span>
+          <div className="ctrl-group-actions">
+            <button
+              onClick={() => setShowEditor(!showEditor)}
+              className={`ctrl-btn ${showEditor ? 'active' : ''}`}
+              title={showEditor ? "Masquer l'éditeur" : "Afficher l'éditeur"}
+            >
+              <PanelLeft size={14} />
+              <span>Éditeur</span>
+            </button>
+            <div className="ctrl-slider">
+              <Type size={13} className="ctrl-slider-icon" />
+              <input
+                id="fontScale"
+                type="range"
+                min="0.5"
+                max="1.5"
+                step="0.01"
+                value={fontScale}
+                onChange={(e) => setFontScale(parseFloat(e.target.value))}
+              />
+              <span className="ctrl-slider-val">{(fontScale * 100).toFixed(0)}%</span>
             </div>
           </div>
         </div>
 
-        <div className="action-buttons">
-          <input
-            type="file"
-            id="json-import"
-            accept=".json"
-            style={{ display: 'none' }}
-            onChange={handleImport}
-          />
-          <button onClick={() => document.getElementById('json-import').click()} className="secondary-btn icon-btn" title="Importer un fichier JSON">
-            <span>Importer JSON</span>
-          </button>
-          
-          <button onClick={handleExport} className="secondary-btn icon-btn" title="Exporter les données en JSON">
-             <span>Exporter JSON</span>
-          </button>
+        <span className="ctrl-sep" />
+
+        {/* Groupe Thème */}
+        <div className="ctrl-group">
+          <span className="ctrl-group-label">Thème</span>
+          <div className="ctrl-group-actions">
+            <Palette size={14} className="ctrl-palette-icon" />
+            <div className="color-pickers">
+              <div className="color-item" title="Couleur primaire">
+                <input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+              </div>
+              <div className="color-item" title="Fond latéral">
+                <input type="color" value={sidebarBg} onChange={(e) => setSidebarBg(e.target.value)} />
+              </div>
+              <div className="color-item" title="Couleur texte">
+                <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <button onClick={() => setShowEditor(!showEditor)} className="secondary-btn">
-          {showEditor ? 'Masquer éditeur' : 'Afficher éditeur'}
-        </button>
+        <span className="ctrl-sep" />
 
-        <button onClick={handlePrint} className="secondary-btn">
-          Impression A4
-        </button>
+        {/* Groupe Fichier */}
+        <div className="ctrl-group">
+          <span className="ctrl-group-label">Fichier</span>
+          <div className="ctrl-group-actions">
+            <input
+              type="file"
+              id="json-import"
+              accept=".json"
+              style={{ display: 'none' }}
+              onChange={handleImport}
+            />
+            <button
+              onClick={() => document.getElementById('json-import').click()}
+              className="ctrl-btn"
+              title="Importer un fichier JSON"
+            >
+              <Upload size={14} />
+              <span>Import</span>
+            </button>
+            <button
+              onClick={handleExport}
+              className="ctrl-btn"
+              title="Exporter les données en JSON"
+            >
+              <Download size={14} />
+              <span>Export</span>
+            </button>
+          </div>
+        </div>
 
-        <button onClick={handleDownloadPDF} className="print-btn">
-          Direct PDF
-        </button>
+        <span className="ctrl-sep" />
 
+        {/* Groupe Export */}
+        <div className="ctrl-group">
+          <span className="ctrl-group-label">Export</span>
+          <div className="ctrl-group-actions">
+            <button onClick={handlePrint} className="ctrl-btn" title="Imprimer en A4">
+              <Printer size={14} />
+              <span>Impr.</span>
+            </button>
+            <button onClick={handleDownloadPDF} className="ctrl-btn-primary" title="Télécharger en PDF">
+              <FileDown size={14} />
+              <span>PDF</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Spacer */}
+        <div className="ctrl-spacer" />
+
+        {/* IA — action principale */}
         <button
           onClick={() => setShowATSOptimizer(true)}
           className="ats-trigger-btn"
           title="Optimiser le CV pour une offre d'emploi via IA"
         >
           <Sparkles size={15} />
-          Optimiser pour l'offre
+          Optimiser ATS
         </button>
+
       </div>
 
       {showATSOptimizer && (
