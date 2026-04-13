@@ -620,7 +620,8 @@
 .resume-container {
   width: 210mm;
   min-height: 297mm;
-  background: white;
+  /* Le fond de la sidebar est porté par le container : il couvre toutes les pages */
+  background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%);
   display: flex;
   align-items: stretch;
   position: relative;
@@ -628,7 +629,10 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* Page-break indicator — visible on screen only, drawn every 297mm */
+/* Page-break indicator — visible on screen only, drawn every 297mm.
+   Zone grise = marge basse (10 mm) avant chaque coupure de page.
+   La marge haute des pages 2+ est gérée côté PDF uniquement.
+   Cycle : exactement 297mm (stop initial à 0 obligatoire). */
 .page-break-overlay {
   position: absolute;
   inset: 0;
@@ -636,21 +640,21 @@
   z-index: 20;
   background-image: repeating-linear-gradient(
     to bottom,
+    /* ── zone contenu ── */
     transparent               0,
-    transparent               calc(297mm - 6px),
-    rgba(148, 163, 184, 0.12) calc(297mm - 6px),
-    rgba(148, 163, 184, 0.25) calc(297mm - 1px),
-    #94a3b8                   calc(297mm - 1px),
-    #94a3b8                   calc(297mm + 1px),
-    rgba(148, 163, 184, 0.25) calc(297mm + 1px),
-    rgba(148, 163, 184, 0.12) calc(297mm + 6px),
-    transparent               calc(297mm + 6px)
+    transparent               287mm,
+    /* ── marge basse (10 mm) ── */
+    rgba(226, 232, 240, 0.65) 287mm,
+    rgba(226, 232, 240, 0.65) calc(297mm - 1.5px),
+    /* ── ligne séparatrice ── */
+    #94a3b8                   calc(297mm - 1.5px),
+    #94a3b8                   297mm
   );
 }
 
 .sidebar {
   width: 32%;
-  background-color: var(--sidebar-bg);
+  background: transparent; /* géré par le gradient du container */
   padding: 30px 20px;
   border-right: 1px solid #eeeeee;
 }
@@ -1425,6 +1429,7 @@ h1 {
   html, body {
     margin: 0 !important;
     padding: 0 !important;
+    width: 210mm !important;
     height: auto !important;
     overflow: visible !important;
   }
@@ -1442,23 +1447,26 @@ h1 {
     display: none !important;
   }
 
+  /* Le wrapper app et layout n'ont aucun padding/margin */
   .app-container {
     padding: 0 !important;
     margin: 0 !important;
-    background: white;
-    width: 210mm;
+    background: white !important;
+    width: 210mm !important;
     height: auto !important;
+    min-height: 0 !important;
   }
 
   .main-layout {
-    display: flex !important;
-    width: 100% !important;
-    height: auto !important;
+    display: block !important;   /* block évite les artefacts flex en print */
+    width: 210mm !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
+  /* Resume : flux naturel, pas de hauteur imposée */
   .resume-container {
+    display: flex !important;
     box-shadow: none !important;
     margin: 0 !important;
     width: 210mm !important;
@@ -1468,30 +1476,34 @@ h1 {
     overflow: visible !important;
     border: none !important;
     transform: none !important;
+    background: linear-gradient(to right, var(--sidebar-bg) 32%, white 32%) !important;
   }
 
+  /* Les colonnes flex ne doivent pas clipper le contenu au saut de page */
+  .sidebar,
   .main-content {
-    padding: 35px 20mm 35px 35px !important;
+    overflow: visible !important;
+    max-height: none !important;
   }
 
   .sidebar {
-    background-color: var(--sidebar-bg) !important;
-    -webkit-print-color-adjust: exact;
+    background: transparent !important;
   }
 
-  /* Avoid splitting individual items across pages */
+  .main-content {
+    padding: 35px 15px 35px 35px !important;
+  }
+
+  /* Éviter la coupure au milieu d'un bloc d'expérience ou de formation */
   .experience-item,
   .formation-item {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  .exp-header {
-    break-after: avoid;
-    page-break-after: avoid;
-  }
-
-  .main-section h2 {
+  /* Le titre d'une section reste collé à ce qui suit */
+  .exp-header,
+  .main-section > h2 {
     break-after: avoid;
     page-break-after: avoid;
   }
