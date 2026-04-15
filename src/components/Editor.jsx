@@ -1,4 +1,4 @@
-import { User, Briefcase, GraduationCap, Languages, Award, Heart, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle, Camera, Image, Link } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Award, Heart, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle, Camera, Image, Link } from 'lucide-react';
 
 const Editor = ({ data, setData }) => {
     const handlePersonalInfoChange = (e) => {
@@ -225,6 +225,17 @@ const Editor = ({ data, setData }) => {
                         type="text"
                         name="name"
                         value={data.personalInfo.name}
+                        onChange={handlePersonalInfoChange}
+                    />
+                </div>
+
+                <div className="form-group floating">
+                    <label>Titre / Poste</label>
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Ex: Lead Développeur FullStack"
+                        value={data.personalInfo.title || ''}
                         onChange={handlePersonalInfoChange}
                     />
                 </div>

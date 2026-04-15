@@ -27,6 +27,7 @@ const Resume = ({ data }) => {
                         <img src={personalInfo.photo || photo} alt={`Photo de profil de ${personalInfo.name}`} />
                     </div>
                     <h1>{personalInfo.name}</h1>
+                    {personalInfo.title && <p className="profile-title">{personalInfo.title}</p>}
                     <div className="contact-info">
                         <p><Icon name="Mail" label="Email" /> <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a></p>
                         <p><Icon name="Phone" label="Téléphone" /> <a href={`tel:${personalInfo.phone.replace(/\s/g, '')}`}>{personalInfo.phone}</a></p>
@@ -79,7 +80,7 @@ const Resume = ({ data }) => {
                     <ul className="lang-list">
                         {languages.map((lang, index) => (
                             <li key={index}>
-                                <Icon name="Globe" label="Langage" /> <strong>{lang.name}:</strong> {lang.level}
+                                <Icon name="Globe" label="Langage" /> <strong>{lang.name} : </strong>  {lang.level}
                             </li>
                         ))}
                     </ul>

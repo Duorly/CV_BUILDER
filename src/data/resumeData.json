@@ -69,19 +69,19 @@
     {
       "name": "Linkedin",
       "url": "https://linkedin.com/in/nebel-mass/",
-      "label": "linkedin.com/in/nebel-mass/",
+      "label": "https://linkedin.com/in/nebel-mass",
       "icon": "Link"
     },
     {
       "name": "Github",
       "url": "https://github.com/Duorly",
-      "label": "github.com/Duorly",
+      "label": "https://github.com/Duorly",
       "icon": "CodeXml"
     },
     {
       "name": "Portfolio",
       "url": "https://nebel.dev",
-      "label": "nebel.dev",
+      "label": "https://nebel.dev",
       "icon": "Globe"
     }
   ],
@@ -151,6 +151,20 @@
       "school": "ITIC Paris",
       "degree": "Titre RNCP de niveau 7 (BAC +5)",
       "period": "2024 - 2026",
+      "objectives": [
+        "Architecture logicielle",
+        "Machine Learning",
+        "Cloud Computing",
+        "DevOps"
+      ],
+      "tools": [
+        "Python",
+        "Scikit-learn",
+        "TensorFlow",
+        "Numpy",
+        "Pandas",
+        "Java"
+      ],
       "details": []
     },
     {

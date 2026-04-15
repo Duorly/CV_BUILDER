@@ -699,6 +699,15 @@ h1 {
   font-weight: 800;
   color: var(--text-dark);
   line-height: 1.15;
+  margin-bottom: 4px;
+}
+
+.profile-title {
+  font-size: calc(0.8rem * var(--font-scale));
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   margin-bottom: 10px;
 }
 
@@ -761,7 +770,7 @@ h1 {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
 .soft-skills-list li {
@@ -855,6 +864,7 @@ h1 {
   font-size: calc(0.85rem * var(--font-scale));
   color: #374151;
   margin-bottom: 8px;
+  text-align: justify;
 }
 
 .experience-item,
@@ -1602,6 +1612,7 @@ h1 {
   font-size: 0.75rem;
   color: #6b7280;
 }
+
 /* ── Certifications Layout ─────────────────────────────────────────── */
 .cert-item {
   display: flex !important;
@@ -1624,7 +1635,7 @@ h1 {
 
 .cert-info strong {
   font-size: calc(0.78rem * var(--font-scale));
-  line-height:1.2;
+  line-height: 1.2;
   color: var(--text-dark);
 }
 
