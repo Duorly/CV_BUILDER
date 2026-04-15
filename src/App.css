@@ -726,7 +726,7 @@ h1 {
 }
 
 .sidebar-section {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .sidebar-section h2 {
@@ -792,11 +792,11 @@ h1 {
   font-weight: 700;
   letter-spacing: 0.05em;
   margin-bottom: 8px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .skills-category-group {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 /* Editor additions */
