@@ -1,50 +1,69 @@
 {
   "personalInfo": {
     "name": "Duorli Réjouis Nebel MASSENGO",
-    "title": "Développeur Full Stack",
+    "title": "Lead Développeur FullStack",
     "email": "nebel.mass@gmail.com",
     "phone": "+33 7 75 72 55 82",
-    "location": "Andrésy",
+    "location": "Île de France, France",
     "photo": "",
-    "objective": "Développeur Full Stack expérimenté avec 5 ans d'expérience, expert en technologies front-end (VueJS, React, Nuxt) et back-end (NestJS, Laravel), ainsi qu'en intégration cloud (AWS, Google Cloud) et déploiement CI/CD. Passionné de création et d'innovation technologique."
+    "objective": "Développeur Full Stack, passionné par la conception de solutions web et mobiles performantes. Fort de 6 ans d'expérience en développement, en architecture logicielle et en cloud (AWS, GCP), je conçois des produits robustes, évolutifs et optimisés. Curieux, dynamique et orienté résultats, j'aime collaborer dans des environnements agiles et relever des défis techniques ambitieux pour contribuer activement à la réussite des projets d'entreprise."
   },
   "mainSkills": [
     {
       "category": "Frontend",
       "skills": [
-        "Vue.js",
-        "React.js",
-        "TypeScript",
-        "Tailwind CSS"
+        "Vuejs",
+        "Nuxt",
+        "React",
+        "Javascript",
+        "Typescript",
+        "Flutter"
       ]
     },
     {
       "category": "Backend",
       "skills": [
+        "PHP",
+        "Wordpress",
         "Laravel",
+        "JAVA",
+        "Hibernate",
+        "JUnit",
+        "Kafka",
+        "SpringBoot",
+        "NodeJS",
+        "Express",
         "NestJS",
-        "Symfony",
-        "Node.js",
-        "Java",
-        "Spring Boot"
+        "Python (TenserFlow, Numpy, Panda)",
+        "Sci-Kit Learn"
       ]
     },
     {
-      "category": "Cloud & DevOps",
+      "category": "Cloud, DevOps & Architecture",
       "skills": [
         "AWS",
-        "Google Cloud",
-        "Docker",
-        "CI/CD"
+        "GCP",
+        "Cloudflare",
+        "CI/CD (Github Actions, Docker)",
+        "Architecture (Microservice, Hexagonal)"
+      ]
+    },
+    {
+      "category": "Outils & Méthodologies",
+      "skills": [
+        "Git (Github, Bitbucket, Gitlab)",
+        "Agile (Scrum, SAFe)",
+        "Jira",
+        "Trello"
       ]
     }
   ],
   "softSkills": [
-    "Travail en équipe",
-    "Adaptabilité",
-    "Communication",
-    "Résolution de problèmes",
-    "Apprentissage continu"
+    "Curiosité et dynamisme",
+    "Orientation résultats",
+    "Travail en équipe et collaboration",
+    "Mentorat et accompagnement",
+    "Résolution de problèmes complexes"
   ],
   "socialLinks": [
     {
@@ -58,83 +77,94 @@
       "url": "https://github.com/Duorly",
       "label": "github.com/Duorly",
       "icon": "CodeXml"
+    },
+    {
+      "name": "Portfolio",
+      "url": "https://nebel.dev",
+      "label": "nebel.dev",
+      "icon": "Globe"
     }
   ],
   "languages": [
     {
-      "name": "Anglais",
-      "level": "Intermédiaire (B1-B2)"
-    },
-    {
       "name": "Français",
       "level": "Langue maternelle"
+    },
+    {
+      "name": "Anglais",
+      "level": "Niveau B2"
     }
   ],
   "experiences": [
     {
-      "title": "Apprenti expert en informatique",
-      "company": "Xksgroup",
-      "location": "Andrésy",
-      "period": "10/2024 - Présent",
+      "title": "Développeur Fullstack / Mentor",
+      "company": "ITIC PARIS",
+      "location": "Paris",
+      "period": "09/2025 - En cours",
       "details": [
-        "Conception architecturale et analyse technique approfondie suivies de révisions de code.",
-        "Maîtrise de la dette technique via des choix technologiques stratégiques.",
-        "Mentorat des collègues sur les optimisations de performance et l'automatisation des tests.",
-        "Création et maintenance de la documentation technique et coordination d'équipes multidisciplinaires.",
-        "Utilisation de technologies telles que NestJS, NextJS, Laravel, AWS, MariaDB et Tailwind."
+        "Conception de l'application ITIC COMPANION (Outils de gamification scolaire).",
+        "Collaboration & inter-opérabilité avec l'ERP Scolaire Ymag Ypareo.",
+        "Mentorat technique et accompagnement des étudiants du BTS au Master.",
+        "Documentation et mise en place d'une architecture microservice."
+      ]
+    },
+    {
+      "title": "Lead Développeur Fullstack / Chef de projet",
+      "company": "XKSGROUP",
+      "location": "Île-de-France",
+      "period": "10/2024 - 09/2025",
+      "details": [
+        "Conception de l'architecture technique et validation des choix technologiques.",
+        "Revue de code, gestion de la dette technique et amélioration continue.",
+        "Mentorat technique et accompagnement des développeurs.",
+        "Documentation, veille technologique et coordination des équipes."
       ]
     },
     {
       "title": "Tech Lead Backend",
-      "company": "Faseya",
-      "location": "Sénégal",
+      "company": "FASEYA",
+      "location": "Île-de-France",
       "period": "05/2024 - 09/2024",
       "details": [
-        "Conception architecturale et revue de code approfondie.",
-        "Gestion proactive de la dette technique et pilotage des orientations technologiques.",
-        "Mentorat des équipes, optimisation des performances système.",
-        "Automatisation des processus de tests, résolution efficace des incidents.",
-        "Rédaction de documentation technique, veille continue et coordination d'équipe.",
-        "Développement backend et gestion de l'infrastructure cloud AWS.",
-        "Maîtrise des technologies NestJS, NextJS, AWS, MariaDB, Tailwind."
+        "Développement backend et déploiement de services sur le cloud (AWS).",
+        "Gestion de la dette technique et choix d'architectures adaptées.",
+        "Encadrement technique des développeurs et suivi des performances.",
+        "Mise en œuvre de bonnes pratiques pour améliorer la qualité du code."
+      ]
+    },
+    {
+      "title": "Tech Lead / Chef de projet",
+      "company": "NANOCREATIVES",
+      "location": "Île-de-France",
+      "period": "10/2023 - 03/2024",
+      "details": [
+        "Conception et développement de solutions logicielles et sites web.",
+        "Déploiement d'applications sur des serveurs Linux dans le cloud.",
+        "Pilotage de projets en méthodologie agile et coordination d'équipe.",
+        "Gestion du DNS, des sous-domaines et des certificats de sécurité."
       ]
     }
   ],
   "education": [
     {
-      "title": "Architecte Logiciel",
-      "school": "OpenClassrooms",
-      "degree": "Diplôme de niveau 7 (bac +5)",
-      "period": "À venir",
-      "objectives": [
-        "Analyser les besoins et auditer une architecture",
-        "Concevoir et présenter des solutions d'architecture",
-        "Définir une roadmap et gérer la dette technique",
-        "Développer un POC pour valider une solution",
-        "Piloter l'évolution et la gouvernance d'un projet"
-      ],
-      "tools": [
-        "Git / GitHub",
-        "Archi",
-        "Java",
-        "Gestion de projet Gantt",
-        "Trello",
-        "TOGAF"
-      ],
-      "link": "#"
-    },
-    {
-      "title": "EXPERT LEAD DÉVELOPPEUR FULLSTACK",
+      "title": "Mastère Expert Lead Développeur Fullstack",
       "school": "ITIC Paris",
-      "degree": "Bac +5",
-      "period": "09/2026",
+      "degree": "Titre RNCP de niveau 7 (BAC +5)",
+      "period": "2024 - 2026",
       "details": []
     },
     {
-      "title": "DEVELOPPEUR CONCEPTEUR LOGICIEL",
-      "school": "OpenClassrooms",
-      "degree": "Bac +3/4",
-      "period": "12/2023",
+      "title": "Bachelor Développeur Concepteur d'Application",
+      "school": "Openclassrooms, Paris",
+      "degree": "Titre RNCP de niveau 6 (BAC +3/4)",
+      "period": "2022 - 2023",
+      "details": []
+    },
+    {
+      "title": "Licence en informatique",
+      "school": "Université Marien Ngouabi, Brazzaville",
+      "degree": "Licence",
+      "period": "2018 - 2021",
       "details": []
     }
   ],

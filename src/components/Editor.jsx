@@ -1,4 +1,4 @@
-import { User, Briefcase, GraduationCap, Languages, Award, Heart, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle, Camera, Image } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Languages, Award, Heart, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle, Camera, Image, Link } from 'lucide-react';
 
 const Editor = ({ data, setData }) => {
     const handlePersonalInfoChange = (e) => {
@@ -170,6 +170,12 @@ const Editor = ({ data, setData }) => {
     const removeCertification = (index) => {
         const newCertifications = data.certifications.filter((_, i) => i !== index);
         setData({ ...data, certifications: newCertifications });
+    };
+
+    const updateSocialLink = (index, field, value) => {
+        const newLinks = [...(data.socialLinks || [])];
+        newLinks[index] = { ...newLinks[index], [field]: value };
+        setData({ ...data, socialLinks: newLinks });
     };
 
     return (
@@ -579,6 +585,37 @@ const Editor = ({ data, setData }) => {
                                     onChange={(e) => updateCertification(index, 'date', e.target.value)}
                                 />
                             </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className="editor-section">
+                <div className="section-header-icon">
+                    <Link size={18} className="header-icon" />
+                    <h3>Liens externes</h3>
+                </div>
+                {(data.socialLinks || []).map((link, index) => (
+                    <div key={index} className="editor-item-box elegant mini-box">
+                        <div className="item-controls-top">
+                            <span className="item-label">{link.name.toUpperCase()}</span>
+                        </div>
+                        <div className="form-group mini">
+                            <label>URL</label>
+                            <input
+                                type="url"
+                                placeholder={`https://...`}
+                                value={link.url}
+                                onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group mini">
+                            <label>Libellé affiché</label>
+                            <input
+                                type="text"
+                                placeholder={`Ex: mon-portfolio.fr`}
+                                value={link.label}
+                                onChange={(e) => updateSocialLink(index, 'label', e.target.value)}
+                            />
                         </div>
                     </div>
                 ))}

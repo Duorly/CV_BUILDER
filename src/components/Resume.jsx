@@ -64,7 +64,7 @@ const Resume = ({ data }) => {
                 <section className="sidebar-section">
                     <h2>Liens externes</h2>
                     <ul className="social-links">
-                        {socialLinks.map((link, index) => (
+                        {socialLinks.filter(link => link.url).map((link, index) => (
                             <li key={index}>
                                 <a href={link.url} target="_blank" rel="noreferrer">
                                     <Icon name={link.icon || "Link"} label={link.name} /> {link.label}
