@@ -1,24 +1,28 @@
 import photo from '../images/photo-cv.jpg';
 import * as Icons from 'lucide-react';
 
-const Resume = ({ data }) => {
+const Resume = ({ data, atsMode }) => {
     if (!data) return null;
     const { personalInfo, mainSkills, socialLinks, languages, experiences, education } = data;
 
     // Helper to render Lucide icons dynamically with optional accessibility label
     const Icon = ({ name, size = 12, className = "icon", label }) => {
+        if (atsMode) {
+            return label ? <strong className="ats-visible-label">{label} : </strong> : null;
+        }
+
         const LucideIcon = Icons[name];
         if (!LucideIcon) return null;
         return (
             <>
                 {label && <span className="sr-only">{label}:</span>}
-                <LucideIcon size={size} className={className} aria-hidden="true" />
+                <LucideIcon size={size} className={className} aria-hidden="true" focusable="false" />
             </>
         );
     };
 
     return (
-        <div className="resume-container" id="resume-root">
+        <div className={`resume-container ${atsMode ? 'ats-mode-active' : ''}`} id="resume-root">
             {/* Visual page-break indicator — screen only, hidden on print */}
             <div className="page-break-overlay" aria-hidden="true" />
             <aside className="sidebar">
@@ -56,7 +60,7 @@ const Resume = ({ data }) => {
                     <ul className="soft-skills-list">
                         {data.softSkills && data.softSkills.map((skill, index) => (
                             <li key={index}>
-                                <Icon name="CheckCircle2" size={14} className="icon-inline" label="Point fort" /> {skill}
+                                <Icon name="CheckCircle2" size={14} className="icon-inline" /> {skill}
                             </li>
                         ))}
                     </ul>
@@ -80,7 +84,7 @@ const Resume = ({ data }) => {
                     <ul className="lang-list">
                         {languages.map((lang, index) => (
                             <li key={index}>
-                                <Icon name="Globe" label="Langage" /> <strong>{lang.name} : </strong>  {lang.level}
+                                <Icon name="Globe" /> <strong>{lang.name} : </strong>  {lang.level}
                             </li>
                         ))}
                     </ul>
@@ -92,7 +96,7 @@ const Resume = ({ data }) => {
                         <ul className="social-links">
                             {data.certifications.map((cert, index) => (
                                 <li key={index} className="cert-item">
-                                    <Icon name="Award" size={14} className="icon-inline" label="Certification" />
+                                    <Icon name="Award" size={14} className="icon-inline" />
                                     <div className="cert-info">
                                         <strong>{cert.name}</strong>
                                         <span>{cert.issuer} • {cert.date}</span>
@@ -105,9 +109,8 @@ const Resume = ({ data }) => {
             </aside>
 
             <main className="main-content">
-                <section className="main-section">
-                    <h2>Objectif professionnel</h2>
-                    <p>{personalInfo.objective}</p>
+                <section className="main-section objective-section">
+                    <p className="objective-text">{personalInfo.objective}</p>
                 </section>
 
                 <section className="main-section" aria-label="Expériences professionnelles">

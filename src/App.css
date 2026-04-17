@@ -867,6 +867,13 @@ h1 {
   text-align: justify;
 }
 
+.objective-text {
+  font-size: calc(0.92rem * var(--font-scale)) !important;
+  font-style: italic;
+  color: var(--text-dark) !important;
+  line-height: 1.6;
+}
+
 .experience-item,
 .formation-item {
   margin-bottom: 20px;
@@ -1643,4 +1650,10 @@ h1 {
   font-size: calc(0.68rem * var(--font-scale));
   color: var(--text-light);
   line-height: 1.2;
+}
+/* ── ATS Basic Layout Mode ─────────────────────────────────────────── */
+.ats-visible-label {
+  margin-right: 4px;
+  font-weight: 700;
+  color: var(--text-dark);
 }

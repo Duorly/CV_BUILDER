@@ -13,6 +13,7 @@ function App() {
   const [sidebarBg, setSidebarBg] = useState('#f9fafb');
   const [textColor, setTextColor] = useState('#111827');
   const [showEditor, setShowEditor] = useState(true);
+  const [atsMode, setAtsMode] = useState(false);
   const [showATSOptimizer, setShowATSOptimizer] = useState(false);
 
   const handlePrint = () => {
@@ -201,6 +202,14 @@ function App() {
               <PanelLeft size={14} />
               <span>Éditeur</span>
             </button>
+            <button
+              onClick={() => setAtsMode(!atsMode)}
+              className={`ctrl-btn ${atsMode ? 'active' : ''}`}
+              title="Mode ATS (Texte brut, sans icônes)"
+            >
+              <FileDown size={14} />
+              <span>Mode ATS</span>
+            </button>
             <div className="ctrl-slider">
               <Type size={13} className="ctrl-slider-icon" />
               <input
@@ -314,7 +323,7 @@ function App() {
         {showEditor && (
           <Editor data={data} setData={setData} />
         )}
-        <Resume data={data} />
+        <Resume data={data} atsMode={atsMode} />
       </div>
     </div>
   )
