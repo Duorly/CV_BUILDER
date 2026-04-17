@@ -101,6 +101,52 @@ const Editor = ({ data, setData }) => {
         setData({ ...data, experiences: newExperiences });
     };
 
+    const updateOtherExperience = (index, field, value) => {
+        const newExperiences = [...(data.otherExperiences || [])];
+        newExperiences[index] = { ...newExperiences[index], [field]: value };
+        setData({ ...data, otherExperiences: newExperiences });
+    };
+
+    const updateOtherExperienceDetail = (expIndex, detailIndex, value) => {
+        const newExperiences = [...(data.otherExperiences || [])];
+        const newDetails = [...newExperiences[expIndex].details];
+        newDetails[detailIndex] = value;
+        newExperiences[expIndex].details = newDetails;
+        setData({ ...data, otherExperiences: newExperiences });
+    };
+
+    const addOtherExperience = () => {
+        const newExperiences = [
+            {
+                title: "Nouveau poste",
+                company: "Entreprise",
+                location: "Ville",
+                period: "Période",
+                details: ["Nouveau détail"]
+            },
+            ...(data.otherExperiences || [])
+        ];
+        setData({ ...data, otherExperiences: newExperiences });
+    };
+
+    const removeOtherExperience = (index) => {
+        const newExperiences = (data.otherExperiences || []).filter((_, i) => i !== index);
+        setData({ ...data, otherExperiences: newExperiences });
+    };
+
+    const addOtherDetail = (expIndex) => {
+        const newExperiences = [...(data.otherExperiences || [])];
+        if (!newExperiences[expIndex].details) newExperiences[expIndex].details = [];
+        newExperiences[expIndex].details.push("Nouveau détail");
+        setData({ ...data, otherExperiences: newExperiences });
+    };
+
+    const removeOtherDetail = (expIndex, detailIndex) => {
+        const newExperiences = [...(data.otherExperiences || [])];
+        newExperiences[expIndex].details = newExperiences[expIndex].details.filter((_, i) => i !== detailIndex);
+        setData({ ...data, otherExperiences: newExperiences });
+    };
+
     const updateEducation = (index, field, value) => {
         const newEducation = [...data.education];
         newEducation[index] = { ...newEducation[index], [field]: value };
@@ -548,6 +594,119 @@ const Editor = ({ data, setData }) => {
                                 </div>
                             </div>
                         )}
+                    </div>
+                ))}
+            </div>
+
+            <div className="editor-section">
+                <div className="section-header-flex section-header-icon">
+                    <div className="title-with-icon">
+                        <Briefcase size={18} className="header-icon" />
+                        <h3>Autres Expériences</h3>
+                    </div>
+                    <button className="add-btn-round" onClick={addOtherExperience} title="Ajouter une expérience">
+                        <Plus size={16} />
+                    </button>
+                </div>
+                {(data.otherExperiences || []).map((exp, index) => (
+                    <div key={index} className="editor-item-box elegant">
+                        <div className="item-controls-top">
+                            <span className="item-label">AUTRE PROJET {index + 1}</span>
+                            <button className="remove-btn-icon" onClick={() => removeOtherExperience(index)} title="Supprimer l'expérience">
+                                <Trash2 size={14} />
+                            </button>
+                        </div>
+
+                        <div className="form-group mini">
+                            <label>Poste</label>
+                            <div className="icon-input-group">
+                                <Briefcase size={14} className="input-icon" />
+                                <input
+                                    type="text"
+                                    placeholder="Ex: Lead Développeur"
+                                    value={exp.title}
+                                    onChange={(e) => updateOtherExperience(index, 'title', e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="editor-grid">
+                            <div className="form-group mini">
+                                <label>Entreprise</label>
+                                <div className="icon-input-group">
+                                    <Building size={14} className="input-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="Nom"
+                                        value={exp.company}
+                                        onChange={(e) => updateOtherExperience(index, 'company', e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group mini">
+                                <label>Lieu</label>
+                                <div className="icon-input-group">
+                                    <MapPin size={14} className="input-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="Ville"
+                                        value={exp.location}
+                                        onChange={(e) => updateOtherExperience(index, 'location', e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group mini">
+                                <label>Période</label>
+                                <div className="icon-input-group">
+                                    <Calendar size={14} className="input-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="Ex: 2021 - 2023"
+                                        value={exp.period}
+                                        onChange={(e) => updateOtherExperience(index, 'period', e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="details-editor">
+                            <div className="section-header-flex mini-header">
+                                <label>Bullet points</label>
+                                <button className="add-btn-tiny" onClick={() => addOtherDetail(index)}>
+                                    <Plus size={10} /> Point
+                                </button>
+                            </div>
+                            {(exp.details || []).map((detail, dIdx) => (
+                                <div key={dIdx} className="detail-row premium">
+                                    <div className="detail-drag-handle">
+                                        <GripVertical size={14} />
+                                    </div>
+                                    <div className="detail-bullet">
+                                        <Circle size={6} fill="currentColor" strokeWidth={3} />
+                                    </div>
+                                    <textarea
+                                        className="detail-input"
+                                        rows="1"
+                                        value={detail}
+                                        onChange={(e) => updateOtherExperienceDetail(index, dIdx, e.target.value)}
+                                        onInput={(e) => {
+                                            e.target.style.height = 'auto';
+                                            e.target.style.height = e.target.scrollHeight + 'px';
+                                        }}
+                                        ref={(el) => {
+                                            if (el) {
+                                                el.style.height = 'auto';
+                                                el.style.height = el.scrollHeight + 'px';
+                                            }
+                                        }}
+                                    />
+                                    <button className="remove-btn-icon-tiny" onClick={() => removeOtherDetail(index, dIdx)} title="Supprimer ce point">
+                                        <X size={14} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
                     </div>
                 ))}
             </div>

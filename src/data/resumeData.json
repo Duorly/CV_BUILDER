@@ -6,7 +6,7 @@
     "phone": "+33 7 75 72 55 82",
     "location": "Île de France, France",
     "photo": "",
-    "objective": "Développeur Full Stack, passionné par la conception de solutions web et mobiles performantes. Fort de 6 ans d'expérience en développement, en architecture logicielle et en cloud (AWS, GCP), je conçois des produits robustes, évolutifs et optimisés. Curieux, dynamique et orienté résultats, j'aime collaborer dans des environnements agiles et relever des défis techniques ambitieux pour contribuer activement à la réussite des projets d'entreprise."
+    "objective": "Lead Développeur FullStack et Architecte avec plus de 6 ans d'expérience, j'accompagne les entreprises et les institutions dans leur transformation numérique. Maîtrisant les environnements Cloud et les architectures complexes, je pilote le développement de solutions web de bout en bout, tout en assurant le mentorat technique des équipes. Orienté résultats, j'allie excellence technique et impact métier pour garantir la réussite de vos projets stratégiques."
   },
   "mainSkills": [
     {
@@ -184,9 +184,88 @@
   ],
   "certifications": [
     {
-      "name": "AWS Certified Developer - Associate",
+      "name": "AWS Certified Cloud Practitioner",
       "issuer": "Amazon Web Services",
-      "date": "2023"
+      "date": "2026"
+    }
+  ],
+  "otherExperiences": [
+    {
+      "title": "IT Manager",
+      "company": "LALLA BUSINESS",
+      "location": "Brazzaville, République du Congo",
+      "period": "03/2021 - 02/2023",
+      "details": [
+        "Chef de projet technique et développeur.",
+        "Montage et direction d'une équipe de 4 profils IT.",
+        "Conception et mise en place d'une plateforme de transfert de fonds internationaux (LALLA TRANSFERT).",
+        "Compétences : Développement front-end, backend, MariaDB"
+      ]
+    },
+    {
+      "title": "Consultant Développeur Concepteur d'Application",
+      "company": "Ministère de la Santé",
+      "location": "Brazzaville, République du Congo",
+      "period": "03/2024 - 05/2024",
+      "details": [
+        "Accompagnement de l'équipe technique pour une application de rappel vaccinal (MANGWELE).",
+        "Développement des micro services RESTful.",
+        "Développement du back-office et intégration des APIs.",
+        "Configuration de serveur sous Debian et déploiement.",
+        "Implémentation USSD, connexion au SMSC."
+      ]
+    },
+    {
+      "title": "Consultant IT",
+      "company": "United Nations Population Fund (UNFPA)",
+      "location": "Brazzaville, République du Congo",
+      "period": "09/2023 - 11/2023",
+      "details": [
+        "Installation et mise en ligne de la plateforme GLPI.",
+        "Formation des agents de la DTIC à l'utilisation de GLPI.",
+        "Collecte des données du parc informatique des formations sanitaires."
+      ]
+    },
+    {
+      "title": "Développeur Frontend",
+      "company": "Noki Noki services",
+      "location": "Brazzaville, République du Congo",
+      "period": "03/2023 - 08/2023",
+      "details": [
+        "Conception et développement des interfaces utilisateur (Nuxt 3).",
+        "Maintenance régulière et mises à jour de l'interface utilisateur."
+      ]
+    },
+    {
+      "title": "Consultant IT Junior",
+      "company": "AGRER",
+      "location": "Bruxelles, Belgique",
+      "period": "01/2022 - 05/2022",
+      "details": [
+        "Développement d'une solution numérique mutualisée (mise en relation producteurs, distributeurs, consommateurs) pour le PRCCE II au Congo, financement UE.",
+        "Appui méthodologique et technique (conception, développement, déploiement) et intégration de la solution à la plateforme de gestion du PRCCE II.",
+        "Accompagnement des acteurs et clusters cibles à l'exploitation et la maintenance de la solution."
+      ]
+    },
+    {
+      "title": "Développeur web",
+      "company": "Lopango",
+      "location": "Brazzaville, République du Congo",
+      "period": "01/2020 - 03/2021",
+      "details": [
+        "Conception de sites internet et applications web (HTML, CSS, JS).",
+        "Assurance de la sécurité et de la qualité des contenus CMS.",
+        "Création d'interfaces utilisateurs alignées avec l'expérience de marque."
+      ]
+    },
+    {
+      "title": "Stagiaire en développement Web",
+      "company": "Lopango",
+      "location": "Brazzaville, République du Congo",
+      "period": "10/2019 - 12/2019",
+      "details": [
+        "Stage en développement web."
+      ]
     }
   ]
 }

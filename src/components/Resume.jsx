@@ -3,7 +3,7 @@ import * as Icons from 'lucide-react';
 
 const Resume = ({ data, atsMode }) => {
     if (!data) return null;
-    const { personalInfo, mainSkills, socialLinks, languages, experiences, education } = data;
+    const { personalInfo, mainSkills, socialLinks, languages, experiences, education, otherExperiences } = data;
 
     // Helper to render Lucide icons dynamically with optional accessibility label
     const Icon = ({ name, size = 12, className = "icon", label }) => {
@@ -182,6 +182,35 @@ const Resume = ({ data, atsMode }) => {
                         </article>
                     ))}
                 </section>
+
+                {otherExperiences && otherExperiences.length > 0 && (
+                    <section className="main-section" aria-label="Autres expériences">
+                        <h2>Autres expériences</h2>
+                        {otherExperiences.map((exp, index) => (
+                            <article key={index} className="experience-item">
+                                <div className="exp-header">
+                                    <h3>{exp.title}</h3>
+                                    <div className="exp-meta">
+                                        <span><strong>{exp.company}</strong></span>
+                                        <span className="meta-item">
+                                            <Icon name="MapPin" className="icon-inline" label="Lieu" /> {exp.location}
+                                        </span>
+                                        <span className="meta-item">
+                                            <Icon name="Calendar" className="icon-inline" label="Période" /> {exp.period}
+                                        </span>
+                                    </div>
+                                </div>
+                                {exp.details && exp.details.length > 0 && (
+                                    <ul className="exp-details">
+                                        {exp.details.map((detail, idx) => (
+                                            <li key={idx}>{detail}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </article>
+                        ))}
+                    </section>
+                )}
             </main>
         </div>
     );
