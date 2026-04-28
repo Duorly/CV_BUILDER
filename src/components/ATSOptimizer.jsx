@@ -56,6 +56,9 @@ async function callAnthropic(apiKey, data, jobOffer) {
   });
 
   if (!response.ok) {
+    if (response.status === 429) {
+      throw new Error("Quota API dépassé. Veuillez patienter quelques instants ou vérifier le solde/les limites de votre clé Anthropic.");
+    }
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.error?.message || `Erreur API Anthropic: ${response.status}`);
   }
@@ -65,7 +68,7 @@ async function callAnthropic(apiKey, data, jobOffer) {
 }
 
 async function callGemini(apiKey, data, jobOffer) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -91,6 +94,9 @@ async function callGemini(apiKey, data, jobOffer) {
   });
 
   if (!response.ok) {
+    if (response.status === 429) {
+      throw new Error("Quota API dépassé (Trop de requêtes). Veuillez patienter quelques instants ou vérifier les limites/facturation de votre clé Google.");
+    }
     const errorData = await response.json().catch(() => ({}));
     const msg =
       errorData.error?.message || `Erreur API Gemini: ${response.status}`;
