@@ -77,13 +77,6 @@
       ]
     }
   ],
-  "softSkills": [
-    "Encadre et fait monter en compétence des équipes de développeurs",
-    "Anime les revues de code et pilote la réduction de la dette technique",
-    "Mentorat de développeurs juniors et d'étudiants",
-    "Pilote des projets en autonomie en méthodologie Agile",
-    "Résout des problématiques d'architecture et de scalabilité complexes"
-  ],
   "socialLinks": [
     {
       "name": "Linkedin",
@@ -121,10 +114,10 @@
       "location": "Paris",
       "period": "09/2025 - En cours",
       "details": [
-        "Conception et développement d'ITIC COMPANION, plateforme de gamification scolaire utilisée par plus de 500 étudiants du BTS au Master.",
-        "Intégration et interopérabilité avec l'ERP scolaire Ymag Ypareo et Hubspot pour la synchronisation des données étudiants.",
-        "Mentorat technique et accompagnement des étudiants du BTS au Master sur les bonnes pratiques de développement.",
-        "Création d'une plateforme de tests et d'évaluations académiques avec automatisation du calcul des scores et du suivi des résultats candidats ayant évalué plus d'un millier d'étudiants."
+        "Conception et développement d'ITIC Companion, plateforme de gamification scolaire utilisée par plus de 500 étudiants et une vingtaine d'enseignants à ITIC Paris.",
+        "Collaboration au sein d'une équipe de 2 développeurs pour concevoir et faire évoluer la plateforme.",
+        "Intégration de l'ERP Ymag Ypareo et de HubSpot pour automatiser la synchronisation des données étudiants.",
+        "Développement d'une plateforme d'évaluations académiques ayant permis de gérer les résultats de plus de 1 000 étudiants."
       ]
     },
     {
@@ -133,10 +126,10 @@
       "location": "Île-de-France",
       "period": "10/2024 - 09/2025",
       "details": [
-        "Conception et mise en place d'une architecture cloud AWS, garantissant scalabilité et maintenabilité du projet client.",
-        "Optimisation des coûts d'infrastructure AWS : réduction de la facture cloud et maintien de coûts maîtrisés dans la durée.",
-        "Encadrement technique et mentorat d'une équipe de 3 développeurs (revues de code hebdomadaires, montée en compétence).",
-        "Pilotage de la réduction de la dette technique via un refactoring ciblé et une amélioration continue de la qualité du code."
+        "Conception et mise en place d'une architecture cloud AWS, garantissant scalabilité et maintenabilité des applications.",
+        "Réduction des coûts d'infrastructure AWS de 71 % (700 $ → 200 $/mois) grâce à l'optimisation de l'architecture cloud, sans dégrader les performances.",
+        "Encadrement d'une équipe de 3 développeurs via les revues de code et le mentorat technique.",
+        "Pilotage de la réduction de la dette technique via un programme de refactoring et l'amélioration continue des pratiques de développement."
       ]
     },
     {
@@ -145,10 +138,10 @@
       "location": "Île-de-France",
       "period": "05/2024 - 09/2024",
       "details": [
-        "Développement et déploiement de services backend sur AWS.",
-        "Réduction de la dette technique par le choix d'architectures adaptées à la croissance du produit.",
-        "Encadrement technique des développeurs et suivi de leurs performances.",
-        "Mise en œuvre de bonnes pratiques (revues de code, tests) pour fiabiliser la qualité du code."
+        "Développement et déploiement de services backend sur AWS pour accompagner la croissance du produit.",
+        "Encadrement technique de 2 développeurs : revues de code, mentorat et suivi des bonnes pratiques.",
+        "Réduction de la dette technique par la refonte de l'architecture backend vers des composants plus maintenables.",
+        "Mise en place des bonnes pratiques de qualité (tests, revues de code, standards de développement)."
       ]
     },
     {
@@ -200,10 +193,10 @@
       "location": "Brazzaville, République du Congo",
       "period": "03/2021 - 02/2023",
       "details": [
-        "Conception et déploiement de LALLA TRANSFERT, plateforme de transfert de fonds internationaux.",
+        "Conception et pilotage du développement de LALLA TRANSFERT, plateforme de transfert de fonds internationaux mise en production.",
+        "Livraison d'une plateforme ayant enregistré plus d'un million de transactions, couvrant 9 corridors internationaux.",
         "Management d'une équipe de 4 profils IT (organisation, suivi des livrables, montée en compétence).",
-        "Pilotage technique des projets de bout en bout, de la conception au déploiement.",
-        "Développement front-end et back-end (MariaDB) des solutions internes."
+        "Pilotage des développements full-stack et conception de la base de données (MariaDB)."
       ]
     },
     {
@@ -256,8 +249,7 @@
       "location": "Brazzaville, République du Congo",
       "period": "01/2020 - 03/2021",
       "details": [
-        "Conception et développement de sites internet et applications web (HTML, CSS, JS).",
-        "Sécurisation et fiabilisation des contenus CMS.",
+        "Conception et développement de sites internet et applications web (HTML, CSS, JS), avec une attention particulière à la sécurité et à la qualité des contenus CMS.",
         "Création d'interfaces utilisateur alignées avec l'identité de marque des clients."
       ]
     },

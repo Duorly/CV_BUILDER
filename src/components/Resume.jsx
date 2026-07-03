@@ -1,16 +1,11 @@
 import photo from '../images/photo-cv.jpg';
 import * as Icons from 'lucide-react';
 
-const Resume = ({ data, atsMode }) => {
+const Resume = ({ data }) => {
     if (!data) return null;
     const { personalInfo, mainSkills, socialLinks, languages, experiences, education, otherExperiences } = data;
 
-    // Helper to render Lucide icons dynamically with optional accessibility label
     const Icon = ({ name, size = 12, className = "icon", label }) => {
-        if (atsMode) {
-            return label ? <strong className="ats-visible-label">{label} : </strong> : null;
-        }
-
         const LucideIcon = Icons[name];
         if (!LucideIcon) return null;
         return (
@@ -22,7 +17,7 @@ const Resume = ({ data, atsMode }) => {
     };
 
     return (
-        <div className={`resume-container ${atsMode ? 'ats-mode-active' : ''}`} id="resume-root">
+        <div className="resume-container" id="resume-root">
             {/* Visual page-break indicator — screen only, hidden on print */}
             <div className="page-break-overlay" aria-hidden="true" />
             <aside className="sidebar">
@@ -53,17 +48,6 @@ const Resume = ({ data, atsMode }) => {
                             </div>
                         </div>
                     ))}
-                </section>
-
-                <section className="sidebar-section">
-                    <h2>Soft Skills</h2>
-                    <ul className="soft-skills-list">
-                        {data.softSkills && data.softSkills.map((skill, index) => (
-                            <li key={index}>
-                                <Icon name="CheckCircle2" size={14} className="icon-inline" /> {skill}
-                            </li>
-                        ))}
-                    </ul>
                 </section>
 
                 <section className="sidebar-section">
@@ -217,4 +201,3 @@ const Resume = ({ data, atsMode }) => {
 };
 
 export default Resume;
-

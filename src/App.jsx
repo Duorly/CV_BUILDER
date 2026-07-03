@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Sparkles, PanelLeft, Type, Palette, Upload, Download, Printer, FileDown, FileText } from 'lucide-react'
 import Resume from './components/Resume'
+import ResumeATS from './components/ResumeATS'
 import Editor from './components/Editor'
 import ATSOptimizer from './components/ATSOptimizer'
 import initialData from './data/resumeData.json'
@@ -323,7 +324,7 @@ function App() {
         {showEditor && (
           <Editor data={data} setData={setData} />
         )}
-        <Resume data={data} atsMode={atsMode} />
+        {atsMode ? <ResumeATS data={data} /> : <Resume data={data} />}
       </div>
     </div>
   )

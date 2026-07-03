@@ -7,7 +7,7 @@ Tu reçois un CV au format JSON et une offre d'emploi. Tu dois optimiser le CV p
 Règles strictes :
 1. Ne jamais inventer ni falsifier des informations — garde toutes les données factuelles exactes
 2. Réécris le champ "objective" (résumé professionnel) pour inclure les mots-clés importants de l'offre
-3. Réordonne les tableaux mainSkills et softSkills pour mettre en avant les plus pertinentes en premier
+3. Réordonne le tableau mainSkills pour mettre en avant les compétences les plus pertinentes en premier
 4. Reformule les bullets points d'expérience (champ "details") pour utiliser les mots-clés de l'offre tout en restant fidèle aux faits réels
 5. Retourne UNIQUEMENT le JSON optimisé, sans aucune explication ni texte supplémentaire avant ou après
 6. Respecte exactement la même structure JSON que l'entrée`;

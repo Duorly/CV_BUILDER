@@ -1,4 +1,4 @@
-import { User, Briefcase, GraduationCap, Award, Heart, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle, Camera, Image, Link } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Award, Plus, Trash2, X, MapPin, Calendar, Building, GripVertical, Circle, Camera, Image, Link } from 'lucide-react';
 
 const Editor = ({ data, setData }) => {
     const handlePersonalInfoChange = (e) => {
@@ -49,11 +49,6 @@ const Editor = ({ data, setData }) => {
     const removeSkillCategory = (index) => {
         const newMainSkills = data.mainSkills.filter((_, i) => i !== index);
         setData({ ...data, mainSkills: newMainSkills });
-    };
-
-    const handleSoftSkillsChange = (e) => {
-        const skillsArray = e.target.value.split(',').map(skill => skill.trim());
-        setData({ ...data, softSkills: skillsArray });
     };
 
     const updateExperience = (index, field, value) => {
@@ -351,21 +346,6 @@ const Editor = ({ data, setData }) => {
                         </div>
                     </div>
                 ))}
-            </div>
-
-            <div className="editor-section">
-                <div className="section-header-icon">
-                    <Heart size={18} className="header-icon" />
-                    <h3>Soft Skills</h3>
-                </div>
-                <div className="form-group">
-                    <p className="field-hint">Séparez par des virgules</p>
-                    <textarea
-                        rows="3"
-                        value={data.softSkills ? data.softSkills.join(', ') : ''}
-                        onChange={handleSoftSkillsChange}
-                    />
-                </div>
             </div>
 
             <div className="editor-section">
