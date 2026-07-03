@@ -33,78 +33,97 @@ const PROVIDERS = {
   },
 };
 
-async function callAnthropic(apiKey, data, jobOffer) {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 8096,
-      system: SYSTEM_PROMPT,
-      messages: [
-        {
-          role: 'user',
-          content: `CV actuel (JSON) :\n${JSON.stringify(data, null, 2)}\n\nOffre d'emploi :\n${jobOffer}`,
-        },
-      ],
-    }),
-  });
+async function callAnthropic(apiKey, data, jobOffer, retryCount = 0) {
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-sonnet-latest',
+        max_tokens: 8096,
+        system: SYSTEM_PROMPT,
+        messages: [
+          {
+            role: 'user',
+            content: `CV actuel (JSON) :\n${JSON.stringify(data, null, 2)}\n\nOffre d'emploi :\n${jobOffer}`,
+          },
+        ],
+      }),
+    });
 
-  if (!response.ok) {
-    if (response.status === 429) {
-      throw new Error("Quota API dépassé. Veuillez patienter quelques instants ou vérifier le solde/les limites de votre clé Anthropic.");
+    if (!response.ok) {
+      if (response.status === 429 && retryCount < 3) {
+        const delay = Math.pow(2, retryCount + 1) * 1000 + Math.random() * 1000;
+        console.warn(`Anthropic 429 hit. Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return callAnthropic(apiKey, data, jobOffer, retryCount + 1);
+      }
+      if (response.status === 429) {
+        throw new Error("Quota API Anthropic dépassé. Veuillez patienter quelques instants.");
+      }
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error?.message || `Erreur API Anthropic: ${response.status}`);
     }
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error?.message || `Erreur API Anthropic: ${response.status}`);
-  }
 
-  const result = await response.json();
-  return result.content[0]?.text || '';
+    const result = await response.json();
+    return result.content[0]?.text || '';
+  } catch (err) {
+    throw err;
+  }
 }
 
-async function callGemini(apiKey, data, jobOffer) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+async function callGemini(apiKey, data, jobOffer, retryCount = 0) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${apiKey}`;
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: {
-        parts: [{ text: SYSTEM_PROMPT }],
-      },
-      contents: [
-        {
-          parts: [
-            {
-              text: `CV actuel (JSON) :\n${JSON.stringify(data, null, 2)}\n\nOffre d'emploi :\n${jobOffer}`,
-            },
-          ],
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: {
+          parts: [{ text: SYSTEM_PROMPT }],
         },
-      ],
-      generationConfig: {
-        temperature: 0.3,
-        maxOutputTokens: 8192,
-      },
-    }),
-  });
+        contents: [
+          {
+            parts: [
+              {
+                text: `CV actuel (JSON) :\n${JSON.stringify(data, null, 2)}\n\nOffre d'emploi :\n${jobOffer}`,
+              },
+            ],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: 8192,
+        },
+      }),
+    });
 
-  if (!response.ok) {
-    if (response.status === 429) {
-      throw new Error("Quota API dépassé (Trop de requêtes). Veuillez patienter quelques instants ou vérifier les limites/facturation de votre clé Google.");
+    if (!response.ok) {
+      if (response.status === 429 && retryCount < 3) {
+        const delay = Math.pow(2, retryCount + 1) * 1000 + Math.random() * 1000;
+        console.warn(`Gemini 429 hit. Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return callGemini(apiKey, data, jobOffer, retryCount + 1);
+      }
+      if (response.status === 429) {
+        throw new Error("Quota API Gemini dépassé (Trop de requêtes). Veuillez patienter quelques instants.");
+      }
+      const errorData = await response.json().catch(() => ({}));
+      const msg = errorData.error?.message || `Erreur API Gemini: ${response.status}`;
+      throw new Error(msg);
     }
-    const errorData = await response.json().catch(() => ({}));
-    const msg =
-      errorData.error?.message || `Erreur API Gemini: ${response.status}`;
-    throw new Error(msg);
-  }
 
-  const result = await response.json();
-  return result.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const result = await response.json();
+    return result.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  } catch (err) {
+    throw err;
+  }
 }
 
 function extractJson(raw) {

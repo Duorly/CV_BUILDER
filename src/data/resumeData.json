@@ -6,46 +6,65 @@
     "phone": "+33 7 75 72 55 82",
     "location": "Île de France, France",
     "photo": "",
-    "objective": "Lead Développeur FullStack et Architecte avec plus de 6 ans d'expérience, j'accompagne les entreprises et les institutions dans leur transformation numérique. Maîtrisant les environnements Cloud et les architectures complexes, je pilote le développement de solutions web de bout en bout, tout en assurant le mentorat technique des équipes. Orienté résultats, j'allie excellence technique et impact métier pour garantir la réussite de vos projets stratégiques."
+    "objective": "Lead Développeur Fullstack avec 6+ ans d'expérience, spécialisé en architecture microservice et environnements Cloud (AWS, GCP). J'ai encadré une équipe de 3 développeurs chez XKSGROUP et conçu ITIC Companion, une plateforme de gamification scolaire utilisée par plus de 500 étudiants du BTS au Master. Je conjugue expertise technique full-stack (React, Vue, Spring Boot, NestJS) et leadership d'équipe pour livrer des solutions robustes, scalables et alignées sur les enjeux métier."
   },
   "mainSkills": [
     {
-      "category": "Frontend",
+      "category": "Langages",
+      "skills": [
+        "Javascript",
+        "Typescript",
+        "PHP",
+        "JAVA",
+        "Python"
+      ]
+    },
+    {
+      "category": "Frameworks Frontend",
       "skills": [
         "Vuejs",
         "Nuxt",
         "React",
-        "Javascript",
-        "Typescript",
         "Flutter"
       ]
     },
     {
-      "category": "Backend",
+      "category": "Frameworks Backend",
       "skills": [
-        "PHP",
-        "Wordpress",
-        "Laravel",
-        "JAVA",
+        "SpringBoot",
         "Hibernate",
         "JUnit",
-        "Kafka",
-        "SpringBoot",
         "NodeJS",
         "Express",
         "NestJS",
-        "Python (TenserFlow, Numpy, Panda)",
-        "Sci-Kit Learn"
+        "Laravel",
+        "Wordpress",
+        "Kafka"
       ]
     },
     {
-      "category": "Cloud, DevOps & Architecture",
+      "category": "Cloud & DevOps",
       "skills": [
         "AWS",
         "GCP",
         "Cloudflare",
-        "CI/CD (Github Actions, Docker)",
-        "Architecture (Microservice, Hexagonal)"
+        "CI/CD (Github Actions, Docker)"
+      ]
+    },
+    {
+      "category": "Architecture",
+      "skills": [
+        "Microservices",
+        "Architecture Hexagonale"
+      ]
+    },
+    {
+      "category": "IA & Data",
+      "skills": [
+        "NLP",
+        "Numpy",
+        "Pandas",
+        "Scikit-Learn"
       ]
     },
     {
@@ -59,11 +78,11 @@
     }
   ],
   "softSkills": [
-    "Curiosité et dynamisme",
-    "Orientation résultats",
-    "Travail en équipe et collaboration",
-    "Mentorat et accompagnement",
-    "Résolution de problèmes complexes"
+    "Encadre et fait monter en compétence des équipes de développeurs",
+    "Anime les revues de code et pilote la réduction de la dette technique",
+    "Mentorat de développeurs juniors et d'étudiants",
+    "Pilote des projets en autonomie en méthodologie Agile",
+    "Résout des problématiques d'architecture et de scalabilité complexes"
   ],
   "socialLinks": [
     {
@@ -102,10 +121,10 @@
       "location": "Paris",
       "period": "09/2025 - En cours",
       "details": [
-        "Conception de l'application ITIC COMPANION (Outils de gamification scolaire).",
-        "Collaboration & inter-opérabilité avec l'ERP Scolaire Ymag Ypareo.",
-        "Mentorat technique et accompagnement des étudiants du BTS au Master.",
-        "Documentation et mise en place d'une architecture microservice."
+        "Conception et développement d'ITIC COMPANION, plateforme de gamification scolaire utilisée par plus de 500 étudiants du BTS au Master.",
+        "Intégration et interopérabilité avec l'ERP scolaire Ymag Ypareo et Hubspot pour la synchronisation des données étudiants.",
+        "Mentorat technique et accompagnement des étudiants du BTS au Master sur les bonnes pratiques de développement.",
+        "Création d'une plateforme de tests et d'évaluations académiques avec automatisation du calcul des scores et du suivi des résultats candidats ayant évalué plus d'un millier d'étudiants."
       ]
     },
     {
@@ -114,10 +133,10 @@
       "location": "Île-de-France",
       "period": "10/2024 - 09/2025",
       "details": [
-        "Conception de l'architecture technique et validation des choix technologiques.",
-        "Revue de code, gestion de la dette technique et amélioration continue.",
-        "Mentorat technique et accompagnement des développeurs.",
-        "Documentation, veille technologique et coordination des équipes."
+        "Conception et mise en place d'une architecture cloud AWS, garantissant scalabilité et maintenabilité du projet client.",
+        "Optimisation des coûts d'infrastructure AWS : réduction de la facture cloud et maintien de coûts maîtrisés dans la durée.",
+        "Encadrement technique et mentorat d'une équipe de 3 développeurs (revues de code hebdomadaires, montée en compétence).",
+        "Pilotage de la réduction de la dette technique via un refactoring ciblé et une amélioration continue de la qualité du code."
       ]
     },
     {
@@ -126,10 +145,10 @@
       "location": "Île-de-France",
       "period": "05/2024 - 09/2024",
       "details": [
-        "Développement backend et déploiement de services sur le cloud (AWS).",
-        "Gestion de la dette technique et choix d'architectures adaptées.",
-        "Encadrement technique des développeurs et suivi des performances.",
-        "Mise en œuvre de bonnes pratiques pour améliorer la qualité du code."
+        "Développement et déploiement de services backend sur AWS.",
+        "Réduction de la dette technique par le choix d'architectures adaptées à la croissance du produit.",
+        "Encadrement technique des développeurs et suivi de leurs performances.",
+        "Mise en œuvre de bonnes pratiques (revues de code, tests) pour fiabiliser la qualité du code."
       ]
     },
     {
@@ -138,10 +157,10 @@
       "location": "Île-de-France",
       "period": "10/2023 - 03/2024",
       "details": [
-        "Conception et développement de solutions logicielles et sites web.",
-        "Déploiement d'applications sur des serveurs Linux dans le cloud.",
-        "Pilotage de projets en méthodologie agile et coordination d'équipe.",
-        "Gestion du DNS, des sous-domaines et des certificats de sécurité."
+        "Conception et développement de solutions logicielles et de sites web pour des clients variés.",
+        "Déploiement et administration d'applications sur des serveurs Linux dans le cloud.",
+        "Pilotage de projets en méthodologie Agile et coordination d'équipe.",
+        "Gestion du DNS, des sous-domaines et des certificats de sécurité (SSL/TLS)."
       ]
     }
   ],
@@ -150,22 +169,7 @@
       "title": "Mastère Expert Lead Développeur Fullstack",
       "school": "ITIC Paris",
       "degree": "Titre RNCP de niveau 7 (BAC +5)",
-      "period": "2024 - 2026",
-      "objectives": [
-        "Architecture logicielle",
-        "Machine Learning",
-        "Cloud Computing",
-        "DevOps"
-      ],
-      "tools": [
-        "Python",
-        "Scikit-learn",
-        "TensorFlow",
-        "Numpy",
-        "Pandas",
-        "Java"
-      ],
-      "details": []
+      "period": "2024 - 2026"
     },
     {
       "title": "Bachelor Développeur Concepteur d'Application",
@@ -196,10 +200,10 @@
       "location": "Brazzaville, République du Congo",
       "period": "03/2021 - 02/2023",
       "details": [
-        "Chef de projet technique et développeur.",
-        "Montage et direction d'une équipe de 4 profils IT.",
-        "Conception et mise en place d'une plateforme de transfert de fonds internationaux (LALLA TRANSFERT).",
-        "Compétences : Développement front-end, backend, MariaDB"
+        "Conception et déploiement de LALLA TRANSFERT, plateforme de transfert de fonds internationaux.",
+        "Management d'une équipe de 4 profils IT (organisation, suivi des livrables, montée en compétence).",
+        "Pilotage technique des projets de bout en bout, de la conception au déploiement.",
+        "Développement front-end et back-end (MariaDB) des solutions internes."
       ]
     },
     {
@@ -208,11 +212,10 @@
       "location": "Brazzaville, République du Congo",
       "period": "03/2024 - 05/2024",
       "details": [
-        "Accompagnement de l'équipe technique pour une application de rappel vaccinal (MANGWELE).",
-        "Développement des micro services RESTful.",
-        "Développement du back-office et intégration des APIs.",
-        "Configuration de serveur sous Debian et déploiement.",
-        "Implémentation USSD, connexion au SMSC."
+        "Développement de MANGWELE, application de rappel vaccinal, aux côtés de l'équipe technique du ministère.",
+        "Développement de micro-services RESTful et du back-office, intégration des APIs.",
+        "Configuration et déploiement de serveurs sous Debian.",
+        "Implémentation d'un canal USSD connecté au SMSC pour l'envoi des rappels."
       ]
     },
     {
@@ -221,9 +224,9 @@
       "location": "Brazzaville, République du Congo",
       "period": "09/2023 - 11/2023",
       "details": [
-        "Installation et mise en ligne de la plateforme GLPI.",
+        "Déploiement et mise en ligne de la plateforme GLPI de gestion du parc informatique.",
         "Formation des agents de la DTIC à l'utilisation de GLPI.",
-        "Collecte des données du parc informatique des formations sanitaires."
+        "Collecte et structuration des données du parc informatique des formations sanitaires."
       ]
     },
     {
@@ -232,8 +235,8 @@
       "location": "Brazzaville, République du Congo",
       "period": "03/2023 - 08/2023",
       "details": [
-        "Conception et développement des interfaces utilisateur (Nuxt 3).",
-        "Maintenance régulière et mises à jour de l'interface utilisateur."
+        "Conception et développement des interfaces utilisateur en Nuxt 3.",
+        "Maintenance et mise à jour continue de l'interface utilisateur en production."
       ]
     },
     {
@@ -242,8 +245,8 @@
       "location": "Bruxelles, Belgique",
       "period": "01/2022 - 05/2022",
       "details": [
-        "Développement d'une solution numérique mutualisée (mise en relation producteurs, distributeurs, consommateurs) pour le PRCCE II au Congo, financement UE.",
-        "Appui méthodologique et technique (conception, développement, déploiement) et intégration de la solution à la plateforme de gestion du PRCCE II.",
+        "Développement d'une solution numérique mutualisée mettant en relation producteurs, distributeurs et consommateurs, pour le programme PRCCE II (financement UE) au Congo.",
+        "Conception, développement et déploiement de la solution, intégrée à la plateforme de gestion du PRCCE II.",
         "Accompagnement des acteurs et clusters cibles à l'exploitation et la maintenance de la solution."
       ]
     },
@@ -253,9 +256,9 @@
       "location": "Brazzaville, République du Congo",
       "period": "01/2020 - 03/2021",
       "details": [
-        "Conception de sites internet et applications web (HTML, CSS, JS).",
-        "Assurance de la sécurité et de la qualité des contenus CMS.",
-        "Création d'interfaces utilisateurs alignées avec l'expérience de marque."
+        "Conception et développement de sites internet et applications web (HTML, CSS, JS).",
+        "Sécurisation et fiabilisation des contenus CMS.",
+        "Création d'interfaces utilisateur alignées avec l'identité de marque des clients."
       ]
     },
     {
@@ -264,7 +267,7 @@
       "location": "Brazzaville, République du Congo",
       "period": "10/2019 - 12/2019",
       "details": [
-        "Stage en développement web."
+        "Développement de fonctionnalités web sous la supervision de l'équipe technique."
       ]
     }
   ]
