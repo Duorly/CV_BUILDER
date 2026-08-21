@@ -112,7 +112,7 @@
       "title": "Développeur Fullstack / Mentor",
       "company": "ITIC PARIS",
       "location": "Paris",
-      "period": "09/2025 - En cours",
+      "period": "09/2025 - 09/2026",
       "details": [
         "Conception et développement d'ITIC Companion, plateforme de gamification scolaire utilisée par plus de 500 étudiants et une vingtaine d'enseignants à ITIC Paris.",
         "Collaboration au sein d'une équipe de 2 développeurs pour concevoir et faire évoluer la plateforme.",
@@ -121,7 +121,7 @@
       ]
     },
     {
-      "title": "Lead Développeur Fullstack / Chef de projet",
+      "title": "Développeur Fullstack",
       "company": "XKSGROUP",
       "location": "Île-de-France",
       "period": "10/2024 - 09/2025",
@@ -130,30 +130,6 @@
         "Réduction des coûts d'infrastructure AWS de 71 % (700 $ → 200 $/mois) grâce à l'optimisation de l'architecture cloud, sans dégrader les performances.",
         "Encadrement d'une équipe de 3 développeurs via les revues de code et le mentorat technique.",
         "Pilotage de la réduction de la dette technique via un programme de refactoring et l'amélioration continue des pratiques de développement."
-      ]
-    },
-    {
-      "title": "Tech Lead Backend",
-      "company": "FASEYA",
-      "location": "Île-de-France",
-      "period": "05/2024 - 09/2024",
-      "details": [
-        "Développement et déploiement de services backend sur AWS pour accompagner la croissance du produit.",
-        "Encadrement technique de 2 développeurs : revues de code, mentorat et suivi des bonnes pratiques.",
-        "Réduction de la dette technique par la refonte de l'architecture backend vers des composants plus maintenables.",
-        "Mise en place des bonnes pratiques de qualité (tests, revues de code, standards de développement)."
-      ]
-    },
-    {
-      "title": "Tech Lead / Chef de projet",
-      "company": "NANOCREATIVES",
-      "location": "Île-de-France",
-      "period": "10/2023 - 03/2024",
-      "details": [
-        "Conception et développement de solutions logicielles et de sites web pour des clients variés.",
-        "Déploiement et administration d'applications sur des serveurs Linux dans le cloud.",
-        "Pilotage de projets en méthodologie Agile et coordination d'équipe.",
-        "Gestion du DNS, des sous-domaines et des certificats de sécurité (SSL/TLS)."
       ]
     }
   ],
@@ -167,15 +143,8 @@
     {
       "title": "Bachelor Développeur Concepteur d'Application",
       "school": "Openclassrooms, Paris",
-      "degree": "Titre RNCP de niveau 6 (BAC +3/4)",
-      "period": "2022 - 2023",
-      "details": []
-    },
-    {
-      "title": "Licence en informatique",
-      "school": "Université Marien Ngouabi, Brazzaville",
-      "degree": "Licence",
-      "period": "2018 - 2021",
+      "degree": "Titre RNCP de niveau 6 (BAC +3)",
+      "period": "2023 - 2024",
       "details": []
     }
   ],
@@ -187,6 +156,18 @@
     }
   ],
   "otherExperiences": [
+    {
+      "title": "Lead Backend",
+      "company": "FASEYA",
+      "location": "Île-de-France",
+      "period": "03/2023 - 09/2024",
+      "details": [
+        "Développement et déploiement de services backend sur AWS pour accompagner la croissance du produit.",
+        "Encadrement technique de 2 développeurs : revues de code, mentorat et suivi des bonnes pratiques.",
+        "Réduction de la dette technique par la refonte de l'architecture backend vers des composants plus maintenables.",
+        "Mise en place des bonnes pratiques de qualité (tests, revues de code, standards de développement)."
+      ]
+    },
     {
       "title": "IT Manager",
       "company": "LALLA BUSINESS",
@@ -220,16 +201,6 @@
         "Déploiement et mise en ligne de la plateforme GLPI de gestion du parc informatique.",
         "Formation des agents de la DTIC à l'utilisation de GLPI.",
         "Collecte et structuration des données du parc informatique des formations sanitaires."
-      ]
-    },
-    {
-      "title": "Développeur Frontend",
-      "company": "Noki Noki services",
-      "location": "Brazzaville, République du Congo",
-      "period": "03/2023 - 08/2023",
-      "details": [
-        "Conception et développement des interfaces utilisateur en Nuxt 3.",
-        "Maintenance et mise à jour continue de l'interface utilisateur en production."
       ]
     },
     {
