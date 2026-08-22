@@ -83,7 +83,7 @@ const Resume = ({ data }) => {
                                     <Icon name="Award" size={14} className="icon-inline" />
                                     <div className="cert-info">
                                         <strong>{cert.name}</strong>
-                                        <span>{cert.issuer} • {cert.date}</span>
+                                        <span>{[cert.issuer, cert.date].filter(Boolean).join(' • ')}</span>
                                     </div>
                                 </li>
                             ))}

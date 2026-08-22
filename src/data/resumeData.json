@@ -6,7 +6,7 @@
     "phone": "+33 7 75 72 55 82",
     "location": "Île de France, France",
     "photo": "",
-    "objective": "Lead Développeur Fullstack avec 6+ ans d'expérience, spécialisé en architecture microservice et environnements Cloud (AWS, GCP). J'ai encadré une équipe de 3 développeurs chez XKSGROUP et conçu ITIC Companion, une plateforme de gamification scolaire utilisée par plus de 500 étudiants du BTS au Master. Je conjugue expertise technique full-stack (React, Vue, Spring Boot, NestJS) et leadership d'équipe pour livrer des solutions robustes, scalables et alignées sur les enjeux métier."
+    "objective": "Lead Développeur Fullstack avec 6+ ans d'expérience, spécialisé en architecture microservice et environnements Cloud (AWS, GCP). J'ai encadré une équipe de 3 développeurs chez XKSGROUP et conçu ITIC Companion, une plateforme de gamification scolaire utilisée par plus de 500 étudiants du BTS au Master. Je conjugue expertise technique full-stack et leadership d'équipe pour livrer des solutions robustes, scalables et alignées sur les enjeux métier."
   },
   "mainSkills": [
     {
@@ -153,84 +153,44 @@
       "name": "AWS Certified Cloud Practitioner",
       "issuer": "Amazon Web Services",
       "date": "2026"
+    },
+    {
+      "name": "Permis de conduire",
+      "issuer": "Catégorie B",
+      "date": "Véhiculé"
     }
   ],
   "otherExperiences": [
     {
-      "title": "Lead Backend",
-      "company": "FASEYA",
-      "location": "Île-de-France",
-      "period": "03/2023 - 09/2024",
+      "title": "Consultant IT & Développeur Logiciel",
+      "company": "Missions Institutionnelles (Ministère de la Santé, UNFPA, Union Européenne)",
+      "location": "Brazzaville, République du Congo",
+      "period": "01/2022 - 05/2024",
       "details": [
-        "Développement et déploiement de services backend sur AWS pour accompagner la croissance du produit.",
-        "Encadrement technique de 2 développeurs : revues de code, mentorat et suivi des bonnes pratiques.",
-        "Réduction de la dette technique par la refonte de l'architecture backend vers des composants plus maintenables.",
-        "Mise en place des bonnes pratiques de qualité (tests, revues de code, standards de développement)."
+        "Ministère de la Santé : Développement de l'application MANGWELE (rappel vaccinal), conception de micro-services RESTful et intégration d'un canal USSD/SMSC.",
+        "Union Européenne / AGRER (PRCCE II) : Conception et mise en production d'une plateforme numérique mutualisée reliant producteurs, distributeurs et consommateurs.",
+        "UNFPA : Déploiement et configuration de la plateforme GLPI pour la gestion et l'audit du parc informatique des structures sanitaires."
       ]
     },
     {
-      "title": "IT Manager",
+      "title": "Développeur Fullstack",
       "company": "LALLA BUSINESS",
       "location": "Brazzaville, République du Congo",
       "period": "03/2021 - 02/2023",
       "details": [
-        "Conception et pilotage du développement de LALLA TRANSFERT, plateforme de transfert de fonds internationaux mise en production.",
-        "Livraison d'une plateforme ayant enregistré plus d'un million de transactions, couvrant 9 corridors internationaux.",
-        "Management d'une équipe de 4 profils IT (organisation, suivi des livrables, montée en compétence).",
-        "Pilotage des développements full-stack et conception de la base de données (MariaDB)."
+        "Conception et pilotage de la plateforme de paiement international LALLA TRANSFERT (+10 000 000 de transactions, 9 corridors internationaux).",
+        "Management d'une équipe technique de 4 profils IT (organisation des livrables, revues, montée en compétences).",
+        "Architecture full-stack et modélisation de la base de données relationnelle sécurisée."
       ]
     },
     {
-      "title": "Consultant Développeur Concepteur d'Application",
-      "company": "Ministère de la Santé",
-      "location": "Brazzaville, République du Congo",
-      "period": "03/2024 - 05/2024",
-      "details": [
-        "Développement de MANGWELE, application de rappel vaccinal, aux côtés de l'équipe technique du ministère.",
-        "Développement de micro-services RESTful et du back-office, intégration des APIs.",
-        "Configuration et déploiement de serveurs sous Debian.",
-        "Implémentation d'un canal USSD connecté au SMSC pour l'envoi des rappels."
-      ]
-    },
-    {
-      "title": "Consultant IT",
-      "company": "United Nations Population Fund (UNFPA)",
-      "location": "Brazzaville, République du Congo",
-      "period": "09/2023 - 11/2023",
-      "details": [
-        "Déploiement et mise en ligne de la plateforme GLPI de gestion du parc informatique.",
-        "Formation des agents de la DTIC à l'utilisation de GLPI.",
-        "Collecte et structuration des données du parc informatique des formations sanitaires."
-      ]
-    },
-    {
-      "title": "Consultant IT Junior",
-      "company": "AGRER",
-      "location": "Bruxelles, Belgique",
-      "period": "01/2022 - 05/2022",
-      "details": [
-        "Développement d'une solution numérique mutualisée mettant en relation producteurs, distributeurs et consommateurs, pour le programme PRCCE II (financement UE) au Congo.",
-        "Conception, développement et déploiement de la solution, intégrée à la plateforme de gestion du PRCCE II.",
-        "Accompagnement des acteurs et clusters cibles à l'exploitation et la maintenance de la solution."
-      ]
-    },
-    {
-      "title": "Développeur web",
+      "title": "Développeur Web",
       "company": "Lopango",
       "location": "Brazzaville, République du Congo",
-      "period": "01/2020 - 03/2021",
+      "period": "10/2019 - 03/2021",
       "details": [
-        "Conception et développement de sites internet et applications web (HTML, CSS, JS), avec une attention particulière à la sécurité et à la qualité des contenus CMS.",
-        "Création d'interfaces utilisateur alignées avec l'identité de marque des clients."
-      ]
-    },
-    {
-      "title": "Stagiaire en développement Web",
-      "company": "Lopango",
-      "location": "Brazzaville, République du Congo",
-      "period": "10/2019 - 12/2019",
-      "details": [
-        "Développement de fonctionnalités web sous la supervision de l'équipe technique."
+        "Conception et intégration de sites web et applications sur-mesure (HTML, CSS, JavaScript, CMS).",
+        "Évolution d'un stage initial vers un poste de développeur en charge de la production et de la maintenance des interfaces utilisateurs."
       ]
     }
   ]

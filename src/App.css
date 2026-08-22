@@ -667,7 +667,7 @@
   width: 32%;
   background: transparent;
   /* géré par le gradient du container */
-  padding: 18px 20px 30px;
+  padding: 14px 16px 20px;
   border-right: 1px solid #eeeeee;
 }
 
@@ -678,7 +678,7 @@
 .resume-container.resume-ats-template {
   display: block;
   background: white;
-  padding: 30px 40px;
+  padding: 20px 30px;
   font-family: 'Inter', sans-serif;
   color: #1f2937;
 }
@@ -776,11 +776,11 @@
 }
 
 .profile-img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   border: 3px solid white;
   background: #e5e7eb;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -803,7 +803,7 @@ h1 {
   font-weight: 800;
   color: var(--text-dark);
   line-height: 1.15;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .profile-title {
@@ -812,7 +812,7 @@ h1 {
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .contact-info {
@@ -821,7 +821,7 @@ h1 {
 }
 
 .contact-info p {
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .contact-info a {
@@ -830,7 +830,7 @@ h1 {
 }
 
 .sidebar-section {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .sidebar-section h2 {
@@ -838,8 +838,8 @@ h1 {
   font-weight: 700;
   color: var(--text-dark);
   border-bottom: 1.5px solid #374151;
-  padding-bottom: 5px;
-  margin-bottom: 12px;
+  padding-bottom: 3px;
+  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -847,13 +847,13 @@ h1 {
 .tag-cloud {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 3px;
 }
 
 .tag {
   background: white;
   border: 1px solid #d1d5db;
-  padding: 2px 6px;
+  padding: 1.5px 5px;
   border-radius: 3px;
   font-size: calc(0.68rem * var(--font-scale));
   font-weight: 500;
@@ -874,13 +874,13 @@ h1 {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .soft-skills-list li {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: calc(0.78rem * var(--font-scale));
   color: var(--text-medium);
 }
@@ -895,8 +895,8 @@ h1 {
   color: var(--text-light);
   font-weight: 700;
   letter-spacing: 0.05em;
-  margin-bottom: 8px;
-  margin-top: 10px;
+  margin-bottom: 4px;
+  margin-top: 6px;
 }
 
 .skills-category-group {
@@ -933,7 +933,7 @@ h1 {
 
 .social-links li,
 .lang-list li {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: var(--text-dark);
   font-size: calc(0.75rem * var(--font-scale));
 }
@@ -946,20 +946,20 @@ h1 {
 /* Main Content */
 .main-content {
   width: 68%;
-  padding: 18px 35px 35px;
+  padding: 14px 25px 25px;
 }
 
 .main-section {
-  margin-bottom: 25px;
+  margin-bottom: 16px;
 }
 
 .main-section h2 {
-  font-size: calc(1.1rem * var(--font-scale));
+  font-size: calc(1.05rem * var(--font-scale));
   font-weight: 800;
   color: var(--text-dark);
   border-bottom: 2px solid #374151;
-  padding-bottom: 4px;
-  margin-bottom: 15px;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -967,24 +967,24 @@ h1 {
 .main-section p {
   font-size: calc(0.85rem * var(--font-scale));
   color: #374151;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-align: justify;
 }
 
 .objective-text {
-  font-size: calc(0.92rem * var(--font-scale)) !important;
+  font-size: calc(0.88rem * var(--font-scale)) !important;
   font-style: italic;
   color: var(--text-dark) !important;
-  line-height: 1.6;
+  line-height: 1.45;
 }
 
 .experience-item,
 .formation-item {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .exp-header h3 {
-  font-size: calc(0.95rem * var(--font-scale));
+  font-size: calc(0.93rem * var(--font-scale));
   font-weight: 700;
   color: var(--text-dark);
 }
@@ -992,10 +992,10 @@ h1 {
 .exp-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 12px;
   font-size: calc(0.78rem * var(--font-scale));
   color: #4b5563;
-  margin: 4px 0 8px 0;
+  margin: 2px 0 5px 0;
 }
 
 .meta-item {
@@ -1026,16 +1026,16 @@ h1 {
 .exp-details {
   list-style-type: none;
   padding-left: 0;
-  font-size: calc(0.85rem * var(--font-scale));
+  font-size: calc(0.83rem * var(--font-scale));
   color: #374151;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .exp-details li {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 3px;
+  gap: 6px;
+  margin-bottom: 2.5px;
 }
 
 .exp-details li::before {
@@ -1050,13 +1050,13 @@ h1 {
 
 .formation-objectives p,
 .formation-tools p {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-weight: 700;
   font-size: calc(0.8rem * var(--font-scale));
 }
 
 .program-link {
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .program-link a {
@@ -1625,10 +1625,11 @@ h1 {
 
   .sidebar {
     background: transparent !important;
+    padding: 14px 16px 20px !important;
   }
 
   .main-content {
-    padding: 35px 15px 35px 35px !important;
+    padding: 14px 15px 25px 25px !important;
   }
 
   /* Mode ATS : conserver le template dédié (colonne unique) à l'export PDF */

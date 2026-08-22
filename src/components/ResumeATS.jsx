@@ -99,7 +99,9 @@ const ResumeATS = ({ data }) => {
                     <h2>Certifications</h2>
                     <ul className="ats-plain-list">
                         {certifications.map((cert, index) => (
-                            <li key={index}>{cert.name} — {cert.issuer} ({cert.date})</li>
+                            <li key={index}>
+                                {cert.name}{cert.issuer ? ` — ${cert.issuer}` : ''}{cert.date ? ` (${cert.date})` : ''}
+                            </li>
                         ))}
                     </ul>
                 </section>
