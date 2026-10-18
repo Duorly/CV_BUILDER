@@ -1,3 +1,16 @@
 node_modules
-.DS_Store
 dist
+.harness
+.DS_Store
+*.log
+.env
+.env.*
+coverage
+# Tests de bout en bout (Playwright)
+test-results
+playwright-report
+blob-report
+playwright/.cache
+# Ancien CV du développeur (données personnelles) : gardé en local pour les tests
+# anti-fuite, jamais poussé sur le dépôt public.
+examples/

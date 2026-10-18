@@ -1,0 +1,628 @@
+/* ── Lettre de motivation : page A4 ─────────────────────────────────────── */
+/* Même identité que le CV : police, couleur principale et couleur du texte
+   viennent des variables posées sur .letter-container (CoverLetter.jsx). */
+
+.letter-container {
+  position: relative;
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 22mm;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  color: var(--text-dark, #111827);
+  font-family: var(--resume-font, 'Inter', Helvetica, Arial, sans-serif);
+  font-size: 10pt;
+  line-height: 1.5;
+  text-align: left;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* :where() garde cette remise à zéro sans poids : les marges des blocs ci-dessous priment */
+.letter-container :where(p, ul, address) {
+  margin: 0;
+  padding: 0;
+}
+
+.letter-container a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* En-tête : expéditeur en haut à gauche, destinataire à droite et un peu plus bas
+   (convention française). */
+.letter-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 45%;
+  column-gap: 8mm;
+  align-items: start;
+}
+
+.letter-sender {
+  grid-column: 1;
+}
+
+.letter-sender::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 0;
+  margin-top: 3.5mm;
+  /* Une bordure s'imprime même quand « Graphiques d'arrière-plan » est décoché */
+  border-top: 3px solid var(--primary-color, #2563eb);
+}
+
+.letter-sender-name {
+  font-size: 17pt;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--text-dark, #111827);
+}
+
+.letter-sender-title {
+  margin-top: 1.2mm;
+  font-size: 8.5pt;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary-color, #2563eb);
+}
+
+.letter-sender-contact {
+  list-style: none;
+  margin-top: 2.5mm;
+  font-size: 9pt;
+  line-height: 1.45;
+  color: #374151;
+}
+
+.letter-sender-contact li {
+  display: flex;
+  align-items: center;
+  gap: 1.6mm;
+}
+
+.letter-sender-contact svg {
+  flex: none;
+  color: var(--primary-color, #2563eb);
+}
+
+/* Lieu et date, signature : alignés sur la colonne du destinataire */
+.letter-dateline,
+.letter-signature {
+  margin-left: 55%;
+}
+
+.letter-recipient {
+  grid-column: 2;
+  align-self: end;
+  margin-top: 14mm;
+  font-style: normal;
+  line-height: 1.4;
+}
+
+.letter-recipient:first-child {
+  margin-top: 0;
+}
+
+.letter-recipient span {
+  display: block;
+}
+
+.letter-recipient-first {
+  font-weight: 600;
+}
+
+.letter-dateline {
+  margin-top: 6mm;
+}
+
+.letter-subject {
+  margin-top: 7mm;
+  font-weight: 600;
+}
+
+.letter-subject-label {
+  color: var(--primary-color, #2563eb);
+  font-weight: 700;
+}
+
+.letter-salutation {
+  margin-top: 5mm;
+}
+
+.letter-body {
+  margin-top: 3mm;
+  line-height: 1.45;
+}
+
+.letter-body p {
+  margin: 0 0 2.4mm;
+  text-align: justify;
+  text-wrap: pretty;
+  orphans: 3;
+  widows: 3;
+}
+
+.letter-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Formule de politesse et signature ne se séparent pas au saut de page */
+.letter-signoff {
+  margin-top: 2.4mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* … et ne partent jamais seules sur la page suivante : le dernier paragraphe les accompagne. */
+@media print {
+  .letter-body p:last-child {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .letter-signoff {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+}
+
+.letter-closing {
+  text-align: justify;
+}
+
+.letter-signature {
+  margin-top: 8mm;
+  font-weight: 600;
+}
+
+/* Le premier bloc présent colle au haut de la page, quel qu'il soit */
+.letter-container > :first-child {
+  margin-top: 0;
+}
+
+.letter-empty-hint {
+  margin-top: 8mm;
+  padding: 6mm;
+  border: 1.5px dashed #d1d5db;
+  border-radius: 8px;
+  color: #9ca3af;
+  font-size: 10pt;
+  text-align: center;
+}
+
+/* Repère écran de fin de page (masqué à l'impression) */
+.letter-page-break {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1.5px dashed #f59e0b;
+  pointer-events: none;
+}
+
+.letter-page-break span {
+  position: absolute;
+  right: 6mm;
+  top: -9px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+@media print {
+  /* Les marges haut/bas viennent de @page (PrintStyles mode « letter ») */
+  .letter-container {
+    width: 210mm !important;
+    min-height: auto !important;
+    padding: 0 22mm !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  .letter-page-break,
+  .letter-empty-hint {
+    display: none !important;
+  }
+
+  .letter-container,
+  .letter-container * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ── Éditeur de la lettre ───────────────────────────────────────────────── */
+
+.letter-editor {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  color: #111827;
+  min-width: 0;
+}
+
+.letter-editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.letter-editor-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.letter-editor-title svg {
+  color: var(--primary-color, #2563eb);
+}
+
+.letter-editor-intro {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+  max-width: 46ch;
+}
+
+.letter-prefill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.letter-notice {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #047857;
+}
+
+.letter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.letter-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 2px;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.letter-section-title svg {
+  color: var(--primary-color, #2563eb);
+}
+
+.letter-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@container (max-width: 420px) {
+  .letter-grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Le panneau peut être contraint en hauteur et défiler : ses blocs ne rétrécissent pas */
+.letter-editor > * {
+  flex-shrink: 0;
+}
+
+.letter-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.letter-input-row > .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.letter-input-row > .btn {
+  flex: none;
+  white-space: nowrap;
+}
+
+.letter-editor .textarea {
+  resize: vertical;
+}
+
+.letter-body-input {
+  min-height: 14em;
+  line-height: 1.55;
+  overflow: hidden;
+  resize: none !important;
+}
+
+.letter-word-count {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.letter-word-count strong {
+  color: #111827;
+}
+
+.letter-word-count--ok strong {
+  color: #047857;
+}
+
+.letter-word-count--short strong,
+.letter-word-count--long strong {
+  color: #b45309;
+}
+
+/* Brouillon IA (bloc repliable) */
+.letter-ai {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.letter-ai > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 12px;
+}
+
+.letter-ai > summary::-webkit-details-marker {
+  display: none;
+}
+
+.letter-ai > summary:focus-visible {
+  outline: 2px solid var(--primary-color, #2563eb);
+  outline-offset: 2px;
+}
+
+.letter-ai-summary-icon {
+  flex: none;
+  color: var(--primary-color, #2563eb);
+}
+
+.letter-ai-summary-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.letter-ai-summary-text strong {
+  font-size: 0.9rem;
+}
+
+.letter-ai-summary-text span {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.letter-ai-chevron {
+  flex: none;
+  color: #9ca3af;
+  transition: transform 0.15s ease;
+}
+
+.letter-ai[open] .letter-ai-chevron {
+  transform: rotate(180deg);
+}
+
+.letter-ai-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2px 14px 14px;
+}
+
+.letter-choice {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.letter-choice legend {
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.letter-segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.letter-segmented label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  background: #ffffff;
+  font-size: 0.82rem;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.letter-segmented input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.letter-segmented label:has(input:checked) {
+  border-color: var(--primary-color, #2563eb);
+  background: color-mix(in srgb, var(--primary-color, #2563eb) 10%, #ffffff);
+  color: var(--primary-color, #2563eb);
+  font-weight: 600;
+}
+
+.letter-choice:disabled .letter-segmented label {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.letter-segmented label:has(input:focus-visible) {
+  outline: 2px solid var(--primary-color, #2563eb);
+  outline-offset: 2px;
+}
+
+.letter-ai-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.letter-ai-privacy {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.letter-spin {
+  animation: letter-spin 0.9s linear infinite;
+}
+
+@keyframes letter-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.letter-alert {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.letter-alert svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.letter-alert--error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.letter-alert--info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+}
+
+.letter-alert--success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.letter-alert-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.letter-alert-body p {
+  margin: 0;
+}
+
+.letter-alert-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.letter-key-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.letter-key-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.letter-key-panel-head p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #1e3a8a;
+}
+
+.letter-paste-notice {
+  margin-top: 8px;
+}
+
+.letter-base-hint {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 8px;
+}
+
+.letter-base-hint svg {
+  flex: none;
+  margin-top: 2px;
+}

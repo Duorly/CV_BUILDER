@@ -1,0 +1,82 @@
+/* ── Impression ──────────────────────────────────────────────────────────
+   Seul le document actif (.print-area : CV ou lettre) s'imprime, sur fond blanc,
+   à sa taille réelle. La règle @page du mode courant est posée par
+   <PrintStyles mode="design|ats|letter" /> (marges : PRINT_MARGINS_MM). */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  :root,
+  html,
+  body {
+    background: #ffffff !important;
+  }
+
+  html,
+  body {
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .no-print,
+  .page-break-overlay {
+    display: none !important;
+  }
+
+  /* Tout ce qui n'est ni la zone imprimée, ni l'un de ses ancêtres, ni son contenu
+     (barres d'outils, éditeur, messages…) disparaît, même sans .no-print. */
+  body:has(.print-area) *:not(.print-area, .print-area *, :has(.print-area), .page-measure-host, .page-measure-host *) {
+    display: none !important;
+  }
+
+  /* Ancêtres de la zone imprimée remis à plat : ni marge, ni défilement, ni mise
+     à l'échelle (le transform de l'aperçu créerait aussi un repère pour les
+     éléments fixes et casserait le fond de sidebar répété). */
+  :is(.app-container, .main-layout, .preview-pane, .preview-scale, .print-area, :has(.print-area)) {
+    display: block !important;
+    position: static !important;
+    float: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+    zoom: 1 !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    perspective: none !important;
+    contain: none !important;
+    will-change: auto !important;
+  }
+
+  /* Le document lui-même : pas de hauteur minimale (pas de page blanche finale),
+     pas d'ombre, pas de marge. */
+  .resume-container {
+    min-height: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .resume-container,
+  .resume-container * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

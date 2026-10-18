@@ -1,0 +1,158 @@
+/* ── Template ATS : une colonne, ordre de lecture linéaire ───────────────
+   S'appuie sur la base .resume-container de resume.css.
+   Le padding vertical représente à l'écran les marges @page du mode « ats »
+   (PRINT_MARGINS_MM.ats = 14 mm) ; il est retiré à l'impression. */
+
+.resume-container.resume-ats-template {
+  display: block;
+  padding: 14mm 16mm;
+  color: #1f2937;
+}
+
+.resume-ats-template .ats-header {
+  margin-bottom: 5mm;
+  padding-bottom: 3mm;
+  border-bottom: 1.5px solid #374151;
+  break-inside: avoid;
+}
+
+.resume-ats-template h1 {
+  color: var(--text-dark);
+  font-size: calc(18pt * var(--font-scale));
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.resume-ats-template .ats-title {
+  margin-top: 2px;
+  color: var(--primary-color);
+  font-size: calc(11.5pt * var(--font-scale));
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.resume-ats-template .ats-contact-line {
+  margin-top: 5px;
+  color: #374151;
+  font-size: calc(9.5pt * var(--font-scale));
+  line-height: 1.45;
+}
+
+.resume-ats-template .ats-contact-item {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.resume-ats-template .ats-section {
+  margin-bottom: 4.5mm;
+}
+
+/* Pas de marge finale : elle pourrait déborder seule sur une page blanche. */
+.resume-ats-template .ats-section:last-child,
+.resume-ats-template :is(ul, ol) > li:last-child {
+  margin-bottom: 0;
+}
+
+.resume-ats-template .ats-section > h2 {
+  margin-bottom: 6px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #9ca3af;
+  color: var(--primary-color);
+  font-size: calc(11.5pt * var(--font-scale));
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.resume-ats-template .ats-objective {
+  font-size: calc(10.5pt * var(--font-scale));
+  line-height: 1.45;
+  white-space: pre-line;
+}
+
+.resume-ats-template .ats-line {
+  margin-bottom: 2px;
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.45;
+  break-inside: avoid;
+}
+
+.resume-ats-template .ats-line a {
+  overflow-wrap: anywhere;
+}
+
+.resume-ats-template .ats-item {
+  margin-bottom: 3.5mm;
+}
+
+.resume-ats-template .ats-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Intitulé puis « Entreprise · Lieu · Période » aligné à gauche : la période
+   reste attachée au poste à l'extraction du texte. */
+.resume-ats-template .ats-item-header {
+  margin-bottom: 3px;
+  break-inside: avoid;
+}
+
+/* Garde l'en-tête avec la première puce. Seulement s'il est suivi de contenu :
+   sur un dernier enfant, « avoid » remonterait jusqu'à la fin de la section et
+   interdirait la coupure suivante (section entière renvoyée page suivante). */
+.resume-ats-template .ats-item-header:not(:last-child) {
+  break-after: avoid;
+}
+
+.resume-ats-template .ats-item-header h3 {
+  color: var(--text-dark);
+  font-size: calc(11pt * var(--font-scale));
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.resume-ats-template .ats-item-meta {
+  margin-top: 1px;
+  color: #4b5563;
+  font-size: calc(9.5pt * var(--font-scale));
+  line-height: 1.35;
+}
+
+.resume-ats-template .ats-period {
+  white-space: nowrap;
+}
+
+/* Corps de texte : 10 pt à --font-scale = 1 (BODY_TEXT_PT.ats) */
+.resume-ats-template .ats-detail-list {
+  padding-left: 5mm;
+  list-style: disc outside;
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.4;
+}
+
+.resume-ats-template .ats-detail-list li {
+  margin-bottom: 2px;
+  break-inside: avoid;
+}
+
+.resume-ats-template .ats-detail-list + .ats-line {
+  margin-top: 3px;
+}
+
+.resume-ats-template .ats-plain-list li {
+  margin-bottom: 2px;
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.45;
+  break-inside: avoid;
+}
+
+@media print {
+  /* Les marges haut/bas viennent de @page (PrintStyles mode « ats ») */
+  .resume-container.resume-ats-template {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}

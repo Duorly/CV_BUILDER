@@ -1,0 +1,92 @@
+import { test, expect } from './support/fixtures.js';
+
+// e) Sections : renommer, masquer, déplacer, ajouter une section libre ; les deux modèles suivent.
+
+const headings = (locator) => locator.locator('h2').allTextContents();
+
+test('renommer, masquer, déplacer et ajouter une section se reflète dans les deux modèles', async ({ page, app }) => {
+  await app.loadExample();
+  const main = app.resume.locator('.main-content');
+  const sidebar = app.resume.locator('.sidebar');
+  expect(await headings(main)).toEqual(['Expériences professionnelles', 'Formation', 'Autres expériences']);
+
+  // Renommer « Expériences professionnelles » (Entrée valide).
+  await page.locator('#ed-panel-experiences-rename').click();
+  const titleInput = page.locator('#ed-panel-experiences-title');
+  await expect(titleInput).toBeFocused();
+  await expect(titleInput).toHaveAttribute('placeholder', 'Expériences professionnelles');
+  await titleInput.fill('Parcours professionnel');
+  await titleInput.press('Enter');
+  await expect(page.locator('#ed-panel-experiences .editor-panel-title')).toHaveText('Parcours professionnel');
+
+  // Échap annule un renommage en cours.
+  await page.locator('#ed-panel-education-rename').click();
+  await page.locator('#ed-panel-education-title').fill('Études');
+  await page.locator('#ed-panel-education-title').press('Escape');
+  await expect(page.locator('#ed-panel-education .editor-panel-title')).toHaveText('Formation');
+
+  // Masquer « Langues ».
+  await page.locator('#ed-panel-languages-visibility').click();
+  await expect(page.locator('#ed-panel-languages-visibility')).toHaveAttribute('aria-label', 'Afficher « Langues » sur le CV');
+  await expect(sidebar).not.toContainText('Langue maternelle');
+
+  // Déplacer « Formation » au-dessus des expériences.
+  await page.locator('#ed-panel-education-up').click();
+  await expect(page.locator('#ed-panel-education-up')).toBeFocused();
+
+  // Section libre « Publications », d'abord dans la colonne principale.
+  await page.getByRole('button', { name: 'Ajouter une section libre' }).click();
+  const custom = page.locator('.editor-section-panel').last();
+  const customTitle = custom.getByLabel('Titre de la section', { exact: true });
+  await expect(customTitle).toBeFocused();
+  await customTitle.fill('Publications');
+  await custom.locator('textarea.detail-input').first().fill('Article « Communiquer en local », revue Com’ (2024)');
+
+  expect(await headings(main)).toEqual(['Formation', 'Parcours professionnel', 'Autres expériences', 'Publications']);
+  await expect(main).toContainText('Article « Communiquer en local »');
+  const sideHeadings = await headings(sidebar);
+  expect(sideHeadings).not.toContain('Langues');
+  expect(sideHeadings).toEqual(expect.arrayContaining(['Compétences', 'Liens', 'Certifications', "Centres d'intérêt"]));
+
+  // Colonne latérale.
+  await custom.getByLabel('Emplacement dans le modèle design').selectOption('sidebar');
+  await expect(sidebar.locator('h2', { hasText: 'Publications' })).toBeVisible();
+  expect(await headings(main)).toEqual(['Formation', 'Parcours professionnel', 'Autres expériences']);
+
+  // Modèle ATS : une colonne, même ordre, mêmes titres, même section masquée.
+  await app.setTemplate('ATS (sobre)');
+  const ats = await headings(app.resume);
+  expect(ats).toContain('Parcours professionnel');
+  expect(ats).not.toContain('Expériences professionnelles');
+  expect(ats).not.toContain('Langues');
+  expect(ats).toContain('Publications');
+  expect(ats.indexOf('Formation')).toBeLessThan(ats.indexOf('Parcours professionnel'));
+  expect(ats.indexOf('Publications')).toBe(ats.length - 1);
+  await expect(app.resume).toContainText('Article « Communiquer en local »');
+  await expect(app.resume).not.toContainText('Langue maternelle');
+
+  // Réafficher « Langues » : elle revient dans le modèle ATS.
+  await page.locator('#ed-panel-languages-visibility').click();
+  await expect(app.resume.locator('h2', { hasText: 'Langues' })).toBeVisible();
+
+  // Tout est enregistré avec la version.
+  const lib = await app.waitForSaved((l) => l?.cvs[0].data.customSections.some((c) => c.title === 'Publications'));
+  const order = lib.cvs[0].data.sections.map((s) => s.id);
+  expect(order.indexOf('education')).toBeLessThan(order.indexOf('experiences'));
+  expect(lib.cvs[0].data.sections.find((s) => s.id === 'experiences').title).toBe('Parcours professionnel');
+});
+
+test('une section libre supprimée disparaît des deux modèles', async ({ page, app }) => {
+  await app.startBlank();
+  await page.getByRole('button', { name: 'Ajouter une section libre' }).click();
+  const custom = page.locator('.editor-section-panel').last();
+  await custom.getByLabel('Titre de la section', { exact: true }).fill('Bénévolat');
+  await custom.locator('textarea.detail-input').first().fill('Collecte annuelle de la banque alimentaire');
+  await expect(app.resume.locator('h2', { hasText: 'Bénévolat' })).toBeVisible();
+
+  page.once('dialog', (dialog) => dialog.accept());
+  await custom.getByRole('button', { name: 'Supprimer cette section' }).click();
+  await expect(app.resume.locator('h2')).toHaveCount(0);
+  await app.setTemplate('ATS (sobre)');
+  await expect(app.resume).not.toContainText('Bénévolat');
+});

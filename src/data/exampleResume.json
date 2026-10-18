@@ -1,0 +1,129 @@
+{
+  "personalInfo": {
+    "name": "Camille Martin",
+    "title": "Chargée de communication et marketing digital",
+    "email": "camille.martin@exemple.fr",
+    "phone": "06 12 34 56 78",
+    "location": "Lyon, France",
+    "photo": "",
+    "objective": "Chargée de communication avec 5 ans d'expérience en agence et chez l'annonceur. J'ai piloté des campagnes multicanales (réseaux sociaux, e-mailing, événementiel) et fait progresser de 40 % l'audience Instagram d'une enseigne régionale. Je cherche à rejoindre une équipe marketing où allier créativité, rigueur et suivi des résultats."
+  },
+  "mainSkills": [
+    {
+      "category": "Communication",
+      "skills": ["Stratégie éditoriale", "Relations presse", "Rédaction web", "Événementiel"]
+    },
+    {
+      "category": "Marketing digital",
+      "skills": ["Réseaux sociaux", "E-mailing", "SEO", "Google Analytics"]
+    },
+    {
+      "category": "Outils",
+      "skills": ["Canva", "Suite Adobe", "Mailchimp", "Meta Business Suite", "Notion"]
+    },
+    {
+      "category": "Qualités",
+      "skills": ["Organisation", "Aisance relationnelle", "Esprit d'équipe"]
+    }
+  ],
+  "socialLinks": [
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/camille-martin-exemple",
+      "label": "",
+      "icon": "Link"
+    },
+    {
+      "name": "Portfolio",
+      "url": "https://camille-martin.exemple.fr",
+      "label": "",
+      "icon": "Globe"
+    }
+  ],
+  "languages": [
+    { "name": "Français", "level": "Langue maternelle" },
+    { "name": "Anglais", "level": "C1 – Autonome" },
+    { "name": "Espagnol", "level": "B1 – Intermédiaire" }
+  ],
+  "experiences": [
+    {
+      "title": "Chargée de communication",
+      "company": "Maison Lumière (réseau de 12 boutiques)",
+      "location": "Lyon",
+      "period": "03/2023 - Aujourd'hui",
+      "details": [
+        "Définition et pilotage du plan de communication annuel (budget de 80 000 €), en lien avec la direction commerciale.",
+        "Animation des réseaux sociaux : +40 % d'abonnés Instagram en 18 mois et taux d'engagement moyen de 4,2 %.",
+        "Organisation de 6 événements en boutique par an (lancements de collection, ateliers clients).",
+        "Encadrement d'une alternante et coordination des prestataires (photographe, imprimeur, agence média)."
+      ]
+    },
+    {
+      "title": "Chargée de projets digitaux",
+      "company": "Agence Hublot",
+      "location": "Villeurbanne",
+      "period": "09/2020 - 02/2023",
+      "details": [
+        "Gestion d'un portefeuille de 8 clients (PME et collectivités) : conseil, planning éditorial, reporting mensuel.",
+        "Conception de campagnes e-mailing (Mailchimp) avec un taux d'ouverture moyen de 32 %.",
+        "Rédaction de contenus web optimisés pour le référencement naturel."
+      ]
+    },
+    {
+      "title": "Assistante communication (alternance)",
+      "company": "Mairie de Villeurbanne",
+      "location": "Villeurbanne",
+      "period": "09/2018 - 08/2020",
+      "details": [
+        "Rédaction d'articles pour le magazine municipal et le site de la ville.",
+        "Participation à l'organisation de la Fête des quartiers (3 000 visiteurs)."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "title": "Master Communication des organisations",
+      "school": "Université Lumière Lyon 2",
+      "degree": "Bac +5",
+      "location": "Lyon",
+      "period": "2018 - 2020",
+      "details": [],
+      "objectives": [],
+      "tools": [],
+      "link": ""
+    },
+    {
+      "title": "Licence Information-Communication",
+      "school": "Université Lumière Lyon 2",
+      "degree": "Bac +3",
+      "location": "Lyon",
+      "period": "2015 - 2018",
+      "details": [],
+      "objectives": [],
+      "tools": [],
+      "link": ""
+    }
+  ],
+  "certifications": [
+    { "name": "Google Analytics 4", "issuer": "Google Skillshop", "date": "2024" },
+    { "name": "Permis B", "issuer": "", "date": "" }
+  ],
+  "otherExperiences": [
+    {
+      "title": "Bénévole communication",
+      "company": "Association Les Restos du Cœur",
+      "location": "Lyon",
+      "period": "2021 - Aujourd'hui",
+      "details": ["Création des visuels de collecte et animation de la page Facebook locale."]
+    }
+  ],
+  "customSections": [
+    {
+      "id": "sec_interets",
+      "title": "Centres d'intérêt",
+      "column": "sidebar",
+      "items": ["Photographie argentique", "Course à pied (semi-marathon)", "Théâtre amateur"]
+    }
+  ],
+  "sections": []
+}

@@ -1,0 +1,610 @@
+/* ── Suivi des candidatures ─────────────────────────────────────────────── */
+
+.tracker {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.tracker-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tracker-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tracker-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tracker-title svg {
+  color: var(--primary-color, #2563eb);
+}
+
+/* Le titre reçoit le focus après une suppression : pas de cadre au clic */
+.tracker-title:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.tracker-intro {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+  color: #6b7280;
+}
+
+.tracker-header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Compteurs */
+.tracker-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tracker-stat-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+button.tracker-stat-button {
+  cursor: pointer;
+}
+
+button.tracker-stat-button:hover {
+  border-color: #cbd5e1;
+}
+
+button.tracker-stat-button[aria-pressed='true'] {
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 1px var(--primary-color, #2563eb);
+}
+
+.tracker-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.tracker-stat-label {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.tracker-stat--warn .tracker-stat-button {
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+
+.tracker-stat--warn .tracker-stat-value {
+  color: #b45309;
+}
+
+/* Formulaire d'ajout */
+.tracker-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.tracker-form-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.tracker-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tracker-form-wide {
+  grid-column: 1 / -1;
+}
+
+.tracker-form-error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #b91c1c;
+}
+
+.tracker-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Barre de filtre et de tri */
+.tracker-toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tracker-toolbar-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.tracker-toolbar-field .select {
+  min-width: 210px;
+}
+
+.tracker-toolbar-count {
+  padding-bottom: 8px;
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+
+.tracker-no-result {
+  margin: 0;
+  padding: 18px;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* Tableau */
+.tracker-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.tracker-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.86rem;
+}
+
+.tracker-col-main {
+  width: 25%;
+}
+.tracker-col-status {
+  width: 138px;
+}
+.tracker-col-date {
+  width: 136px;
+}
+.tracker-col-followup {
+  width: 168px;
+}
+.tracker-col-cv {
+  width: 19%;
+}
+.tracker-col-actions {
+  width: 46px;
+}
+
+.tracker-table th {
+  padding: 10px 8px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: left;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.tracker-table td {
+  padding: 8px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: top;
+}
+
+.tracker-row:last-child td {
+  border-bottom: 0;
+}
+
+.tracker-row--due td:first-child {
+  box-shadow: inset 3px 0 0 #f59e0b;
+}
+
+.tracker-main-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Champs en ligne : discrets jusqu'au survol ou à la saisie */
+.tracker-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 5px 7px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  font: inherit;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.tracker-input:hover {
+  border-color: #e5e7eb;
+  background: #ffffff;
+}
+
+.tracker-input:focus {
+  outline: none;
+  border-color: var(--primary-color, #2563eb);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color, #2563eb) 18%, transparent);
+}
+
+.tracker-input::placeholder {
+  color: #9ca3af;
+}
+
+.tracker-input-company {
+  font-weight: 700;
+}
+
+.tracker-input-company,
+.tracker-input-position {
+  resize: none;
+  overflow: hidden;
+  line-height: 1.35;
+}
+
+.tracker-input-position {
+  color: #4b5563;
+}
+
+.tracker-input-offer {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.tracker-notes {
+  resize: none;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.tracker-select {
+  cursor: pointer;
+}
+
+.tracker-cv,
+.tracker-offer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tracker-cv .tracker-input,
+.tracker-offer .tracker-input {
+  flex: 1;
+}
+
+.tracker-open-cv {
+  flex: none;
+}
+
+/* La version de CV prend toute la largeur de sa colonne, « Ouvrir » en dessous : le nom,
+   qui distingue les versions, reste lisible. */
+.tracker-cv {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.tracker-cv .tracker-input {
+  flex: none;
+  width: 100%;
+}
+
+.tracker-cv .tracker-open-cv {
+  align-self: flex-start;
+}
+
+.tracker-offer-link {
+  flex: none;
+  color: var(--primary-color, #2563eb);
+}
+
+.tracker-followup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tracker-due-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tracker-due {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.tracker-done {
+  white-space: nowrap;
+}
+
+.tracker-hint {
+  padding-left: 8px;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.tracker-cell-actions {
+  text-align: center;
+}
+
+.tracker-delete:hover {
+  color: #b91c1c;
+}
+
+/* Statut : liste déroulante en forme de badge coloré */
+.tracker-status {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tracker-status:focus-visible {
+  outline: 2px solid var(--primary-color, #2563eb);
+  outline-offset: 2px;
+}
+
+.tracker-status option {
+  background: #ffffff;
+  color: #111827;
+}
+
+.tracker-status--a_envoyer {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+  color: #374151;
+}
+.tracker-status--envoyee {
+  background: #dbeafe;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+.tracker-status--relancee {
+  background: #e0e7ff;
+  border-color: #c7d2fe;
+  color: #3730a3;
+}
+.tracker-status--entretien {
+  background: #f3e8ff;
+  border-color: #e9d5ff;
+  color: #6b21a8;
+}
+.tracker-status--offre {
+  background: #d1fae5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+.tracker-status--refusee {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+.tracker-status--abandon {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  color: #6b7280;
+}
+
+/* État vide */
+.tracker-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.tracker-empty h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.tracker-empty p {
+  margin: 0;
+  max-width: 60ch;
+  color: #4b5563;
+}
+
+.tracker-empty ul {
+  margin: 4px 0 8px;
+  padding: 0;
+  list-style: none;
+  max-width: 60ch;
+  font-size: 0.88rem;
+  color: #4b5563;
+}
+
+.tracker-empty li {
+  margin: 4px 0;
+}
+
+.tracker-empty-icon {
+  color: var(--primary-color, #2563eb);
+}
+
+/* Largeur moyenne : cartes sur deux colonnes */
+@container (max-width: 1080px) {
+  .tracker-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tracker-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tracker-table-wrap {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .tracker-table,
+  .tracker-table tbody,
+  .tracker-table tr,
+  .tracker-table td {
+    display: block;
+    width: auto;
+  }
+
+  .tracker-table colgroup,
+  .tracker-table thead {
+    display: none;
+  }
+
+  .tracker-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tracker-table .tracker-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 12px;
+    padding: 12px 52px 12px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+  }
+
+  .tracker-table .tracker-row--due {
+    border-color: #fcd34d;
+    box-shadow: inset 3px 0 0 #f59e0b;
+  }
+
+  .tracker-table td {
+    padding: 0;
+    border: 0;
+  }
+
+  .tracker-row--due td:first-child {
+    box-shadow: none;
+  }
+
+  .tracker-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin: 0 0 2px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #9ca3af;
+  }
+
+  .tracker-table .tracker-cell-main,
+  .tracker-table td[data-label='Notes'] {
+    grid-column: 1 / -1;
+  }
+
+  .tracker-table .tracker-cell-main::before {
+    display: none !important;
+  }
+
+  .tracker-table .tracker-cell-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .tracker-input-company {
+    font-size: 1rem;
+  }
+}
+
+/* Téléphone : une colonne */
+@container (max-width: 560px) {
+  .tracker-form-grid,
+  .tracker-table .tracker-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tracker-toolbar-field,
+  .tracker-toolbar-field .select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .tracker {
+    padding: 16px;
+    border-radius: 12px;
+  }
+}

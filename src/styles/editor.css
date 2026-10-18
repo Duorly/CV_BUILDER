@@ -1,0 +1,1271 @@
+/* ── Éditeur du CV ──────────────────────────────────────────────────────
+   Toutes les règles sont rattachées à .editor-sidebar ou préfixées « editor- »
+   pour ne pas déborder sur les autres écrans (CSS global). */
+
+.editor-sidebar {
+  --ed-accent: #2563eb;
+  --ed-accent-strong: #1d4ed8;
+  --ed-accent-soft: #eff6ff;
+  --ed-ring: 0 0 0 3px rgba(37, 99, 235, 0.14);
+  --ed-text: #111827;
+  --ed-text-2: #374151;
+  --ed-label: #4b5563;
+  --ed-muted: #6b7280;
+  --ed-faint: #9ca3af;
+  --ed-border: #e5e7eb;
+  --ed-border-soft: #f3f4f6;
+  --ed-field-bg: #f9fafb;
+  --ed-danger: #dc2626;
+  --ed-danger-soft: #fef2f2;
+  --ed-warn: #b45309;
+  --ed-ok: #047857;
+
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #fff;
+  color: var(--ed-text);
+  padding: 26px 24px 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ed-border) transparent;
+}
+
+.editor-sidebar *,
+.editor-sidebar *::before,
+.editor-sidebar *::after {
+  box-sizing: border-box;
+}
+
+.editor-sidebar :where(h2, h3, p, ul, ol, li, fieldset, legend) {
+  margin: 0;
+  padding: 0;
+}
+
+.editor-sidebar :where(button, input, textarea, select) {
+  font-family: inherit;
+}
+
+.editor-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.editor-sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--ed-border);
+  border-radius: 10px;
+}
+
+.editor-sidebar :is(button, select, summary):focus-visible,
+.editor-sidebar input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: 2px;
+}
+
+.editor-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── En-tête ─────────────────────────────────────────────────────────── */
+.editor-header {
+  margin-bottom: 8px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--ed-border-soft);
+}
+
+.editor-header h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--ed-text);
+  letter-spacing: -0.02em;
+}
+
+.editor-header p {
+  font-size: 0.85rem;
+  color: var(--ed-muted);
+  margin-top: 4px;
+}
+
+/* ── Panneaux repliables ─────────────────────────────────────────────── */
+.editor-panel {
+  border-bottom: 1px solid var(--ed-border-soft);
+}
+
+.editor-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0;
+}
+
+.editor-panel-heading {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+}
+
+.editor-panel-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 6px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.editor-panel-toggle:hover {
+  background: var(--ed-field-bg);
+}
+
+.editor-chevron {
+  flex-shrink: 0;
+  color: var(--ed-faint);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.editor-panel.is-open > .editor-panel-header .editor-chevron,
+.editor-card.is-open > .editor-card-header .editor-chevron {
+  transform: rotate(90deg);
+}
+
+.header-icon {
+  flex-shrink: 0;
+  color: var(--ed-accent);
+  opacity: 0.85;
+}
+
+.editor-panel-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.editor-panel-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ed-label);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.editor-panel-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 8px;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ed-muted);
+}
+
+.editor-meta-kind {
+  font-weight: 600;
+  color: var(--ed-label);
+}
+
+.editor-meta-empty {
+  font-style: italic;
+}
+
+.editor-column-badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--ed-border-soft);
+  color: var(--ed-label);
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.editor-column-badge.is-inactive {
+  opacity: 0.6;
+}
+
+.editor-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.editor-panel-body {
+  padding: 4px 2px 24px;
+}
+
+.editor-panel.is-muted .editor-panel-titles,
+.editor-panel.is-muted > .editor-panel-header .header-icon,
+.editor-panel.is-muted .editor-panel-body > :not(.editor-hidden-note) {
+  opacity: 0.5;
+}
+
+.editor-hidden-note {
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 0.78rem;
+}
+
+.editor-panel-rename {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px 4px 32px;
+}
+
+.editor-panel-title-input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1.5px solid var(--ed-accent);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ed-text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: var(--ed-ring);
+  outline: none;
+}
+
+.editor-panel-title-input::placeholder {
+  color: var(--ed-muted);
+  font-weight: 600;
+}
+
+/* Bouton icône carré (en-têtes de panneaux et de cartes) */
+.editor-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ed-muted);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.editor-icon-btn:hover:not(:disabled) {
+  background: var(--ed-border-soft);
+  color: var(--ed-text);
+}
+
+.editor-icon-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.editor-icon-btn.is-active {
+  background: var(--ed-accent-soft);
+  color: var(--ed-accent);
+}
+
+.editor-icon-btn.is-danger:hover:not(:disabled) {
+  background: var(--ed-danger-soft);
+  color: var(--ed-danger);
+}
+
+/* ── Champs ──────────────────────────────────────────────────────────── */
+.editor-sidebar .form-group {
+  margin-bottom: 20px;
+}
+
+.editor-sidebar .form-group.mini {
+  margin-bottom: 14px;
+}
+
+.editor-sidebar .form-group label,
+.editor-sublabel,
+.editor-icon-picker legend {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ed-label);
+}
+
+.editor-sidebar .form-group input,
+.editor-sidebar .form-group textarea,
+.editor-sidebar .form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--ed-border);
+  border-radius: 10px;
+  background-color: var(--ed-field-bg);
+  color: var(--ed-text);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.editor-sidebar .form-group textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+.editor-sidebar .form-group input:hover,
+.editor-sidebar .form-group textarea:hover,
+.editor-sidebar .form-group select:hover {
+  border-color: #d1d5db;
+}
+
+.editor-sidebar .form-group input:focus,
+.editor-sidebar .form-group textarea:focus,
+.editor-sidebar .form-group select:focus {
+  border-color: var(--ed-accent);
+  background-color: #fff;
+  box-shadow: var(--ed-ring);
+  outline: none;
+}
+
+.editor-sidebar ::placeholder {
+  color: var(--ed-faint);
+  opacity: 1;
+}
+
+.editor-sidebar .icon-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.editor-sidebar .input-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--ed-faint);
+  pointer-events: none;
+}
+
+.editor-sidebar .icon-input-group input {
+  padding-left: 34px;
+}
+
+/* Champs côte à côte qui passent l'un sous l'autre quand la place manque.
+   Les champs aux valeurs longues (dates, e-mail, niveau) reçoivent plus de largeur
+   pour que « 03/2023 – Aujourd'hui » reste lisible en entier. */
+.editor-grid {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 12px;
+}
+
+.editor-grid > * {
+  flex: 1 1 170px;
+  min-width: 0;
+}
+
+.editor-grid > .editor-field-wide {
+  flex-basis: 210px;
+}
+
+.editor-grid > .editor-field-narrow {
+  flex-basis: 140px;
+}
+
+.editor-hint {
+  margin-top: 5px;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--ed-muted);
+}
+
+.editor-sidebar .form-group label + .editor-hint {
+  margin: -2px 0 8px;
+}
+
+.editor-counter {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  text-align: right;
+  color: var(--ed-muted);
+}
+
+.editor-counter.is-ok {
+  color: var(--ed-ok);
+}
+
+.editor-counter.is-warn {
+  color: var(--ed-warn);
+  font-weight: 600;
+}
+
+.editor-error {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: var(--ed-danger-soft);
+  color: #b91c1c;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.editor-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--ed-text-2);
+  cursor: pointer;
+}
+
+.editor-check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ed-accent);
+  cursor: pointer;
+}
+
+/* ── Listes d'éléments (cartes repliables) ───────────────────────────── */
+.editor-cards {
+  list-style: none;
+}
+
+.editor-item-box.elegant {
+  margin-bottom: 10px;
+  border: 1px solid var(--ed-border-soft);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.editor-item-box.elegant:hover {
+  border-color: var(--ed-border);
+}
+
+.editor-item-box.elegant:focus-within {
+  border-color: var(--ed-accent);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.06);
+}
+
+.editor-card.is-dragging {
+  border-color: var(--ed-accent);
+  box-shadow: 0 16px 30px -10px rgba(17, 24, 39, 0.25);
+}
+
+.editor-card-header {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px 6px 4px;
+}
+
+.editor-card.is-open > .editor-card-header {
+  border-bottom: 1px solid var(--ed-border-soft);
+}
+
+.editor-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: #c4c9d1;
+  cursor: grab;
+  touch-action: none;
+  transition: color 0.2s;
+}
+
+.editor-drag-handle:hover,
+.editor-item-box:hover .editor-drag-handle {
+  color: var(--ed-faint);
+}
+
+.editor-drag-handle:active {
+  cursor: grabbing;
+}
+
+.editor-card-toggle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 6px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.editor-card-toggle:hover {
+  background: var(--ed-field-bg);
+}
+
+.editor-card-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.editor-card-title,
+.editor-card-subtitle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.editor-card-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ed-text);
+}
+
+.editor-card-title.is-fallback {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--ed-muted);
+}
+
+.editor-card-subtitle {
+  margin-top: 1px;
+  font-size: 0.72rem;
+  color: var(--ed-muted);
+}
+
+.editor-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.editor-card-body {
+  padding: 16px 16px 8px;
+}
+
+.editor-empty {
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  border: 1px dashed var(--ed-border);
+  border-radius: 12px;
+  background: var(--ed-field-bg);
+  color: var(--ed-muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+/* ── Boutons d'ajout ─────────────────────────────────────────────────── */
+.add-btn-tiny {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--ed-border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ed-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.add-btn-tiny:hover:not(:disabled) {
+  background: var(--ed-field-bg);
+  border-color: var(--ed-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
+}
+
+.add-btn-tiny:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.add-btn-tiny:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.add-btn-tiny.is-danger {
+  color: var(--ed-danger);
+}
+
+.add-btn-tiny.is-danger:hover:not(:disabled) {
+  border-color: var(--ed-danger);
+  background: var(--ed-danger-soft);
+  box-shadow: none;
+}
+
+.editor-add-btn {
+  padding: 8px 14px;
+  font-size: 0.8rem;
+}
+
+.editor-add-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 22px;
+  padding: 14px;
+  border: 1.5px dashed #c7d2fe;
+  border-radius: 14px;
+  background: #f8faff;
+  color: var(--ed-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.editor-add-section:hover {
+  border-color: var(--ed-accent);
+  background: var(--ed-accent-soft);
+}
+
+.editor-add-section-hint {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.editor-danger-zone {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ed-border-soft);
+}
+
+/* ── Puces ───────────────────────────────────────────────────────────── */
+.editor-bullets {
+  margin: 4px 0 16px;
+}
+
+.editor-subheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ed-border-soft);
+}
+
+.editor-bullet-list {
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+.detail-row.premium {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 6px 6px 6px 4px;
+  border: 1px solid var(--ed-border-soft);
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.detail-row.premium:hover {
+  border-color: var(--ed-border);
+  background: #fdfdfd;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+}
+
+.detail-row.premium:focus-within {
+  border-color: var(--ed-accent);
+  background: #fff;
+  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.08);
+}
+
+.detail-row.premium.is-long {
+  border-color: #fcd34d;
+}
+
+.detail-row.premium.is-dragging {
+  border-color: var(--ed-accent);
+  box-shadow: 0 12px 24px -10px rgba(17, 24, 39, 0.25);
+}
+
+.detail-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: #d1d5db;
+  cursor: grab;
+  touch-action: none;
+  transition: color 0.2s;
+}
+
+.detail-row.premium:hover .detail-drag-handle {
+  color: var(--ed-faint);
+}
+
+.detail-bullet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 28px;
+  color: var(--ed-accent);
+  opacity: 0.5;
+}
+
+.detail-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-input {
+  width: 100%;
+  min-height: 28px;
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: var(--ed-text-2);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  resize: none;
+  overflow: hidden;
+  outline: none;
+}
+
+/* Posé sur la bordure haute de la ligne : visible au focus sans décaler la mise en page. */
+.editor-bullet-count {
+  position: absolute;
+  top: -8px;
+  right: 44px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ed-muted);
+  font-size: 0.66rem;
+  line-height: 14px;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.detail-row.premium:focus-within .editor-bullet-count {
+  visibility: visible;
+}
+
+.detail-row.premium.is-long .editor-bullet-count {
+  color: var(--ed-warn);
+  font-weight: 600;
+}
+
+.editor-bullet-warn {
+  margin: 2px 0 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ed-warn);
+}
+
+.detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.detail-move {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-move-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 15px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--ed-muted);
+  cursor: pointer;
+}
+
+.detail-move-btn:hover:not(:disabled) {
+  background: var(--ed-border-soft);
+  color: var(--ed-text);
+}
+
+.detail-move-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.remove-btn-icon-tiny {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ed-faint);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remove-btn-icon-tiny:hover {
+  background: var(--ed-danger-soft);
+  color: #ef4444;
+}
+
+/* Écran tactile : cibles assez grandes pour un doigt (au moins 24 px). Les flèches restent
+   empilées, pour ne pas prendre de largeur à la zone de texte. Pas de touche Alt : l'aide
+   du raccourci clavier est masquée. */
+@media (pointer: coarse) {
+  .detail-drag-handle {
+    width: 28px;
+    height: 40px;
+  }
+
+  .detail-move-btn {
+    width: 34px;
+    height: 32px;
+  }
+
+  .detail-move-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .remove-btn-icon-tiny {
+    padding: 9px;
+  }
+
+  .editor-hint-keys {
+    display: none;
+  }
+}
+
+/* Sur écran avec souris : actions des puces visibles au survol ou au focus. */
+@media (hover: hover) {
+  .detail-actions {
+    opacity: 0;
+  }
+
+  .detail-row.premium:hover .detail-actions,
+  .detail-row.premium:focus-within .detail-actions {
+    opacity: 1;
+  }
+}
+
+/* ── Étiquettes (compétences, objectifs, outils) ─────────────────────── */
+.editor-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 8px;
+  border: 1.5px solid var(--ed-border);
+  border-radius: 10px;
+  background: var(--ed-field-bg);
+  cursor: text;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.editor-tags:hover {
+  border-color: #d1d5db;
+}
+
+.editor-tags:focus-within {
+  border-color: var(--ed-accent);
+  background: #fff;
+  box-shadow: var(--ed-ring);
+}
+
+.editor-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 100%;
+  list-style: none;
+}
+
+.editor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 2px 3px 2px 10px;
+  border-radius: 999px;
+  background: var(--ed-accent-soft);
+  color: var(--ed-accent-strong);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.editor-tag.is-editing {
+  background: #fff;
+  outline: 1.5px dashed var(--ed-accent);
+}
+
+.editor-tag-text {
+  min-width: 0;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.editor-tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.editor-tag-remove:hover {
+  background: rgba(37, 99, 235, 0.14);
+  opacity: 1;
+}
+
+.editor-sidebar .editor-tags input.editor-tag-input,
+.editor-sidebar .editor-tags input.editor-tag-input:hover,
+.editor-sidebar .editor-tags input.editor-tag-input:focus {
+  flex: 1 1 140px;
+  min-width: 120px;
+  padding: 6px 4px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.editor-tag-notice {
+  min-height: 0;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: var(--ed-warn);
+}
+
+.editor-tag-notice:empty {
+  display: none;
+}
+
+/* ── Blocs facultatifs d'une formation ───────────────────────────────── */
+.editor-block {
+  position: relative;
+  margin-bottom: 14px;
+  padding: 12px 12px 2px;
+  border: 1px solid var(--ed-border-soft);
+  border-radius: 12px;
+  background: #fafbfc;
+}
+
+.editor-block-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--ed-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editor-block-remove:hover {
+  background: var(--ed-danger-soft);
+  color: var(--ed-danger);
+}
+
+.editor-block-adds {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 16px;
+}
+
+.editor-block-adds .editor-hint {
+  margin: 0 4px 0 0;
+}
+
+/* ── Choix d'icône d'un lien ─────────────────────────────────────────── */
+.editor-icon-picker {
+  min-width: 0;
+  margin-bottom: 12px;
+  border: 0;
+}
+
+.editor-icon-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.editor-icon-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid var(--ed-border);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ed-label);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+}
+
+.editor-icon-option:hover {
+  border-color: #c7d2fe;
+  color: var(--ed-accent);
+}
+
+.editor-icon-option.is-selected {
+  border-color: var(--ed-accent);
+  background: var(--ed-accent-soft);
+  color: var(--ed-accent);
+}
+
+.editor-icon-option:has(input:focus-visible) {
+  outline: 2px solid var(--ed-accent);
+  outline-offset: 2px;
+}
+
+/* ── Photo ───────────────────────────────────────────────────────────── */
+.editor-photo {
+  margin: 6px 0 4px;
+}
+
+.photo-upload-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px;
+  border: 1px solid var(--ed-border-soft);
+  border-radius: 12px;
+  background: var(--ed-field-bg);
+}
+
+.photo-preview-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--ed-border);
+  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.photo-preview-wrapper:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.photo-preview-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--ed-faint);
+}
+
+.photo-upload-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.photo-preview-wrapper:hover .photo-upload-overlay {
+  opacity: 1;
+}
+
+.photo-upload-info {
+  min-width: 0;
+}
+
+.editor-photo-title {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ed-text);
+}
+
+.photo-upload-info p {
+  font-size: 0.75rem;
+  color: var(--ed-muted);
+}
+
+.editor-photo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.editor-spin {
+  animation: editor-spin 0.9s linear infinite;
+}
+
+@keyframes editor-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Petits écrans ───────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .editor-sidebar {
+    padding: 18px 16px 24px;
+    border-radius: 14px;
+  }
+
+  .editor-panel-toggle {
+    gap: 8px;
+    padding-inline: 2px;
+  }
+
+  .editor-panel-title {
+    letter-spacing: 0.05em;
+  }
+
+  .editor-card-body {
+    padding: 14px 12px 6px;
+  }
+
+  .photo-upload-container {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .photo-preview-wrapper {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editor-sidebar *,
+  .editor-sidebar *::before,
+  .editor-sidebar *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Curseur de cadrage, affiché juste après le choix d'une photo */
+.editor-photo-crop {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--ed-border-soft);
+  border-radius: 10px;
+  background: var(--ed-field-bg);
+}
+
+.editor-photo-crop > label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ed-text);
+}
+
+.editor-photo-crop-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: var(--ed-muted);
+}
+
+.editor-photo-crop-row input[type='range'] {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--ed-accent, #2563eb);
+}

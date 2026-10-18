@@ -1,0 +1,544 @@
+/* ── Base commune des templates de CV (.resume-container) ───────────────
+   Le template pose ses variables en style inline (--font-scale, --primary-color,
+   --sidebar-bg, --text-dark, --resume-font) et fixe toute sa typographie :
+   il ne dépend ni de son conteneur ni des styles globaux de l'app.
+   Tailles de texte en pt × --font-scale : à 1, le corps (puces) fait 10 pt
+   (BODY_TEXT_PT dans src/lib/pageGeometry.js).
+   La mise en page doit rester identique à l'écran et à l'impression : le compteur
+   de pages et l'indicateur de saut de page la simulent à partir de l'écran. */
+
+.resume-container {
+  --font-scale: 1;
+  --primary-color: #2563eb;
+  --sidebar-bg: #f9fafb;
+  --text-dark: #111827;
+  --resume-font: 'Inter', Helvetica, Arial, sans-serif;
+  --text-body: #374151;
+  --text-muted: #4b5563;
+  --text-light: #6b7280;
+
+  position: relative;
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0;
+  background: #ffffff;
+  color: var(--text-dark);
+  font-family: var(--resume-font);
+  font-size: calc(10pt * var(--font-scale));
+  font-weight: 400;
+  font-style: normal;
+  font-variant: normal;
+  /* Gras et italique synthétisés si la police n'a pas la graisse ou l'italique chargés
+     (Inter est chargée sans italique) : le parent peut avoir font-synthesis: none. */
+  font-synthesis: weight style;
+  line-height: 1.4;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-align: left;
+  text-indent: 0;
+  text-transform: none;
+  white-space: normal;
+  /* « anywhere » et non « break-word » : un mot trop long (adresse e-mail, URL,
+     étiquette) peut aussi se couper dans un élément flex. Sinon il déborde de sa
+     colonne et Chrome réduit toute la page à l'impression pour le faire tenir. */
+  overflow-wrap: anywhere;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.resume-container *,
+.resume-container *::before,
+.resume-container *::after {
+  box-sizing: border-box;
+}
+
+.resume-container :where(h1, h2, h3, h4, p, ul, ol, li, figure) {
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+.resume-container :where(ul, ol) {
+  list-style: none;
+}
+
+.resume-container :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resume-container :where(svg) {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.resume-container .resume-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Indicateur de saut de page (écran uniquement) ──────────────────── */
+.resume-container .page-break-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.resume-container .page-break-marker {
+  position: absolute;
+  height: 0;
+  border-top: 1.5px dashed #94a3b8;
+}
+
+.resume-container .page-break-label {
+  position: absolute;
+  top: 0;
+  right: 0;
+  /* Centré sur le bord droit de la colonne : dans la gouttière entre les colonnes */
+  transform: translate(50%, -50%);
+  padding: 0 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #475569;
+  font: 600 9px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+/* Colonne au bord de la page : l'étiquette reste dans la marge de droite */
+.resume-container .page-break-marker.is-edge .page-break-label {
+  right: 2px;
+  transform: translateY(-50%);
+}
+
+.resume-container .print-sidebar-bg {
+  display: none;
+}
+
+/* ── Template « design » ─────────────────────────────────────────────── */
+.resume-design {
+  display: flex;
+  align-items: stretch;
+  /* Fond de la sidebar sur toute la hauteur de l'aperçu (à l'impression : .print-sidebar-bg) */
+  background: linear-gradient(to right, var(--sidebar-bg) 32%, #ffffff 32%);
+}
+
+/* Filet entre les colonnes, hors flux pour ne pas changer la mise en page */
+.resume-design::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 32%;
+  width: 1px;
+  background: #eeeeee;
+  pointer-events: none;
+}
+
+.resume-design .sidebar,
+.resume-design .main-content {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  /* 10 mm en haut et en bas de CHAQUE page imprimée : le padding est répété
+     sur chaque fragment de colonne (une page = un fragment). */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.resume-design .sidebar {
+  flex: 0 0 32%;
+  width: 32%;
+  padding: 10mm 6mm;
+}
+
+.resume-design .main-content {
+  flex: 0 0 68%;
+  width: 68%;
+  padding: 10mm 9mm 10mm 7mm;
+}
+
+/* En-tête : photo, nom, poste, coordonnées */
+.resume-design .profile-section {
+  margin-bottom: 5mm;
+  break-inside: avoid;
+}
+
+.resume-design .profile-img {
+  width: 32mm;
+  height: 32mm;
+  margin-bottom: 4mm;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e5e7eb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.resume-design .profile-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resume-design h1 {
+  margin-bottom: 3px;
+  color: var(--text-dark);
+  font-size: calc(16pt * var(--font-scale));
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.resume-design .profile-title {
+  margin-bottom: 8px;
+  color: var(--primary-color);
+  font-size: calc(9.5pt * var(--font-scale));
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.resume-design .contact-info {
+  color: var(--text-body);
+  font-size: calc(9pt * var(--font-scale));
+}
+
+.resume-design .contact-info li,
+.resume-design .social-links a,
+.resume-design .lang-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+.resume-design .contact-info li {
+  margin-bottom: 3px;
+}
+
+.resume-design .icon {
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+  margin-top: 0.12em;
+  color: var(--primary-color);
+}
+
+.resume-design .icon-inline {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+  color: var(--text-muted);
+}
+
+/* Sections */
+.resume-design .sidebar-section {
+  margin-bottom: 4.5mm;
+}
+
+.resume-design .main-section {
+  margin-bottom: 5mm;
+}
+
+/* Aucune marge après le dernier élément d'une colonne : avec le padding bas
+   répété à chaque page, elle suffirait à créer une page blanche finale. */
+.resume-design :is(.sidebar, .main-content) > :last-child,
+.resume-design :is(ul, ol) > li:last-child {
+  margin-bottom: 0;
+}
+
+.resume-design .sidebar-section > h2,
+.resume-design .main-section > h2 {
+  color: var(--text-dark);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.25;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.resume-design .sidebar-section > h2 {
+  margin-bottom: 8px;
+  padding-bottom: 3px;
+  border-bottom: 1.5px solid var(--primary-color);
+  font-size: calc(10pt * var(--font-scale));
+  font-weight: 700;
+}
+
+.resume-design .main-section > h2 {
+  margin-bottom: 10px;
+  padding-bottom: 3px;
+  border-bottom: 2px solid var(--primary-color);
+  font-size: calc(12.5pt * var(--font-scale));
+}
+
+.resume-design .objective-text {
+  color: var(--text-dark);
+  font-size: calc(10.5pt * var(--font-scale));
+  font-style: italic;
+  line-height: 1.45;
+  text-align: justify;
+  white-space: pre-line;
+}
+
+/* Compétences et étiquettes */
+.resume-design .skills-category-group {
+  break-inside: avoid;
+}
+
+.resume-design .skills-category-group + .skills-category-group {
+  margin-top: 6px;
+}
+
+.resume-design .sidebar-sub-title {
+  margin-bottom: 4px;
+  color: var(--text-light);
+  font-size: calc(8.5pt * var(--font-scale));
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.resume-design .tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 4px;
+}
+
+.resume-design .tag {
+  padding: 1.5px 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  background: #ffffff;
+  color: var(--text-body);
+  font-size: calc(8.5pt * var(--font-scale));
+  font-weight: 500;
+  line-height: 1.3;
+  break-inside: avoid;
+}
+
+.resume-design .skills-tags .tag {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.resume-design .small-tags .tag {
+  font-size: calc(8pt * var(--font-scale));
+}
+
+/* Liens, langues, certifications, listes de la sidebar */
+.resume-design .social-links li,
+.resume-design .lang-list li {
+  margin-bottom: 4px;
+  color: var(--text-dark);
+  font-size: calc(9pt * var(--font-scale));
+  break-inside: avoid;
+}
+
+.resume-design .link-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Morceaux d'une URL ou d'une adresse (voir BreakableText) : chacun reste entier s'il tient
+   dans la colonne ; plus large qu'elle, il se coupe au dernier caractère qui tient. */
+.resume-design .break-seg,
+.resume-design .break-chunk {
+  display: inline-block;
+  max-width: 100%;
+  line-break: anywhere;
+}
+
+.resume-design .cert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 7px;
+  font-size: calc(9pt * var(--font-scale));
+  break-inside: avoid;
+}
+
+.resume-design .cert-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.resume-design .cert-info strong {
+  color: var(--text-dark);
+  font-size: calc(9pt * var(--font-scale));
+  line-height: 1.25;
+}
+
+.resume-design .cert-info span {
+  color: var(--text-light);
+  font-size: calc(8.5pt * var(--font-scale));
+  line-height: 1.25;
+}
+
+.resume-design .side-list li {
+  position: relative;
+  margin-bottom: 3px;
+  padding-left: 11px;
+  color: var(--text-body);
+  font-size: calc(9pt * var(--font-scale));
+  break-inside: avoid;
+}
+
+.resume-design .side-list li::before {
+  content: '';
+  position: absolute;
+  top: 0.55em;
+  left: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--primary-color);
+}
+
+/* Expériences et formations */
+.resume-design .experience-item,
+.resume-design .formation-item {
+  margin-bottom: 4mm;
+}
+
+.resume-design .experience-item:last-child,
+.resume-design .formation-item:last-child {
+  margin-bottom: 0;
+}
+
+.resume-design .exp-header {
+  break-inside: avoid;
+}
+
+/* Garde l'en-tête avec la suite. Seulement s'il est suivi de contenu : sur un
+   dernier enfant, « avoid » remonterait jusqu'à la fin de la section. */
+.resume-design .exp-header:not(:last-child) {
+  break-after: avoid;
+}
+
+.resume-design .exp-header h3 {
+  color: var(--text-dark);
+  font-size: calc(11pt * var(--font-scale));
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.resume-design .exp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 12px;
+  margin: 2px 0 5px;
+  color: var(--text-muted);
+  font-size: calc(9pt * var(--font-scale));
+}
+
+.resume-design .exp-company {
+  font-weight: 700;
+}
+
+.resume-design .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Corps de texte : 10 pt à --font-scale = 1 (BODY_TEXT_PT.design) */
+.resume-design .exp-details {
+  color: var(--text-body);
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.35;
+}
+
+.resume-design .exp-details li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-bottom: 2.5px;
+  break-inside: avoid;
+}
+
+.resume-design .exp-details li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  margin-top: 0.5em;
+  border-radius: 50%;
+  background: var(--primary-color);
+}
+
+.resume-design .formation-block {
+  margin-top: 5px;
+  break-inside: avoid;
+}
+
+.resume-design .formation-label {
+  margin-bottom: 3px;
+  color: var(--text-dark);
+  font-size: calc(9.5pt * var(--font-scale));
+  font-weight: 700;
+}
+
+.resume-design .program-link {
+  margin-top: 6px;
+  break-inside: avoid;
+}
+
+.resume-design .program-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--primary-color);
+  font-size: calc(9.5pt * var(--font-scale));
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.resume-design .program-link .icon-inline {
+  color: inherit;
+}
+
+/* ── Impression ───────────────────────────────────────────────────────── */
+@media print {
+  /* Repris de print.css pour que le template reste correct même imprimé sans
+     <PrintStyles /> : une hauteur minimale d'une page ajouterait une page blanche. */
+  .resume-container {
+    min-height: 0;
+    box-shadow: none;
+  }
+
+  /* Fond de sidebar continu : un élément fixe est répété sur chaque page,
+     y compris sous le padding des pages 2+ et après la fin du contenu. */
+  .resume-design .print-sidebar-bg {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    width: calc(210mm * 0.32);
+    border-right: 1px solid #eeeeee;
+    background: var(--sidebar-bg);
+  }
+
+  .resume-design::before {
+    display: none;
+  }
+}

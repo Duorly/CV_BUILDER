@@ -1,25 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  color: #111827;
   color-scheme: light;
-  background-color: #f3f4f6;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
+html,
 body {
   margin: 0;
   padding: 0;
-  width: 100%;
+  background: #f3f4f6;
+}
+
+body {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 #root {
   width: 100%;
-  margin: 0;
+}
+
+/* À l'impression, jamais de fond gris sous le document. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
 }
