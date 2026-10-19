@@ -130,9 +130,11 @@ describe('helpers de rendu', () => {
     // Le drapeau « masquée » n'est pas du contenu.
     expect(isBlankItem({ id: 'x', title: '', details: [], hidden: true })).toBe(true);
   });
-  it('formation masquée : seul true est retenu', () => {
+  it('formation ou groupe de compétences masqué : seul true est retenu', () => {
     const d = normalizeData({ education: [{ title: 'A', hidden: true }, { title: 'B', hidden: 'oui' }, { title: 'C' }] });
     expect(d.education.map((e) => e.hidden)).toEqual([true, false, false]);
+    const s = normalizeData({ mainSkills: [{ skills: ['Excel'], hidden: true }, { skills: ['Word'], hidden: 1 }] });
+    expect(s.mainSkills.map((g) => g.hidden)).toEqual([true, false]);
   });
   it('sectionTitle : titre personnalisé > libellé par défaut', () => {
     const d = normalizeData({ sections: [{ id: 'skills', title: 'Savoir-faire' }] });

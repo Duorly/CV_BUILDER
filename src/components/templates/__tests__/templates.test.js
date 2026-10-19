@@ -120,6 +120,16 @@ describe('templates : rendu sans plantage et sans rubrique vide', () => {
       expect(render(Template, data)).not.toMatch(/>(Formation|Éducation)</);
     });
 
+    it(`${name} : un groupe de compétences masqué n’apparaît pas, les autres restent`, () => {
+      const data = normalizeData(example);
+      data.mainSkills[0].hidden = true;
+      const html = render(Template, data);
+      expect(html).not.toContain('Stratégie éditoriale');
+      expect(html).toContain('Google Analytics');
+      for (const group of data.mainSkills) group.hidden = true;
+      expect(render(Template, data)).not.toContain('>Compétences<');
+    });
+
     it(`${name} : en-tête centré et texte justifié en option`, () => {
       const data = normalizeData(example);
       const plain = render(Template, data);

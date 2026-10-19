@@ -88,6 +88,14 @@ describe('ResumePdfDocument', () => {
     expect(text).toContain('Licence Information-Communication');
   });
 
+  it('omet les groupes de compétences masqués', async () => {
+    const data = structuredClone(example);
+    data.mainSkills[0].hidden = true;
+    const text = drawnLines(await render(data)).join('\n');
+    expect(text).not.toContain('Stratégie éditoriale');
+    expect(text).toContain('Google Analytics');
+  });
+
   it('accepte l’en-tête centré et le texte justifié', async () => {
     const pdf = await render(example, { headerAlign: 'center', textAlign: 'justify' });
     expect(pageCount(pdf)).toBeGreaterThanOrEqual(1);

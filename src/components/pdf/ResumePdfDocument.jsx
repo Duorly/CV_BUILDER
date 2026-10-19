@@ -224,6 +224,7 @@ function educationEntries(list, { styles, labels, lang, text, texts }) {
 
 function skillEntries(groups, { styles, lang, text, texts }) {
   return groups
+    .filter((group) => !group.hidden)
     .map((group) => {
       const skills = texts(group.skills);
       if (!skills.length) return null;

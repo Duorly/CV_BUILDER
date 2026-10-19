@@ -35,7 +35,7 @@ export function sectionColumn(data, sectionId) {
   return SECTION_COLUMNS[sectionId] || 'main';
 }
 
-// Élément affiché sur le CV : ni vide, ni masqué (formations).
+// Élément affiché sur le CV : ni vide, ni masqué (formations, groupes de compétences).
 export const isShownItem = (item) => !item.hidden && !isBlankItem(item);
 
 // Sections visibles, dans l'ordre choisi.
@@ -74,7 +74,7 @@ export function fontCss(settings) {
 }
 
 // ── Fabriques d'éléments (valeurs vides, jamais de texte factice) ───────
-export const newSkillGroup = () => ({ id: createId('skg'), category: '', skills: [] });
+export const newSkillGroup = () => ({ id: createId('skg'), category: '', skills: [], hidden: false });
 export const newLink = () => ({ id: createId('lnk'), name: '', url: '', label: '', icon: 'Link' });
 export const newLanguage = () => ({ id: createId('lng'), name: '', level: '' });
 export const newExperience = () => ({
@@ -177,6 +177,7 @@ export function normalizeData(input) {
     id: withId(g, 'skg', seen),
     category: str(g.category),
     skills: strArr(g.skills),
+    hidden: g.hidden === true,
   }));
 
   const socialLinks = objArr(src.socialLinks).map((l) => ({

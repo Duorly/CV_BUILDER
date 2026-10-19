@@ -741,15 +741,15 @@ export function stripForAI(data) {
     period: s(e.period),
     details: list(e.details),
   });
+  // Groupes de compétences et formations masqués ne sont pas sur le CV : l'IA ne les analyse pas.
   return {
     title: s(d.personalInfo.title),
     summary: s(d.personalInfo.objective),
     skills: d.mainSkills
-      .filter((g) => !blankItem(g, ['category', 'skills']))
+      .filter((g) => !g.hidden && !blankItem(g, ['category', 'skills']))
       .map((g) => ({ id: g.id, category: s(g.category), skills: list(g.skills) })),
     experiences: d.experiences.filter((e) => !blankItem(e, ['title', 'company', 'details'])).map(exp),
     otherExperiences: d.otherExperiences.filter((e) => !blankItem(e, ['title', 'company', 'details'])).map(exp),
-    // Une formation masquée n'est pas sur le CV : l'IA ne l'analyse pas.
     education: d.education
       .filter((e) => !e.hidden && !blankItem(e, ['title', 'school', 'degree', 'details']))
       .map((e) => ({

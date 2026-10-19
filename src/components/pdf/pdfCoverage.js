@@ -20,7 +20,7 @@ function collectStrings(value, out, key = '') {
 }
 
 const SECTION_DATA = {
-  skills: (data) => data.mainSkills,
+  skills: (data) => data.mainSkills.filter((group) => !group.hidden),
   experiences: (data) => data.experiences,
   otherExperiences: (data) => data.otherExperiences,
   education: (data) => data.education.filter(isShownItem),

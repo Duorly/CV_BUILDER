@@ -111,6 +111,22 @@ test('une formation masquée disparaît des deux modèles sans être supprimée'
   await expect(app.resume).toContainText('Master Communication des organisations');
 });
 
+test('un groupe de compétences masqué disparaît des deux modèles sans être supprimé', async ({ page, app }) => {
+  await app.loadExample();
+  const panel = await app.openPanel('skills');
+  await panel.getByRole('button', { name: 'Masquer « Communication » sur le CV' }).click();
+  await expect(panel.getByRole('button', { name: 'Afficher « Communication » sur le CV' })).toBeVisible();
+  await expect(panel.locator('.editor-panel-meta')).toContainText('dont 4 masquées');
+  await expect(app.resume).not.toContainText('Stratégie éditoriale');
+  await expect(app.resume).toContainText('Google Analytics');
+
+  await app.setTemplate('ATS (sobre)');
+  await expect(app.resume).not.toContainText('Stratégie éditoriale');
+
+  const lib = await app.waitForSaved((l) => l?.cvs[0].data.mainSkills[0].hidden);
+  expect(lib.cvs[0].data.mainSkills[0].skills).toContain('Stratégie éditoriale');
+});
+
 test('Apparence : en-tête centré et texte justifié dans les deux modèles', async ({ page, app }) => {
   await app.loadExample();
   const align = (selector) => app.resume.locator(selector).first().evaluate((el) => getComputedStyle(el).textAlign);

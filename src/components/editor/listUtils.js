@@ -210,7 +210,11 @@ export function sectionContentSummary(data, sectionId) {
     count = (data.personalInfo?.objective || '').trim().length;
     noun = 'caractère';
   } else if (sectionId === 'skills') {
-    count = (data.mainSkills || []).reduce((sum, group) => sum + clean(group.skills).length, 0);
+    for (const group of data.mainSkills || []) {
+      const skills = clean(group.skills).length;
+      count += skills;
+      if (group.hidden) hiddenCount += skills;
+    }
     noun = 'compétence';
   } else if (sectionId.startsWith('custom:')) {
     const custom = (data.customSections || []).find((c) => `custom:${c.id}` === sectionId);

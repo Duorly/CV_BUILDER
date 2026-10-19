@@ -203,6 +203,11 @@ describe('sections', () => {
     d.education[1].hidden = true;
     expect(sectionContentSummary(d, 'education')).toEqual({ empty: true, text: '2 formations dont 2 masquées' });
   });
+
+  it('sectionContentSummary compte les compétences des groupes masqués', () => {
+    const d = normalizeData({ mainSkills: [{ skills: ['Excel', 'Word'], hidden: true }, { skills: ['Accueil'] }] });
+    expect(sectionContentSummary(d, 'skills')).toEqual({ empty: false, text: '3 compétences dont 2 masquées' });
+  });
 });
 
 describe('icônes de liens', () => {

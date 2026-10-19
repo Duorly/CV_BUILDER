@@ -100,6 +100,7 @@ export function sectionContent(data, sectionId) {
     case 'skills':
       return nonEmpty(
         data.mainSkills
+          .filter((group) => !group.hidden)
           .map((group) => ({ id: group.id, category: group.category.trim(), skills: tidyList(group.skills) }))
           .filter((group) => group.skills.length),
       );

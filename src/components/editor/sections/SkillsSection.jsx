@@ -16,6 +16,7 @@ export default function SkillsSection({ groups, update }) {
       firstField="category"
       addLabel="Ajouter un groupe de compétences"
       emptyText="Aucune compétence pour l'instant. Regroupez-les par thème (accueil, logiciels, qualités…) ou laissez le nom du groupe vide."
+      hiddenNote="Ce groupe est masqué : ses compétences restent enregistrées mais n'apparaissent pas sur le CV."
       renderBody={(group, { patch }) => (
         <>
           <TextField

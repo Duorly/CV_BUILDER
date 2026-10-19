@@ -53,7 +53,7 @@ export default function ItemCard({
             <span className={`editor-card-title${isFallback ? ' is-fallback' : ''}`}>{title}</span>
             {(subtitle || hidden) && (
               <span className="editor-card-subtitle">
-                {hidden ? joinNonEmpty(['Masquée sur le CV', subtitle], ' · ') : subtitle}
+                {hidden ? joinNonEmpty(["N'apparaît pas sur le CV", subtitle], ' · ') : subtitle}
               </span>
             )}
           </span>
