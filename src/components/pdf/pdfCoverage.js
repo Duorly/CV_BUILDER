@@ -1,4 +1,4 @@
-import { customSectionKey, visibleSections } from '../../lib/schema';
+import { customSectionKey, isShownItem, visibleSections } from '../../lib/schema';
 import { prettyUrl } from '../../lib/files';
 import { alteredFragments, droppedSymbols } from './pdfText';
 
@@ -6,7 +6,7 @@ import { alteredFragments, droppedSymbols } from './pdfText';
 // pour prévenir l'utilisatrice avant le téléchargement au lieu de modifier son CV en silence.
 // Léger : n'importe pas le moteur PDF, la fenêtre « Télécharger » l'appelle à chaque ouverture.
 
-const SKIPPED_KEYS = new Set(['id', 'icon', 'column', 'photo', 'visible']);
+const SKIPPED_KEYS = new Set(['id', 'icon', 'column', 'photo', 'visible', 'hidden']);
 
 function collectStrings(value, out, key = '') {
   if (SKIPPED_KEYS.has(key)) return;
@@ -23,7 +23,7 @@ const SECTION_DATA = {
   skills: (data) => data.mainSkills,
   experiences: (data) => data.experiences,
   otherExperiences: (data) => data.otherExperiences,
-  education: (data) => data.education,
+  education: (data) => data.education.filter(isShownItem),
   links: (data) => data.socialLinks.map(({ url }) => ({ url })),
   languages: (data) => data.languages,
   certifications: (data) => data.certifications,

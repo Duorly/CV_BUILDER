@@ -35,6 +35,9 @@ export function sectionColumn(data, sectionId) {
   return SECTION_COLUMNS[sectionId] || 'main';
 }
 
+// Élément affiché sur le CV : ni vide, ni masqué (formations).
+export const isShownItem = (item) => !item.hidden && !isBlankItem(item);
+
 // Sections visibles, dans l'ordre choisi.
 export function visibleSections(data) {
   return (data.sections || []).filter((s) => s.visible !== false).map((s) => s.id);
@@ -62,6 +65,8 @@ export const defaultSettings = () => ({
   fontFamily: 'inter',
   lang: 'fr', // langue des libellés du CV : 'fr' | 'en'
   showPhoto: true,
+  headerAlign: 'left', // 'left' | 'center' : nom, poste et coordonnées
+  textAlign: 'left', // 'left' | 'justify' : paragraphes et puces
 });
 
 export function fontCss(settings) {
@@ -91,6 +96,7 @@ export const newEducation = () => ({
   objectives: [],
   tools: [],
   link: '',
+  hidden: false, // masquée sur le CV, sans être supprimée
 });
 export const newCertification = () => ({ id: createId('cert'), name: '', issuer: '', date: '' });
 export const newCustomSection = () => ({ id: createId('sec'), title: '', column: 'main', items: [''] });
@@ -209,6 +215,7 @@ export function normalizeData(input) {
     objectives: strArr(e.objectives),
     tools: strArr(e.tools),
     link: str(e.link),
+    hidden: e.hidden === true,
   }));
 
   const certifications = objArr(src.certifications).map((c) => ({
@@ -270,6 +277,8 @@ export function normalizeSettings(input) {
     fontFamily: FONT_OPTIONS.some((f) => f.id === src.fontFamily) ? src.fontFamily : d.fontFamily,
     lang: src.lang === 'en' ? 'en' : 'fr',
     showPhoto: src.showPhoto !== false,
+    headerAlign: src.headerAlign === 'center' ? 'center' : 'left',
+    textAlign: src.textAlign === 'justify' ? 'justify' : 'left',
   };
 }
 
@@ -289,7 +298,7 @@ export const joinNonEmpty = (parts, sep) => parts.map((p) => str(p).trim()).filt
 // Une expérience / formation / certification est « vide » si aucun champ texte n'est rempli.
 export function isBlankItem(item) {
   return Object.entries(item || {}).every(([key, value]) => {
-    if (key === 'id' || key === 'icon' || key === 'column') return true;
+    if (key === 'id' || key === 'icon' || key === 'column' || typeof value === 'boolean') return true;
     if (Array.isArray(value)) return clean(value).length === 0;
     return !str(value).trim();
   });

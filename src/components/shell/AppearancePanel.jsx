@@ -44,7 +44,7 @@ export default function AppearancePanel({ settings, hasPhoto, updateSettings }) 
     <Dropdown
       label="Apparence"
       icon={Palette}
-      title="Modèle, police, taille et couleurs"
+      title="Modèle, police, taille, couleurs et alignement"
       role="dialog"
       panelClassName="ap-panel"
     >
@@ -131,6 +131,33 @@ export default function AppearancePanel({ settings, hasPhoto, updateSettings }) 
             Couleurs par défaut
           </button>
         )}
+      </div>
+
+      <div className="field">
+        <span className="field-label">En-tête (nom, poste et coordonnées)</span>
+        <Segmented
+          label="Alignement de l’en-tête"
+          value={settings.headerAlign}
+          options={[
+            { value: 'left', label: 'À gauche' },
+            { value: 'center', label: 'Centré' },
+          ]}
+          onChange={(headerAlign) => updateSettings({ headerAlign })}
+        />
+      </div>
+
+      <div className="field">
+        <span className="field-label">Texte du CV</span>
+        <Segmented
+          label="Alignement du texte du CV"
+          value={settings.textAlign}
+          options={[
+            { value: 'left', label: 'Aligné à gauche' },
+            { value: 'justify', label: 'Justifié' },
+          ]}
+          onChange={(textAlign) => updateSettings({ textAlign })}
+        />
+        <span className="field-hint">Justifié : le profil et les puces s’alignent sur les deux bords.</span>
       </div>
 
       <div className="field ap-check">

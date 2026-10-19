@@ -6,7 +6,8 @@ import { focusSoon, useEditorUi } from './editorUi';
 import { deleteConfirmMessage, fieldId, itemSummary, moveItem, undoShortcut } from './listUtils';
 
 // Liste d'éléments d'une section (data[field]) : cartes repliables, ajout en fin
-// de liste, réordonnancement et suppression confirmée.
+// de liste, réordonnancement et suppression confirmée. `hiddenNote` rend les
+// éléments masquables sur le CV (champ `hidden`), avec ce message dans la carte.
 export default function ItemList({
   field,
   items,
@@ -16,6 +17,7 @@ export default function ItemList({
   firstField,
   addLabel,
   emptyText,
+  hiddenNote,
   renderBody,
 }) {
   const ui = useEditorUi();
@@ -46,6 +48,11 @@ export default function ItemList({
     focusSoon(neighbour ? fieldId(neighbour.id, 'toggle') : addId);
   };
 
+  const toggleHidden = (id) =>
+    mutate(id, (target) => {
+      target.hidden = !target.hidden;
+    }, { checkpoint: true });
+
   const move = (from, to, focusId, fallbackId) => {
     if (to < 0 || to >= items.length || from === to) return;
     update((draft) => {
@@ -73,6 +80,9 @@ export default function ItemList({
                 onToggle={() => ui.toggle(item.id)}
                 onMove={move}
                 onRemove={() => remove(item, summary.title)}
+                hidden={Boolean(hiddenNote && item.hidden)}
+                onToggleHidden={hiddenNote ? () => toggleHidden(item.id) : undefined}
+                hiddenNote={hiddenNote}
               >
                 {renderBody(item, {
                   index,

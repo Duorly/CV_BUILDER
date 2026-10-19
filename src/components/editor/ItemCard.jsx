@@ -1,9 +1,11 @@
-import { ArrowDown, ArrowUp, ChevronRight, GripVertical, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronRight, Eye, EyeOff, GripVertical, Trash2 } from 'lucide-react';
+import { joinNonEmpty } from '../../lib/schema';
 import { useSortableRow } from './SortableList';
 import { fieldId } from './listUtils';
 
 // Carte repliable d'un élément de liste (expérience, formation, langue…).
 // L'en-tête résume le contenu ; poignée de glisser-déposer, ↑/↓ et suppression.
+// Avec onToggleHidden, un bouton œil masque l'élément sur le CV sans le supprimer.
 export default function ItemCard({
   id,
   index,
@@ -13,6 +15,9 @@ export default function ItemCard({
   onToggle,
   onMove,
   onRemove,
+  hidden = false,
+  onToggleHidden,
+  hiddenNote,
   children,
 }) {
   const { rowProps, handleProps, isDragging } = useSortableRow(id);
@@ -22,7 +27,7 @@ export default function ItemCard({
   return (
     <li
       {...rowProps}
-      className={`editor-item-box elegant editor-card${open ? ' is-open' : ''}${isDragging ? ' is-dragging' : ''}`}
+      className={`editor-item-box elegant editor-card${open ? ' is-open' : ''}${hidden ? ' is-hidden' : ''}${isDragging ? ' is-dragging' : ''}`}
     >
       <div className="editor-card-header">
         <button
@@ -46,10 +51,26 @@ export default function ItemCard({
           <ChevronRight size={15} className="editor-chevron" aria-hidden="true" />
           <span className="editor-card-titles">
             <span className={`editor-card-title${isFallback ? ' is-fallback' : ''}`}>{title}</span>
-            {subtitle && <span className="editor-card-subtitle">{subtitle}</span>}
+            {(subtitle || hidden) && (
+              <span className="editor-card-subtitle">
+                {hidden ? joinNonEmpty(['Masquée sur le CV', subtitle], ' · ') : subtitle}
+              </span>
+            )}
           </span>
         </button>
         <div className="editor-card-actions">
+          {onToggleHidden && (
+            <button
+              type="button"
+              id={`${base}-visibility`}
+              className={`editor-icon-btn${hidden ? ' is-active' : ''}`}
+              aria-label={hidden ? `Afficher « ${title} » sur le CV` : `Masquer « ${title} » sur le CV`}
+              title={hidden ? 'Afficher sur le CV' : 'Masquer sur le CV'}
+              onClick={onToggleHidden}
+            >
+              {hidden ? <EyeOff size={14} aria-hidden="true" /> : <Eye size={14} aria-hidden="true" />}
+            </button>
+          )}
           <button
             type="button"
             id={`${base}-up`}
@@ -85,6 +106,7 @@ export default function ItemCard({
         </div>
       </div>
       <div id={`${base}-body`} className="editor-card-body" hidden={!open}>
+        {open && hidden && hiddenNote && <p className="editor-hidden-note">{hiddenNote}</p>}
         {open && children}
       </div>
     </li>

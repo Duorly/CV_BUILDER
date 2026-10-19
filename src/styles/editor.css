@@ -563,6 +563,15 @@
   color: var(--ed-muted);
 }
 
+/* Élément masqué sur le CV : en-tête estompé, comme une section masquée. */
+.editor-card.is-hidden .editor-card-titles {
+  opacity: 0.5;
+}
+
+.editor-card.is-hidden .editor-card-body > :not(.editor-hidden-note) {
+  opacity: 0.5;
+}
+
 .editor-card-actions {
   display: flex;
   align-items: center;

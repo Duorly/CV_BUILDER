@@ -2,7 +2,7 @@ import { Fragment, useMemo, useRef } from 'react';
 import { joinNonEmpty } from '../../lib/schema';
 import { labelsFor, sectionTitle } from '../../lib/labels';
 import PageBreakOverlay from './PageBreakOverlay';
-import { colon, contactInfo, languageText, prepare, renderableSections, themeStyle } from './shared';
+import { colon, contactInfo, languageText, layoutClasses, prepare, renderableSections, themeStyle } from './shared';
 import '../../styles/resume.css';
 import '../../styles/resume-ats.css';
 
@@ -181,7 +181,7 @@ export default function ResumeATS({ data, settings }) {
   return (
     <div
       ref={rootRef}
-      className="resume-container resume-ats-template"
+      className={joinNonEmpty(['resume-container resume-ats-template', layoutClasses(s)], ' ')}
       id="resume-root"
       lang={lang}
       style={themeStyle(s)}

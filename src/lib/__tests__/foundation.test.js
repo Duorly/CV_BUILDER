@@ -106,6 +106,18 @@ describe('normalizeSettings', () => {
     expect(s.template).toBe('ats');
     expect(s.lang).toBe('fr');
   });
+
+  it('alignements : en-tête et texte à gauche par défaut, valeurs inconnues ignorées', () => {
+    expect(normalizeSettings({})).toMatchObject({ headerAlign: 'left', textAlign: 'left' });
+    expect(normalizeSettings({ headerAlign: 'center', textAlign: 'justify' })).toMatchObject({
+      headerAlign: 'center',
+      textAlign: 'justify',
+    });
+    expect(normalizeSettings({ headerAlign: 'right', textAlign: 'center' })).toMatchObject({
+      headerAlign: 'left',
+      textAlign: 'left',
+    });
+  });
 });
 
 describe('helpers de rendu', () => {
@@ -115,6 +127,12 @@ describe('helpers de rendu', () => {
   it('isBlankItem détecte un élément vide', () => {
     expect(isBlankItem({ id: 'x', title: '', details: ['', ' '] })).toBe(true);
     expect(isBlankItem({ id: 'x', title: 'Poste', details: [] })).toBe(false);
+    // Le drapeau « masquée » n'est pas du contenu.
+    expect(isBlankItem({ id: 'x', title: '', details: [], hidden: true })).toBe(true);
+  });
+  it('formation masquée : seul true est retenu', () => {
+    const d = normalizeData({ education: [{ title: 'A', hidden: true }, { title: 'B', hidden: 'oui' }, { title: 'C' }] });
+    expect(d.education.map((e) => e.hidden)).toEqual([true, false, false]);
   });
   it('sectionTitle : titre personnalisé > libellé par défaut', () => {
     const d = normalizeData({ sections: [{ id: 'skills', title: 'Savoir-faire' }] });

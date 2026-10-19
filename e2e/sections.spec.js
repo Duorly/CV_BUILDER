@@ -90,3 +90,44 @@ test('une section libre supprimée disparaît des deux modèles', async ({ page,
   await app.setTemplate('ATS (sobre)');
   await expect(app.resume).not.toContainText('Bénévolat');
 });
+
+test('une formation masquée disparaît des deux modèles sans être supprimée', async ({ page, app }) => {
+  await app.loadExample();
+  const panel = await app.openPanel('education');
+  const label = 'Master Communication des organisations — Université Lumière Lyon 2';
+  await panel.getByRole('button', { name: `Masquer « ${label} » sur le CV` }).click();
+  await expect(panel.getByRole('button', { name: `Afficher « ${label} » sur le CV` })).toBeVisible();
+  await expect(panel.locator('.editor-panel-meta')).toContainText('2 formations dont 1 masquée');
+  await expect(app.resume).not.toContainText('Master Communication des organisations');
+  await expect(app.resume).toContainText('Licence Information-Communication');
+
+  await app.setTemplate('ATS (sobre)');
+  await expect(app.resume).not.toContainText('Master Communication des organisations');
+
+  const lib = await app.waitForSaved((l) => l?.cvs[0].data.education.some((e) => e.hidden));
+  expect(lib.cvs[0].data.education.map((e) => e.hidden)).toEqual([true, false]);
+
+  await panel.getByRole('button', { name: `Afficher « ${label} » sur le CV` }).click();
+  await expect(app.resume).toContainText('Master Communication des organisations');
+});
+
+test('Apparence : en-tête centré et texte justifié dans les deux modèles', async ({ page, app }) => {
+  await app.loadExample();
+  const align = (selector) => app.resume.locator(selector).first().evaluate((el) => getComputedStyle(el).textAlign);
+  expect(await align('h1')).not.toBe('center');
+  expect(await align('.exp-details li')).not.toBe('justify');
+
+  await app.toolbarButton('Apparence').click();
+  await page.getByRole('radio', { name: 'Centré' }).click();
+  await page.getByRole('radio', { name: 'Justifié' }).click();
+  await page.keyboard.press('Escape');
+  expect(await align('h1')).toBe('center');
+  expect(await align('.exp-details li')).toBe('justify');
+
+  await app.setTemplate('ATS (sobre)');
+  expect(await align('h1')).toBe('center');
+  expect(await align('.ats-detail-list li')).toBe('justify');
+
+  const lib = await app.waitForSaved((l) => l?.cvs[0].settings.textAlign === 'justify');
+  expect(lib.cvs[0].settings.headerAlign).toBe('center');
+});

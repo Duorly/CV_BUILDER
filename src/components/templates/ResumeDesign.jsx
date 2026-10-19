@@ -4,7 +4,7 @@ import { joinNonEmpty, sectionColumn } from '../../lib/schema';
 import { labelsFor, sectionTitle } from '../../lib/labels';
 import PageBreakOverlay from './PageBreakOverlay';
 import { linkIcon } from './icons';
-import { colon, contactInfo, customTitle, languageText, prepare, renderableSections, themeStyle } from './shared';
+import { colon, contactInfo, customTitle, languageText, layoutClasses, prepare, renderableSections, themeStyle } from './shared';
 import '../../styles/resume.css';
 
 // Template « design » : sidebar colorée (32 %) + colonne principale.
@@ -278,7 +278,7 @@ export default function ResumeDesign({ data, settings }) {
   return (
     <div
       ref={rootRef}
-      className="resume-container resume-design"
+      className={joinNonEmpty(['resume-container resume-design', layoutClasses(s)], ' ')}
       id="resume-root"
       lang={lang}
       style={themeStyle(s)}

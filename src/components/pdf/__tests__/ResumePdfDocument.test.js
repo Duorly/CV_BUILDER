@@ -80,6 +80,20 @@ describe('ResumePdfDocument', () => {
     expect(pdf).toContain('/URI (mailto:camille.martin@exemple.fr)');
   });
 
+  it('omet les formations masquées', async () => {
+    const data = structuredClone(example);
+    data.education[0].hidden = true;
+    const text = drawnLines(await render(data)).join('\n');
+    expect(text).not.toContain('Master Communication');
+    expect(text).toContain('Licence Information-Communication');
+  });
+
+  it('accepte l’en-tête centré et le texte justifié', async () => {
+    const pdf = await render(example, { headerAlign: 'center', textAlign: 'justify' });
+    expect(pageCount(pdf)).toBeGreaterThanOrEqual(1);
+    expect(drawnLines(pdf).join('\n')).toContain('Camille Martin');
+  });
+
   it('coupe sans tiret un mot plus large que la ligne au lieu de le faire déborder', async () => {
     const data = structuredClone(example);
     const word = 'A'.repeat(150);

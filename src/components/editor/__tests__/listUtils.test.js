@@ -196,6 +196,13 @@ describe('sections', () => {
     expect(sectionContentSummary(empty, 'experiences').empty).toBe(true);
     expect(sectionContentSummary(empty, 'profile').empty).toBe(true);
   });
+
+  it('sectionContentSummary signale les formations masquées', () => {
+    const d = normalizeData({ education: [{ title: 'A', hidden: true }, { title: 'B' }] });
+    expect(sectionContentSummary(d, 'education')).toEqual({ empty: false, text: '2 formations dont 1 masquée' });
+    d.education[1].hidden = true;
+    expect(sectionContentSummary(d, 'education')).toEqual({ empty: true, text: '2 formations dont 2 masquées' });
+  });
 });
 
 describe('icônes de liens', () => {

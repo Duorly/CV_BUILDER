@@ -291,7 +291,6 @@
   font-size: calc(10.5pt * var(--font-scale));
   font-style: italic;
   line-height: 1.45;
-  text-align: justify;
   white-space: pre-line;
 }
 
@@ -513,6 +512,27 @@
 
 .resume-design .program-link .icon-inline {
   color: inherit;
+}
+
+/* ── Options de mise en page (Apparence) ─────────────────────────────── */
+/* En-tête centré : photo, nom, poste et coordonnées. */
+.resume-design.is-header-centered .profile-section {
+  text-align: center;
+}
+
+.resume-design.is-header-centered .profile-img {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.resume-design.is-header-centered .contact-info li {
+  justify-content: center;
+}
+
+/* Texte justifié : profil et puces de la colonne principale (la colonne
+   latérale, trop étroite, garderait de grands blancs entre les mots). */
+.resume-design.is-justified :is(.objective-text, .exp-details li) {
+  text-align: justify;
 }
 
 /* ── Impression ───────────────────────────────────────────────────────── */

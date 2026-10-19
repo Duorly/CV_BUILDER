@@ -1,5 +1,5 @@
 import { Document, Font, Link, Page, Text, View } from '@react-pdf/renderer';
-import { clean, customSectionKey, isBlankItem, joinNonEmpty, visibleSections } from '../../lib/schema';
+import { clean, customSectionKey, isBlankItem, isShownItem, joinNonEmpty, visibleSections } from '../../lib/schema';
 import { labelsFor, sectionTitle } from '../../lib/labels';
 import { absoluteUrl, prettyUrl, telHref } from '../../lib/files';
 import { bodyTextPt } from '../../lib/pageGeometry';
@@ -26,8 +26,12 @@ const RULE_COLOR = '#9ca3af';
 const BODY_COLOR = '#1f2937';
 
 // Tailles de police proportionnelles à fontScale ; espacements fixes, comme dans resume-ats.css.
+// En-tête centré et texte justifié suivent les options d'apparence (classes is-header-centered
+// et is-justified du template HTML).
 function createStyles(settings) {
   const base = bodyTextPt(settings.fontScale, 'ats');
+  const headerAlign = settings.headerAlign === 'center' ? 'center' : 'left';
+  const textAlign = settings.textAlign === 'justify' ? 'justify' : 'left';
   return {
     page: {
       paddingTop: 14 * MM,
@@ -44,11 +48,19 @@ function createStyles(settings) {
       borderBottomStyle: 'solid',
       borderBottomColor: CONTACT_COLOR,
     },
-    name: { fontSize: base * 1.8, fontWeight: 'bold', lineHeight: 1.15, color: settings.textColor },
-    headline: { fontSize: base * 1.15, fontWeight: 'bold', lineHeight: 1.3, marginTop: 1.5, color: settings.primaryColor },
+    name: { fontSize: base * 1.8, fontWeight: 'bold', lineHeight: 1.15, color: settings.textColor, textAlign: headerAlign },
+    headline: {
+      fontSize: base * 1.15,
+      fontWeight: 'bold',
+      lineHeight: 1.3,
+      marginTop: 1.5,
+      color: settings.primaryColor,
+      textAlign: headerAlign,
+    },
     contactRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',
+      justifyContent: headerAlign === 'center' ? 'center' : 'flex-start',
       marginTop: 3.75,
       fontSize: base * 0.95,
       lineHeight: 1.45,
@@ -73,13 +85,13 @@ function createStyles(settings) {
       borderBottomStyle: 'solid',
       borderBottomColor: RULE_COLOR,
     },
-    objective: { fontSize: base * 1.05, lineHeight: 1.45 },
+    objective: { fontSize: base * 1.05, lineHeight: 1.45, textAlign },
     entryGap: { height: 3.5 * MM },
     itemHeader: { marginBottom: 2.25 },
     itemTitle: { fontSize: base * 1.1, fontWeight: 'bold', lineHeight: 1.3, color: settings.textColor },
     itemMeta: { fontSize: base * 0.95, lineHeight: 1.35, marginTop: 0.75, color: META_COLOR },
     // Toujours une fontSize à côté d'un lineHeight : sinon react-pdf le calcule sur 18 pt.
-    line: { fontSize: base, lineHeight: 1.45, marginTop: 1.5 },
+    line: { fontSize: base, lineHeight: 1.45, marginTop: 1.5, textAlign },
     label: { fontWeight: 'bold' },
     link: { color: BODY_COLOR, textDecoration: 'none' },
     // Écart entre deux puces (comme li + li en CSS) : pas avant la première, sinon le PDF
@@ -87,7 +99,7 @@ function createStyles(settings) {
     bulletRow: { flexDirection: 'row', marginTop: 1.5 },
     firstBulletRow: { flexDirection: 'row' },
     bulletMark: { width: BULLET_WIDTH, paddingLeft: 1.6 * MM },
-    bulletText: { flex: 1 },
+    bulletText: { flex: 1, textAlign },
     // Place minimale sous un titre suivi d'un paragraphe sécable : deux lignes.
     twoLines: base * 1.05 * 1.45 * 2,
     // Largeur (en em) au-delà de laquelle un mot est coupé plutôt que de déborder : ligne la plus
@@ -175,7 +187,7 @@ function experienceEntries(list, { styles, text, texts }) {
 
 function educationEntries(list, { styles, labels, lang, text, texts }) {
   return list
-    .filter((edu) => !isBlankItem(edu))
+    .filter(isShownItem)
     .map((edu) => {
       const body = bullets(texts(edu.details), styles, 'd');
       const objectives = texts(edu.objectives);

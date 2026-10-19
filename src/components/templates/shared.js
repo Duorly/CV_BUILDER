@@ -3,6 +3,7 @@ import {
   customSectionKey,
   fontCss,
   isBlankItem,
+  isShownItem,
   normalizeData,
   normalizeSettings,
   visibleSections,
@@ -26,6 +27,16 @@ export function themeStyle(settings) {
     '--text-dark': settings.textColor,
     '--resume-font': fontCss(settings),
   };
+}
+
+// Classes de mise en page posées sur la racine : en-tête centré, texte justifié.
+export function layoutClasses(settings) {
+  return [
+    settings.headerAlign === 'center' ? 'is-header-centered' : '',
+    settings.textAlign === 'justify' ? 'is-justified' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 }
 
 // Texte affiché : espaces de bord retirées, espaces insécables à la française (lib/typography).
@@ -102,7 +113,7 @@ export function sectionContent(data, sectionId) {
     case 'education':
       return nonEmpty(
         data.education
-          .filter((item) => !isBlankItem(item))
+          .filter(isShownItem)
           .map((item) => ({
             ...trimStrings(item),
             details: tidyList(item.details),

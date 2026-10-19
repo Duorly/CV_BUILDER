@@ -156,6 +156,7 @@ export default function EducationSection({ items, update }) {
       firstField="title"
       addLabel="Ajouter une formation"
       emptyText="Aucune formation pour l'instant. Diplômes, titres professionnels, formations continues…"
+      hiddenNote="Cette formation est masquée : elle reste enregistrée mais n'apparaît pas sur le CV."
       renderBody={(edu, { patch }) => <EducationBody edu={edu} patch={patch} />}
     />
   );

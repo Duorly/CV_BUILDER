@@ -749,8 +749,9 @@ export function stripForAI(data) {
       .map((g) => ({ id: g.id, category: s(g.category), skills: list(g.skills) })),
     experiences: d.experiences.filter((e) => !blankItem(e, ['title', 'company', 'details'])).map(exp),
     otherExperiences: d.otherExperiences.filter((e) => !blankItem(e, ['title', 'company', 'details'])).map(exp),
+    // Une formation masquée n'est pas sur le CV : l'IA ne l'analyse pas.
     education: d.education
-      .filter((e) => !blankItem(e, ['title', 'school', 'degree', 'details']))
+      .filter((e) => !e.hidden && !blankItem(e, ['title', 'school', 'degree', 'details']))
       .map((e) => ({
         id: e.id,
         title: s(e.title),

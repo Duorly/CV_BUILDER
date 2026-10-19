@@ -204,6 +204,7 @@ const SECTION_LISTS = {
 
 export function sectionContentSummary(data, sectionId) {
   let count = 0;
+  let hiddenCount = 0;
   let noun = 'élément';
   if (sectionId === 'profile') {
     count = (data.personalInfo?.objective || '').trim().length;
@@ -216,12 +217,16 @@ export function sectionContentSummary(data, sectionId) {
     count = clean(custom?.items).length;
   } else if (SECTION_LISTS[sectionId]) {
     const [field, itemNoun] = SECTION_LISTS[sectionId];
-    count = (data[field] || []).filter((item) => !isBlankItem(item)).length;
+    const items = (data[field] || []).filter((item) => !isBlankItem(item));
+    count = items.length;
+    hiddenCount = items.filter((item) => item.hidden).length;
     noun = itemNoun;
   }
-  return count
-    ? { empty: false, text: plural(count, noun) }
-    : { empty: true, text: "Vide : n'apparaît pas sur le CV" };
+  if (!count) return { empty: true, text: "Vide : n'apparaît pas sur le CV" };
+  const text = plural(count, noun);
+  return hiddenCount
+    ? { empty: hiddenCount === count, text: `${text} dont ${plural(hiddenCount, 'masquée')}` }
+    : { empty: false, text };
 }
 
 // ── Longueur des textes ──────────────────────────────────────────────────

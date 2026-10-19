@@ -149,6 +149,15 @@
   break-inside: avoid;
 }
 
+/* ── Options de mise en page (Apparence) ─────────────────────────────── */
+.resume-ats-template.is-header-centered .ats-header {
+  text-align: center;
+}
+
+.resume-ats-template.is-justified :is(.ats-objective, .ats-detail-list li, .ats-line) {
+  text-align: justify;
+}
+
 @media print {
   /* Les marges haut/bas viennent de @page (PrintStyles mode « ats ») */
   .resume-container.resume-ats-template {

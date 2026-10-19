@@ -110,6 +110,25 @@ describe('templates : rendu sans plantage et sans rubrique vide', () => {
       expect(html).toContain('href="https://www.univ-lyon2.fr/master-com"');
     });
 
+    it(`${name} : une formation masquée n’apparaît pas, les autres restent`, () => {
+      const data = normalizeData(example);
+      data.education[0].hidden = true;
+      const html = render(Template, data);
+      expect(html).not.toContain('Master Communication des organisations');
+      expect(html).toContain('Licence Information-Communication');
+      data.education[1].hidden = true;
+      expect(render(Template, data)).not.toMatch(/>(Formation|Éducation)</);
+    });
+
+    it(`${name} : en-tête centré et texte justifié en option`, () => {
+      const data = normalizeData(example);
+      const plain = render(Template, data);
+      expect(plain).not.toContain('is-header-centered');
+      expect(plain).not.toContain('is-justified');
+      const html = render(Template, data, { headerAlign: 'center', textAlign: 'justify' });
+      expect(html).toMatch(/class="resume-container [^"]* is-header-centered is-justified"/);
+    });
+
     it(`${name} : CV au format v1 (ancien CV)`, () => {
       const html = render(Template, normalizeData(legacy));
       expect(html).toContain('Titre RNCP de niveau 7');
