@@ -134,6 +134,7 @@ function SectionBody({ id, content, labels, lang }) {
         </ul>
       );
     default:
+      if (content.layout === 'inline') return <p className="ats-line">{content.items.join(SEP)}</p>;
       return (
         <ul className="ats-detail-list">
           {content.items.map((item, i) => (

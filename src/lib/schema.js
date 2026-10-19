@@ -35,7 +35,7 @@ export function sectionColumn(data, sectionId) {
   return SECTION_COLUMNS[sectionId] || 'main';
 }
 
-// Élément affiché sur le CV : ni vide, ni masqué (formations, groupes de compétences).
+// Élément affiché sur le CV : ni vide, ni masqué (expériences, formations, groupes de compétences).
 export const isShownItem = (item) => !item.hidden && !isBlankItem(item);
 
 // Sections visibles, dans l'ordre choisi.
@@ -84,6 +84,7 @@ export const newExperience = () => ({
   location: '',
   period: '',
   details: [''],
+  hidden: false,
 });
 export const newEducation = () => ({
   id: createId('edu'),
@@ -99,7 +100,8 @@ export const newEducation = () => ({
   hidden: false, // masquée sur le CV, sans être supprimée
 });
 export const newCertification = () => ({ id: createId('cert'), name: '', issuer: '', date: '' });
-export const newCustomSection = () => ({ id: createId('sec'), title: '', column: 'main', items: [''] });
+// layout : 'list' (les uns au-dessus des autres) | 'inline' (sur une ligne, séparés par « · »).
+export const newCustomSection = () => ({ id: createId('sec'), title: '', column: 'main', layout: 'list', items: [''] });
 
 export const emptyPersonalInfo = () => ({
   name: '',
@@ -201,6 +203,7 @@ export function normalizeData(input) {
     location: str(e.location),
     period: str(e.period),
     details: strArr(e.details),
+    hidden: e.hidden === true,
   });
   const experiences = objArr(src.experiences).map(normExp);
   const otherExperiences = objArr(src.otherExperiences).map(normExp);
@@ -230,6 +233,7 @@ export function normalizeData(input) {
     id: withId(c, 'sec', seen),
     title: str(c.title),
     column: c.column === 'sidebar' ? 'sidebar' : 'main',
+    layout: c.layout === 'inline' ? 'inline' : 'list',
     items: strArr(c.items),
   }));
 
@@ -299,7 +303,7 @@ export const joinNonEmpty = (parts, sep) => parts.map((p) => str(p).trim()).filt
 // Une expérience / formation / certification est « vide » si aucun champ texte n'est rempli.
 export function isBlankItem(item) {
   return Object.entries(item || {}).every(([key, value]) => {
-    if (key === 'id' || key === 'icon' || key === 'column' || typeof value === 'boolean') return true;
+    if (['id', 'icon', 'column', 'layout'].includes(key) || typeof value === 'boolean') return true;
     if (Array.isArray(value)) return clean(value).length === 0;
     return !str(value).trim();
   });

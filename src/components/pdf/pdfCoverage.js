@@ -6,7 +6,7 @@ import { alteredFragments, droppedSymbols } from './pdfText';
 // pour prévenir l'utilisatrice avant le téléchargement au lieu de modifier son CV en silence.
 // Léger : n'importe pas le moteur PDF, la fenêtre « Télécharger » l'appelle à chaque ouverture.
 
-const SKIPPED_KEYS = new Set(['id', 'icon', 'column', 'photo', 'visible', 'hidden']);
+const SKIPPED_KEYS = new Set(['id', 'icon', 'column', 'layout', 'photo', 'visible', 'hidden']);
 
 function collectStrings(value, out, key = '') {
   if (SKIPPED_KEYS.has(key)) return;
@@ -21,8 +21,8 @@ function collectStrings(value, out, key = '') {
 
 const SECTION_DATA = {
   skills: (data) => data.mainSkills.filter((group) => !group.hidden),
-  experiences: (data) => data.experiences,
-  otherExperiences: (data) => data.otherExperiences,
+  experiences: (data) => data.experiences.filter(isShownItem),
+  otherExperiences: (data) => data.otherExperiences.filter(isShownItem),
   education: (data) => data.education.filter(isShownItem),
   links: (data) => data.socialLinks.map(({ url }) => ({ url })),
   languages: (data) => data.languages,

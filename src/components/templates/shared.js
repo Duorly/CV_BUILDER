@@ -42,7 +42,7 @@ export function layoutClasses(settings) {
 // Texte affiché : espaces de bord retirées, espaces insécables à la française (lib/typography).
 const tidy = (value) => nbspText(value.trim());
 const tidyList = (list) => clean(list).map(nbspText);
-const RAW_KEYS = new Set(['id', 'icon', 'column', 'link', 'url']);
+const RAW_KEYS = new Set(['id', 'icon', 'column', 'layout', 'link', 'url']);
 
 const trimStrings = (item) =>
   Object.fromEntries(
@@ -92,7 +92,7 @@ export function linkView(link) {
 const nonEmpty = (list) => (list.length ? list : null);
 
 // Contenu affichable d'une section, ou null si elle n'a rien à montrer.
-// profile → chaîne ; custom:<id> → { title, column, items } ; autres → tableau d'éléments nettoyés.
+// profile → chaîne ; custom:<id> → { title, column, layout, items } ; autres → tableau d'éléments nettoyés.
 export function sectionContent(data, sectionId) {
   switch (sectionId) {
     case 'profile':
@@ -108,7 +108,7 @@ export function sectionContent(data, sectionId) {
     case 'otherExperiences':
       return nonEmpty(
         data[sectionId]
-          .filter((item) => !isBlankItem(item))
+          .filter(isShownItem)
           .map((item) => ({ ...trimStrings(item), details: tidyList(item.details) })),
       );
     case 'education':
@@ -133,7 +133,7 @@ export function sectionContent(data, sectionId) {
     default: {
       const custom = data.customSections.find((c) => customSectionKey(c) === sectionId);
       const items = custom ? tidyList(custom.items) : [];
-      return items.length ? { title: custom.title.trim(), column: custom.column, items } : null;
+      return items.length ? { title: custom.title.trim(), column: custom.column, layout: custom.layout, items } : null;
     }
   }
 }

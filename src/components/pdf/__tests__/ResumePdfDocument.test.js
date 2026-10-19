@@ -96,6 +96,21 @@ describe('ResumePdfDocument', () => {
     expect(text).toContain('Google Analytics');
   });
 
+  it('omet les expériences masquées', async () => {
+    const data = structuredClone(example);
+    data.experiences[0].hidden = true;
+    const text = drawnLines(await render(data)).join('\n');
+    expect(text).not.toContain('Maison Lumi');
+    expect(text).toContain('Agence Hublot');
+  });
+
+  it('section libre « sur une ligne » : éléments séparés par « · »', async () => {
+    const data = structuredClone(example);
+    data.customSections[0].layout = 'inline';
+    const lines = drawnLines(await render(data));
+    expect(lines.some((line) => line.includes('Photographie argentique · Course'))).toBe(true);
+  });
+
   it('accepte l’en-tête centré et le texte justifié', async () => {
     const pdf = await render(example, { headerAlign: 'center', textAlign: 'justify' });
     expect(pageCount(pdf)).toBeGreaterThanOrEqual(1);

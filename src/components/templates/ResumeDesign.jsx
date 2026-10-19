@@ -237,6 +237,10 @@ function SectionBody({ id, content, column, labels, lang }) {
         </ul>
       );
     default:
+      // Section libre « sur une ligne » : éléments séparés par « · ».
+      if (content.layout === 'inline') {
+        return <p className={column === 'sidebar' ? 'side-inline' : 'main-inline'}>{content.items.join(' · ')}</p>;
+      }
       return <Bullets items={content.items} className={column === 'sidebar' ? 'side-list' : 'exp-details'} />;
   }
 }

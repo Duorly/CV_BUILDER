@@ -410,6 +410,19 @@
   background: var(--primary-color);
 }
 
+/* Section libre « sur une ligne » */
+.resume-design .side-inline {
+  color: var(--text-body);
+  font-size: calc(9pt * var(--font-scale));
+  line-height: 1.45;
+}
+
+.resume-design .main-inline {
+  color: var(--text-body);
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.45;
+}
+
 /* Expériences et formations */
 .resume-design .experience-item,
 .resume-design .formation-item {
@@ -531,7 +544,7 @@
 
 /* Texte justifié : profil et puces de la colonne principale (la colonne
    latérale, trop étroite, garderait de grands blancs entre les mots). */
-.resume-design.is-justified :is(.objective-text, .exp-details li) {
+.resume-design.is-justified :is(.objective-text, .exp-details li, .main-inline) {
   text-align: justify;
 }
 

@@ -135,6 +135,14 @@ describe('helpers de rendu', () => {
     expect(d.education.map((e) => e.hidden)).toEqual([true, false, false]);
     const s = normalizeData({ mainSkills: [{ skills: ['Excel'], hidden: true }, { skills: ['Word'], hidden: 1 }] });
     expect(s.mainSkills.map((g) => g.hidden)).toEqual([true, false]);
+    const e = normalizeData({ experiences: [{ title: 'A', hidden: true }], otherExperiences: [{ title: 'B' }] });
+    expect([e.experiences[0].hidden, e.otherExperiences[0].hidden]).toEqual([true, false]);
+  });
+  it('section libre : présentation en liste par défaut, « inline » sur demande', () => {
+    const d = normalizeData({ customSections: [{ id: 'a', layout: 'inline' }, { id: 'b', layout: 'grille' }, { id: 'c' }] });
+    expect(d.customSections.map((c) => c.layout)).toEqual(['inline', 'list', 'list']);
+    // La présentation n'est pas du contenu : une section vide reste vide.
+    expect(isBlankItem({ id: 'a', title: '', column: 'main', layout: 'list', items: [''] })).toBe(true);
   });
   it('sectionTitle : titre personnalisé > libellé par défaut', () => {
     const d = normalizeData({ sections: [{ id: 'skills', title: 'Savoir-faire' }] });

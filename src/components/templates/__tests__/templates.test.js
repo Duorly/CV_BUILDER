@@ -120,6 +120,27 @@ describe('templates : rendu sans plantage et sans rubrique vide', () => {
       expect(render(Template, data)).not.toMatch(/>(Formation|Éducation)</);
     });
 
+    it(`${name} : une expérience masquée n’apparaît pas, les autres restent`, () => {
+      const data = normalizeData(example);
+      data.experiences[0].hidden = true;
+      data.otherExperiences[0].hidden = true;
+      const html = render(Template, data);
+      expect(html).not.toContain('Maison Lumière');
+      expect(html).toContain('Agence Hublot');
+      expect(html).not.toContain('Les Restos du Cœur');
+      expect(html).not.toMatch(/Autres expériences/i);
+    });
+
+    it(`${name} : section libre sur une ligne ou les uns au-dessus des autres`, () => {
+      const data = normalizeData(example);
+      const list = render(Template, data);
+      expect(list).toMatch(/<li>Photographie argentique<\/li>/);
+      data.customSections[0].layout = 'inline';
+      const inline = render(Template, data);
+      expect(inline).toContain('Photographie argentique · Course à pied (semi-marathon) · Théâtre amateur');
+      expect(inline).not.toMatch(/<li>Photographie argentique<\/li>/);
+    });
+
     it(`${name} : un groupe de compétences masqué n’apparaît pas, les autres restent`, () => {
       const data = normalizeData(example);
       data.mainSkills[0].hidden = true;

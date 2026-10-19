@@ -741,15 +741,17 @@ export function stripForAI(data) {
     period: s(e.period),
     details: list(e.details),
   });
-  // Groupes de compétences et formations masqués ne sont pas sur le CV : l'IA ne les analyse pas.
+  // Éléments masqués (expériences, formations, groupes de compétences) : absents du CV, l'IA ne les analyse pas.
   return {
     title: s(d.personalInfo.title),
     summary: s(d.personalInfo.objective),
     skills: d.mainSkills
       .filter((g) => !g.hidden && !blankItem(g, ['category', 'skills']))
       .map((g) => ({ id: g.id, category: s(g.category), skills: list(g.skills) })),
-    experiences: d.experiences.filter((e) => !blankItem(e, ['title', 'company', 'details'])).map(exp),
-    otherExperiences: d.otherExperiences.filter((e) => !blankItem(e, ['title', 'company', 'details'])).map(exp),
+    experiences: d.experiences.filter((e) => !e.hidden && !blankItem(e, ['title', 'company', 'details'])).map(exp),
+    otherExperiences: d.otherExperiences
+      .filter((e) => !e.hidden && !blankItem(e, ['title', 'company', 'details']))
+      .map(exp),
     education: d.education
       .filter((e) => !e.hidden && !blankItem(e, ['title', 'school', 'degree', 'details']))
       .map((e) => ({
@@ -1702,7 +1704,8 @@ export function mergeTranslation(data, translated) {
 
 function isEmptyTranslatable(item) {
   return Object.entries(item).every(([key, value]) => {
-    if (['id', 'company', 'school', 'location', 'link', 'issuer', 'date', 'column', 'icon'].includes(key)) return true;
+    if (['id', 'company', 'school', 'location', 'link', 'issuer', 'date', 'column', 'layout', 'icon'].includes(key)) return true;
+    if (typeof value === 'boolean') return true;
     if (Array.isArray(value)) return clean(value).length === 0;
     return !str(value);
   });

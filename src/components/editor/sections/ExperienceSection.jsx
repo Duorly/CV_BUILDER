@@ -39,6 +39,7 @@ export default function ExperienceSection({ field, items, update }) {
       firstField="title"
       addLabel={config.addLabel}
       emptyText={config.emptyText}
+      hiddenNote="Cette expérience est masquée : elle reste enregistrée mais n'apparaît pas sur le CV."
       renderBody={(exp, { patch }) => (
         <>
           <TextField

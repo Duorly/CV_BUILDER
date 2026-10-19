@@ -111,6 +111,33 @@ test('une formation masquée disparaît des deux modèles sans être supprimée'
   await expect(app.resume).toContainText('Master Communication des organisations');
 });
 
+test('une expérience masquée disparaît des deux modèles sans être supprimée', async ({ page, app }) => {
+  await app.loadExample();
+  const panel = await app.openPanel('experiences');
+  const label = 'Chargée de communication — Maison Lumière (réseau de 12 boutiques)';
+  await panel.getByRole('button', { name: `Masquer « ${label} » sur le CV` }).click();
+  await expect(panel.locator('.editor-panel-meta')).toContainText('3 expériences dont 1 masquée');
+  await expect(app.resume).not.toContainText('Maison Lumière');
+  await expect(app.resume).toContainText('Agence Hublot');
+  await app.setTemplate('ATS (sobre)');
+  await expect(app.resume).not.toContainText('Maison Lumière');
+  const lib = await app.waitForSaved((l) => l?.cvs[0].data.experiences[0].hidden);
+  expect(lib.cvs[0].data.experiences[0].details.length).toBeGreaterThan(0);
+});
+
+test('centres d’intérêt sur une ligne ou les uns au-dessus des autres', async ({ page, app }) => {
+  await app.loadExample();
+  const panel = await app.openPanel('custom:sec_interets');
+  const sidebar = app.resume.locator('.sidebar');
+  await expect(sidebar.locator('li', { hasText: 'Photographie argentique' })).toBeVisible();
+  await panel.getByLabel('Présentation des éléments').selectOption('inline');
+  await expect(sidebar).toContainText('Photographie argentique · Course à pied (semi-marathon) · Théâtre amateur');
+  await expect(sidebar.locator('li', { hasText: 'Photographie argentique' })).toHaveCount(0);
+  await app.setTemplate('ATS (sobre)');
+  await expect(app.resume).toContainText('Photographie argentique · Course à pied');
+  await app.waitForSaved((l) => l?.cvs[0].data.customSections[0].layout === 'inline');
+});
+
 test('un groupe de compétences masqué disparaît des deux modèles sans être supprimé', async ({ page, app }) => {
   await app.loadExample();
   const panel = await app.openPanel('skills');

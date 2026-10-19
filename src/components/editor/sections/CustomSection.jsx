@@ -36,6 +36,22 @@ export default function CustomSection({ custom, entry, update, onRemove }) {
           <option value="sidebar">Colonne latérale</option>
         </select>
       </div>
+      <div className="form-group mini">
+        <label htmlFor={fieldId(custom.id, 'layout')}>Présentation des éléments</label>
+        <select
+          id={fieldId(custom.id, 'layout')}
+          value={custom.layout}
+          onChange={(e) => {
+            const layout = e.target.value === 'inline' ? 'inline' : 'list';
+            mutate((target) => {
+              target.layout = layout;
+            }, { checkpoint: true });
+          }}
+        >
+          <option value="list">Les uns au-dessus des autres</option>
+          <option value="inline">Sur une ligne (séparés par « · »)</option>
+        </select>
+      </div>
       <BulletListEditor
         idBase={fieldId(custom.id, 'items')}
         items={custom.items}

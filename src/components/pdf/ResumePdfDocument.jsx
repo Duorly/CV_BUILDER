@@ -173,7 +173,7 @@ const bullets = (list, styles, prefix = '') =>
 
 function experienceEntries(list, { styles, text, texts }) {
   return list
-    .filter((exp) => !isBlankItem(exp))
+    .filter(isShownItem)
     .map((exp) =>
       itemEntry(
         exp.id,
@@ -263,9 +263,13 @@ function certificationEntries(certifications, { styles, text }) {
     .filter(Boolean);
 }
 
+// « Sur une ligne » : éléments séparés par « · », comme les langues.
 function customEntries(custom, { styles, texts }) {
-  const body = bullets(texts(custom?.items), styles);
-  return body.length ? [{ key: custom.id, body }] : [];
+  const items = texts(custom?.items);
+  if (!items.length) return [];
+  const body =
+    custom.layout === 'inline' ? [<Text key="line" style={styles.line}>{items.join(SEP)}</Text>] : bullets(items, styles);
+  return [{ key: custom.id, body }];
 }
 
 function profileEntries(objective, { styles, text }) {
