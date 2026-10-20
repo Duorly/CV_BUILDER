@@ -158,21 +158,27 @@
   box-decoration-break: clone;
 }
 
+.resume-design {
+  /* Réglages Marges et Espacement (Apparence) : coefficients posés par themeStyle(). */
+  --m: var(--margin-scale, 1);
+  --s: var(--spacing-scale, 1);
+}
+
 .resume-design .sidebar {
   flex: 0 0 32%;
   width: 32%;
-  padding: 10mm 6mm;
+  padding: calc(10mm * var(--m)) calc(6mm * var(--m));
 }
 
 .resume-design .main-content {
   flex: 0 0 68%;
   width: 68%;
-  padding: 10mm 9mm 10mm 7mm;
+  padding: calc(10mm * var(--m)) calc(9mm * var(--m)) calc(10mm * var(--m)) calc(7mm * var(--m));
 }
 
 /* En-tête : photo, nom, poste, coordonnées */
 .resume-design .profile-section {
-  margin-bottom: 5mm;
+  margin-bottom: calc(5mm * var(--s));
   break-inside: avoid;
 }
 
@@ -246,11 +252,11 @@
 
 /* Sections */
 .resume-design .sidebar-section {
-  margin-bottom: 4.5mm;
+  margin-bottom: calc(4.5mm * var(--s));
 }
 
 .resume-design .main-section {
-  margin-bottom: 5mm;
+  margin-bottom: calc(5mm * var(--s));
 }
 
 /* Aucune marge après le dernier élément d'une colonne : avec le padding bas
@@ -426,7 +432,7 @@
 /* Expériences et formations */
 .resume-design .experience-item,
 .resume-design .formation-item {
-  margin-bottom: 4mm;
+  margin-bottom: calc(4mm * var(--s));
 }
 
 .resume-design .experience-item:last-child,

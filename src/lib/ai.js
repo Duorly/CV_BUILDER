@@ -1,4 +1,4 @@
-import { clean, newSkillGroup, normalizeData } from './schema';
+import { clean, newSkillGroup, normalizeData, shownList, shownSkills } from './schema';
 import { labelsFor } from './labels';
 
 // Fonctions IA (optionnelles) : optimisation du CV pour une offre, traduction,
@@ -734,6 +734,8 @@ export function stripForAI(data) {
   const { scrub } = identityScrubber(d.personalInfo);
   const s = (v) => scrub(String(v || '').trim());
   const list = (arr) => clean(arr).map(scrub);
+  // Ce qui est masqué (éléments, puces, compétences) n'est pas sur le CV : l'IA ne l'analyse pas.
+  const shown = (e) => ({ ...e, details: shownList(e.details, e.hiddenDetails) });
   const exp = (e) => ({
     id: e.id,
     title: s(e.title),
@@ -741,19 +743,28 @@ export function stripForAI(data) {
     period: s(e.period),
     details: list(e.details),
   });
-  // Éléments masqués (expériences, formations, groupes de compétences) : absents du CV, l'IA ne les analyse pas.
   return {
     title: s(d.personalInfo.title),
     summary: s(d.personalInfo.objective),
     skills: d.mainSkills
-      .filter((g) => !g.hidden && !blankItem(g, ['category', 'skills']))
+      .filter((g) => !g.hidden)
+      .map((g) => ({ ...g, skills: shownSkills(g) }))
+      .filter((g) => !blankItem(g, ['category', 'skills']))
       .map((g) => ({ id: g.id, category: s(g.category), skills: list(g.skills) })),
-    experiences: d.experiences.filter((e) => !e.hidden && !blankItem(e, ['title', 'company', 'details'])).map(exp),
+    experiences: d.experiences
+      .filter((e) => !e.hidden)
+      .map(shown)
+      .filter((e) => !blankItem(e, ['title', 'company', 'details']))
+      .map(exp),
     otherExperiences: d.otherExperiences
-      .filter((e) => !e.hidden && !blankItem(e, ['title', 'company', 'details']))
+      .filter((e) => !e.hidden)
+      .map(shown)
+      .filter((e) => !blankItem(e, ['title', 'company', 'details']))
       .map(exp),
     education: d.education
-      .filter((e) => !e.hidden && !blankItem(e, ['title', 'school', 'degree', 'details']))
+      .filter((e) => !e.hidden)
+      .map(shown)
+      .filter((e) => !blankItem(e, ['title', 'school', 'degree', 'details']))
       .map((e) => ({
         id: e.id,
         title: s(e.title),
@@ -765,12 +776,13 @@ export function stripForAI(data) {
         tools: list(e.tools),
       })),
     certifications: d.certifications
-      .filter((c) => !blankItem(c, ['name']))
+      .filter((c) => !c.hidden && !blankItem(c, ['name']))
       .map((c) => ({ id: c.id, name: s(c.name), issuer: s(c.issuer), date: s(c.date) })),
     languages: d.languages
-      .filter((l) => !blankItem(l, ['name']))
+      .filter((l) => !l.hidden && !blankItem(l, ['name']))
       .map((l) => ({ id: l.id, name: s(l.name), level: s(l.level) })),
     customSections: d.customSections
+      .map((c) => ({ ...c, items: shownList(c.items, c.hiddenItems) }))
       .filter((c) => !blankItem(c, ['title', 'items']))
       .map((c) => ({ id: c.id, title: s(c.title), items: list(c.items) })),
   };
@@ -1403,7 +1415,8 @@ export function buildChanges(data, patch, { allowedSkills = [], forbiddenTerms =
     const found = findExperience(data, proposal.id);
     if (!found || !proposal.details?.length) continue;
     const { group, item } = found;
-    const original = filledDetails(item.details);
+    // Puces masquées : l'IA ne les a pas vues, elles ne font pas partie de la proposition.
+    const original = filledDetails(item.details).filter((o) => !item.hiddenDetails?.includes(o.index));
     const proposed = proposal.details.map((d) => fix(str(d))).filter(Boolean);
     // Sans puce d’origine, tout texte proposé serait inventé : on l’ignore.
     if (!original.length || !proposed.length) continue;
@@ -1505,7 +1518,12 @@ export function applyChanges(data, patch, selection, options = {}) {
       const found = findExperience(next, change.itemId);
       if (!found) continue;
       if (change.kind === 'bullet') found.item.details[change.index] = change.after;
-      else found.item.details = [...change.after];
+      else {
+        // Les puces masquées sont conservées (et restent masquées), après les nouvelles.
+        const kept = found.item.hiddenDetails.map((i) => found.item.details[i]).filter((t) => str(t));
+        found.item.details = [...change.after, ...kept];
+        found.item.hiddenDetails = kept.map((_, k) => change.after.length + k);
+      }
     }
   }
   return normalizeData(next);
@@ -1701,7 +1719,10 @@ export function mergeTranslation(data, translated) {
 
   mergeItems(next.mainSkills, t.skills, (g) => `Compétences : ${g.category || 'sans titre'}`, (g, tr, name) => {
     setText(g, 'category', tr.category, name);
+    // Les compétences masquées le sont par leur texte : on les retrouve par leur position.
+    const hiddenAt = g.skills.flatMap((skill, i) => (g.hiddenSkills.includes(skill) ? [i] : []));
     setList(g, 'skills', tr.skills, name);
+    g.hiddenSkills = hiddenAt.map((i) => g.skills[i]);
   });
 
   for (const group of ['experiences', 'otherExperiences']) {
@@ -1752,7 +1773,7 @@ export function mergeTranslation(data, translated) {
 function isEmptyTranslatable(item) {
   return Object.entries(item).every(([key, value]) => {
     if (['id', 'company', 'school', 'location', 'link', 'issuer', 'date', 'column', 'layout', 'icon'].includes(key)) return true;
-    if (typeof value === 'boolean') return true;
+    if (key.startsWith('hidden')) return true;
     if (Array.isArray(value)) return clean(value).length === 0;
     return !str(value);
   });

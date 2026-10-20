@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { X } from 'lucide-react';
+import { Eye, EyeOff, X } from 'lucide-react';
 import { afterPointerRelease, isDiscardingDraftOf, startPointerTracking } from './editorUi';
 import { applyTagDraft, hasTagSeparator, removeAt, sameList, splitTagDraft } from './listUtils';
 
@@ -20,7 +20,18 @@ const keepFocus = (e) => e.preventDefault();
 // arrière sur un champ vide retire la dernière ; un clic sur une étiquette la modifie.
 // La saisie en cours vit dans un état local et n'est découpée qu'à la validation,
 // pour que les espaces tapés restent (« Gestion de projet »).
-export default function TagInput({ id, label, tags, onChange, placeholder, morePlaceholder = 'Ajouter…', hint }) {
+// Avec onToggleHidden, chaque étiquette a un bouton œil ; hiddenTags liste celles masquées sur le CV.
+export default function TagInput({
+  id,
+  label,
+  tags,
+  onChange,
+  placeholder,
+  morePlaceholder = 'Ajouter…',
+  hint,
+  hiddenTags = [],
+  onToggleHidden,
+}) {
   const [draft, setDraft] = useState('');
   const [editIndex, setEditIndex] = useState(null);
   const [notice, setNotice] = useState('');
@@ -122,30 +133,49 @@ export default function TagInput({ id, label, tags, onChange, placeholder, moreP
       >
         {tags.length > 0 && (
           <ul className="editor-tag-list" aria-label={label}>
-            {tags.map((tag, i) => (
-              <li key={keys[i]} className={`editor-tag${i === editIndex ? ' is-editing' : ''}`}>
-                <button
-                  type="button"
-                  className="editor-tag-text"
-                  tabIndex={-1}
-                  title="Cliquer pour modifier"
-                  onMouseDown={keepFocus}
-                  onClick={() => startEdit(i)}
+            {tags.map((tag, i) => {
+              const isHidden = hiddenTags.includes(tag);
+              return (
+                <li
+                  key={keys[i]}
+                  className={`editor-tag${i === editIndex ? ' is-editing' : ''}${isHidden ? ' is-hidden' : ''}`}
                 >
-                  {tag}
-                </button>
-                <button
-                  type="button"
-                  className="editor-tag-remove"
-                  aria-label={`Retirer « ${tag} »`}
-                  title="Retirer"
-                  onMouseDown={keepFocus}
-                  onClick={() => removeTag(i)}
-                >
-                  <X size={12} aria-hidden="true" />
-                </button>
-              </li>
-            ))}
+                  <button
+                    type="button"
+                    className="editor-tag-text"
+                    tabIndex={-1}
+                    title="Cliquer pour modifier"
+                    onMouseDown={keepFocus}
+                    onClick={() => startEdit(i)}
+                  >
+                    {tag}
+                    {isHidden && <span className="editor-sr-only"> (masquée sur le CV)</span>}
+                  </button>
+                  {onToggleHidden && (
+                    <button
+                      type="button"
+                      className="editor-tag-hide"
+                      aria-label={isHidden ? `Afficher « ${tag} » sur le CV` : `Masquer « ${tag} » sur le CV`}
+                      title={isHidden ? 'Afficher sur le CV' : 'Masquer sur le CV'}
+                      onMouseDown={keepFocus}
+                      onClick={() => onToggleHidden(tag)}
+                    >
+                      {isHidden ? <EyeOff size={11} aria-hidden="true" /> : <Eye size={11} aria-hidden="true" />}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="editor-tag-remove"
+                    aria-label={`Retirer « ${tag} »`}
+                    title="Retirer"
+                    onMouseDown={keepFocus}
+                    onClick={() => removeTag(i)}
+                  >
+                    <X size={12} aria-hidden="true" />
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
         <input

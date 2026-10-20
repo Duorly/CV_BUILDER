@@ -106,7 +106,7 @@ export default function PreviewFrame({
     if (pagesAt(min / 100) > 1) {
       flushSync(() => onFontScaleChange(original));
       notify?.(
-        'Même avec le plus petit texte, le CV dépasse une page : raccourcissez le contenu (puces les moins parlantes, expériences anciennes…).',
+        'Même avec le plus petit texte, le CV dépasse une page : essayez des marges étroites et un espacement serré (Apparence), masquez ou raccourcissez le contenu (puces les moins parlantes, expériences anciennes…).',
         { tone: 'error' },
       );
       return;

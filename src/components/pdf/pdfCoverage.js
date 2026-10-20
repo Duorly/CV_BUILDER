@@ -1,4 +1,4 @@
-import { customSectionKey, isShownItem, visibleSections } from '../../lib/schema';
+import { customSectionKey, isShownItem, shownList, shownSkills, visibleSections } from '../../lib/schema';
 import { prettyUrl } from '../../lib/files';
 import { alteredFragments, droppedSymbols } from './pdfText';
 
@@ -6,7 +6,7 @@ import { alteredFragments, droppedSymbols } from './pdfText';
 // pour prévenir l'utilisatrice avant le téléchargement au lieu de modifier son CV en silence.
 // Léger : n'importe pas le moteur PDF, la fenêtre « Télécharger » l'appelle à chaque ouverture.
 
-const SKIPPED_KEYS = new Set(['id', 'icon', 'column', 'layout', 'photo', 'visible', 'hidden']);
+const SKIPPED_KEYS = new Set(['id', 'icon', 'column', 'layout', 'photo', 'visible', 'hidden', 'hiddenSkills']);
 
 function collectStrings(value, out, key = '') {
   if (SKIPPED_KEYS.has(key)) return;
@@ -19,14 +19,16 @@ function collectStrings(value, out, key = '') {
   }
 }
 
+// Seul ce qui est affiché compte : éléments, puces et compétences masqués exclus.
+const withShownDetails = (item) => ({ ...item, details: shownList(item.details, item.hiddenDetails) });
 const SECTION_DATA = {
-  skills: (data) => data.mainSkills.filter((group) => !group.hidden),
-  experiences: (data) => data.experiences.filter(isShownItem),
-  otherExperiences: (data) => data.otherExperiences.filter(isShownItem),
-  education: (data) => data.education.filter(isShownItem),
-  links: (data) => data.socialLinks.map(({ url }) => ({ url })),
-  languages: (data) => data.languages,
-  certifications: (data) => data.certifications,
+  skills: (data) => data.mainSkills.filter((group) => !group.hidden).map((group) => ({ ...group, skills: shownSkills(group) })),
+  experiences: (data) => data.experiences.filter(isShownItem).map(withShownDetails),
+  otherExperiences: (data) => data.otherExperiences.filter(isShownItem).map(withShownDetails),
+  education: (data) => data.education.filter(isShownItem).map(withShownDetails),
+  links: (data) => data.socialLinks.filter((link) => !link.hidden).map(({ url }) => ({ url })),
+  languages: (data) => data.languages.filter((language) => !language.hidden),
+  certifications: (data) => data.certifications.filter((cert) => !cert.hidden),
   profile: (data) => data.personalInfo.objective,
 };
 
@@ -42,7 +44,7 @@ export function pdfSourceTexts(data) {
       collectStrings(SECTION_DATA[id](data), out);
     } else if (id.startsWith('custom:')) {
       const section = data.customSections.find((c) => customSectionKey(c) === id);
-      if (section) collectStrings({ title: section.title, items: section.items }, out);
+      if (section) collectStrings({ title: section.title, items: shownList(section.items, section.hiddenItems) }, out);
     }
   }
   return out;

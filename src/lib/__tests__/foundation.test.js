@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeData, normalizeSettings, clean, isBlankItem, emptyResume, FONT_OPTIONS } from '../schema';
+import {
+  normalizeData,
+  normalizeSettings,
+  clean,
+  isBlankItem,
+  emptyResume,
+  FONT_OPTIONS,
+  marginScale,
+  spacingScale,
+} from '../schema';
 import {
   createLibrary,
   createCv,
@@ -300,5 +309,37 @@ describe('géométrie de page', () => {
     expect(countPages(297 * PX_PER_MM, 'design')).toBe(1);
     expect(countPages(300 * PX_PER_MM, 'design')).toBe(2);
     expect(countPages(270 * PX_PER_MM, 'ats')).toBe(2);
+  });
+});
+
+describe('masquage fin et réglages de page', () => {
+  it('indices de puces masquées valides, compétences masquées présentes dans le groupe', () => {
+    const d = normalizeData({
+      experiences: [{ details: ['a', 'b', 'c'], hiddenDetails: [2, 2, 0, 7, -1, 'x', 1.5] }],
+      education: [{ details: ['a'], hiddenDetails: [0] }],
+      customSections: [{ id: 's', items: ['x', 'y'], hiddenItems: [1] }],
+      mainSkills: [{ skills: ['Excel', 'Word'], hiddenSkills: ['Word', 'Word', 'Access'] }],
+      socialLinks: [{ url: 'x.fr', hidden: true }],
+      languages: [{ name: 'Anglais', hidden: 'oui' }],
+      certifications: [{ name: 'Permis B', hidden: true }],
+    });
+    expect(d.experiences[0].hiddenDetails).toEqual([0, 2]);
+    expect(d.education[0].hiddenDetails).toEqual([0]);
+    expect(d.customSections[0].hiddenItems).toEqual([1]);
+    expect(d.mainSkills[0].hiddenSkills).toEqual(['Word']);
+    expect([d.socialLinks[0].hidden, d.languages[0].hidden, d.certifications[0].hidden]).toEqual([true, false, true]);
+    expect(normalizeData(d)).toEqual(d);
+  });
+
+  it('un élément vide reste vide, même avec des puces masquées', () => {
+    expect(isBlankItem({ id: 'x', title: '', details: [''], hiddenDetails: [0], hidden: false })).toBe(true);
+    expect(isBlankItem({ id: 'g', category: '', skills: [], hiddenSkills: [] })).toBe(true);
+  });
+
+  it('marges et espacement « normaux » par défaut, valeurs inconnues ignorées', () => {
+    expect(normalizeSettings({})).toMatchObject({ margins: 'normal', spacing: 'normal' });
+    expect(normalizeSettings({ margins: 'narrow', spacing: 'airy' })).toMatchObject({ margins: 'narrow', spacing: 'airy' });
+    expect(normalizeSettings({ margins: 'xl', spacing: 0 })).toMatchObject({ margins: 'normal', spacing: 'normal' });
+    expect([marginScale({ margins: 'narrow' }), marginScale({}), spacingScale({ spacing: 'compact' })]).toEqual([0.7, 1, 0.65]);
   });
 });

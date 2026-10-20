@@ -38,7 +38,7 @@ import {
   parseImport,
   STORAGE_KEY,
 } from './lib/storage';
-import { normalizeData } from './lib/schema';
+import { marginScale, normalizeData } from './lib/schema';
 import {
   describeLastExport,
   needsBackupReminder,
@@ -885,7 +885,7 @@ export default function App() {
         )}
       </main>
 
-      <PrintStyles mode={printMode} />
+      <PrintStyles mode={printMode} marginScale={marginScale(settings)} />
       {fileInput}
 
       {dialog?.type === 'download' && (

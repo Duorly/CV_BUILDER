@@ -1,7 +1,14 @@
 import { useId } from 'react';
 import { Palette, TriangleAlert } from 'lucide-react';
 import Dropdown from './Dropdown';
-import { defaultSettings, FONT_OPTIONS, FONT_SCALE_MAX, FONT_SCALE_MIN } from '../../lib/schema';
+import {
+  defaultSettings,
+  FONT_OPTIONS,
+  FONT_SCALE_MAX,
+  FONT_SCALE_MIN,
+  MARGIN_OPTIONS,
+  SPACING_OPTIONS,
+} from '../../lib/schema';
 import { bodyTextPt } from '../../lib/pageGeometry';
 import { formatNumber } from './format';
 
@@ -44,7 +51,7 @@ export default function AppearancePanel({ settings, hasPhoto, updateSettings }) 
     <Dropdown
       label="Apparence"
       icon={Palette}
-      title="Modèle, police, taille, couleurs et alignement"
+      title="Modèle, police, taille, marges, couleurs et alignement"
       role="dialog"
       panelClassName="ap-panel"
     >
@@ -108,6 +115,29 @@ export default function AppearancePanel({ settings, hasPhoto, updateSettings }) 
         ) : (
           <span className="field-hint">10 à 11 pt pour le corps du texte, c’est l’idéal.</span>
         )}
+      </div>
+
+      <div className="field">
+        <span className="field-label">Marges de la page</span>
+        <Segmented
+          label="Marges de la page"
+          value={settings.margins}
+          options={MARGIN_OPTIONS.map((o) => ({ value: o.id, label: o.label }))}
+          onChange={(margins) => updateSettings({ margins })}
+        />
+      </div>
+
+      <div className="field">
+        <span className="field-label">Espacement entre les blocs</span>
+        <Segmented
+          label="Espacement entre les blocs"
+          value={settings.spacing}
+          options={SPACING_OPTIONS.map((o) => ({ value: o.id, label: o.label }))}
+          onChange={(spacing) => updateSettings({ spacing })}
+        />
+        <span className="field-hint">
+          Marges étroites et espacement serré font gagner de la place pour tenir sur une page sans réduire le texte.
+        </span>
       </div>
 
       <div className="field">

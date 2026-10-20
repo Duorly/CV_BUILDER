@@ -1,16 +1,19 @@
 /* ── Template ATS : une colonne, ordre de lecture linéaire ───────────────
    S'appuie sur la base .resume-container de resume.css.
    Le padding vertical représente à l'écran les marges @page du mode « ats »
-   (PRINT_MARGINS_MM.ats = 14 mm) ; il est retiré à l'impression. */
+   (PRINT_MARGINS_MM.ats = 14 mm × réglage Marges) ; il est retiré à l'impression.
+   --margin-scale et --spacing-scale : réglages Marges et Espacement (themeStyle). */
 
 .resume-container.resume-ats-template {
+  --m: var(--margin-scale, 1);
+  --s: var(--spacing-scale, 1);
   display: block;
-  padding: 14mm 16mm;
+  padding: calc(14mm * var(--m)) calc(16mm * var(--m));
   color: #1f2937;
 }
 
 .resume-ats-template .ats-header {
-  margin-bottom: 5mm;
+  margin-bottom: calc(5mm * var(--s));
   padding-bottom: 3mm;
   border-bottom: 1.5px solid #374151;
   break-inside: avoid;
@@ -45,7 +48,7 @@
 }
 
 .resume-ats-template .ats-section {
-  margin-bottom: 4.5mm;
+  margin-bottom: calc(4.5mm * var(--s));
 }
 
 /* Pas de marge finale : elle pourrait déborder seule sur une page blanche. */
@@ -86,7 +89,7 @@
 }
 
 .resume-ats-template .ats-item {
-  margin-bottom: 3.5mm;
+  margin-bottom: calc(3.5mm * var(--s));
 }
 
 .resume-ats-template .ats-item:last-child {

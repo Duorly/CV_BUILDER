@@ -121,6 +121,17 @@ export function pasteIntoBullet(items, index, selectionStart, selectionEnd, text
   return { items: next, focusIndex: index + last, caret };
 }
 
+// Compétences masquées après une modification de la liste : une compétence renommée
+// (seule différence, à la même place) reste masquée ; celles retirées sont oubliées.
+export function carryHidden(before, after, hidden) {
+  let next = hidden;
+  const changed = after.length === before.length ? after.flatMap((skill, i) => (skill !== before[i] ? [i] : [])) : [];
+  if (changed.length === 1 && hidden.includes(before[changed[0]])) {
+    next = hidden.map((skill) => (skill === before[changed[0]] ? after[changed[0]] : skill));
+  }
+  return next.filter((skill) => after.includes(skill));
+}
+
 // ── Résumés affichés dans les en-têtes de cartes ──────────────────────────
 
 export function plural(count, singular, pluralForm = `${singular}s`) {
@@ -193,43 +204,51 @@ export function applySectionTitle(draft, sectionId, title) {
 }
 
 // Contenu d'une section, résumé dans l'en-tête de son panneau.
+// [champ de data, nom au singulier, accord de « masqué »]
 const SECTION_LISTS = {
-  experiences: ['experiences', 'expérience'],
-  otherExperiences: ['otherExperiences', 'expérience'],
-  education: ['education', 'formation'],
-  links: ['socialLinks', 'lien'],
-  languages: ['languages', 'langue'],
-  certifications: ['certifications', 'certification'],
+  experiences: ['experiences', 'expérience', 'masquée'],
+  otherExperiences: ['otherExperiences', 'expérience', 'masquée'],
+  education: ['education', 'formation', 'masquée'],
+  links: ['socialLinks', 'lien', 'masqué'],
+  languages: ['languages', 'langue', 'masquée'],
+  certifications: ['certifications', 'certification', 'masquée'],
 };
 
 export function sectionContentSummary(data, sectionId) {
   let count = 0;
   let hiddenCount = 0;
   let noun = 'élément';
+  let hiddenWord = 'masqué';
   if (sectionId === 'profile') {
     count = (data.personalInfo?.objective || '').trim().length;
     noun = 'caractère';
   } else if (sectionId === 'skills') {
     for (const group of data.mainSkills || []) {
-      const skills = clean(group.skills).length;
-      count += skills;
-      if (group.hidden) hiddenCount += skills;
+      const skills = clean(group.skills);
+      count += skills.length;
+      hiddenCount += group.hidden
+        ? skills.length
+        : skills.filter((skill) => (group.hiddenSkills || []).includes(skill)).length;
     }
     noun = 'compétence';
+    hiddenWord = 'masquée';
   } else if (sectionId.startsWith('custom:')) {
     const custom = (data.customSections || []).find((c) => `custom:${c.id}` === sectionId);
-    count = clean(custom?.items).length;
+    const items = (custom?.items || []).map((text, i) => ({ text, i })).filter(({ text }) => text.trim());
+    count = items.length;
+    hiddenCount = items.filter(({ i }) => (custom.hiddenItems || []).includes(i)).length;
   } else if (SECTION_LISTS[sectionId]) {
-    const [field, itemNoun] = SECTION_LISTS[sectionId];
+    const [field, itemNoun, itemHidden] = SECTION_LISTS[sectionId];
     const items = (data[field] || []).filter((item) => !isBlankItem(item));
     count = items.length;
     hiddenCount = items.filter((item) => item.hidden).length;
     noun = itemNoun;
+    hiddenWord = itemHidden;
   }
   if (!count) return { empty: true, text: "Vide : n'apparaît pas sur le CV" };
   const text = plural(count, noun);
   return hiddenCount
-    ? { empty: hiddenCount === count, text: `${text} dont ${plural(hiddenCount, 'masquée')}` }
+    ? { empty: hiddenCount === count, text: `${text} dont ${plural(hiddenCount, hiddenWord)}` }
     : { empty: false, text };
 }
 

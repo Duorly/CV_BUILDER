@@ -52,6 +52,7 @@ export default function LinksSection({ items, update }) {
       firstField="name"
       addLabel="Ajouter un lien"
       emptyText="LinkedIn, portfolio, site personnel… (facultatif)."
+      hiddenNote="Ce lien est masqué : il reste enregistré mais n'apparaît pas sur le CV."
       renderBody={(link, { patch }) => {
         const shown = prettyUrl(link.url);
         const hasSpace = /\s/.test(link.url.trim());

@@ -1,5 +1,15 @@
 import { Document, Font, Link, Page, Text, View } from '@react-pdf/renderer';
-import { clean, customSectionKey, isBlankItem, isShownItem, joinNonEmpty, visibleSections } from '../../lib/schema';
+import {
+  clean,
+  customSectionKey,
+  isShownItem,
+  joinNonEmpty,
+  marginScale,
+  shownList,
+  shownSkills,
+  spacingScale,
+  visibleSections,
+} from '../../lib/schema';
 import { labelsFor, sectionTitle } from '../../lib/labels';
 import { absoluteUrl, prettyUrl, telHref } from '../../lib/files';
 import { bodyTextPt } from '../../lib/pageGeometry';
@@ -16,7 +26,9 @@ Font.registerHyphenationCallback((word) => word.split(WORD_BREAK).flatMap((part,
 
 const MM = 72 / 25.4;
 const A4_WIDTH = 595.28;
+// Marges « normales » (comme resume-ats.css), multipliées par le réglage Marges.
 const MARGIN_X = 16 * MM;
+const MARGIN_Y = 14 * MM;
 const BULLET_WIDTH = 5 * MM;
 const SEP = ' · ';
 const NBSP = '\u00A0';
@@ -25,18 +37,21 @@ const META_COLOR = '#4b5563';
 const RULE_COLOR = '#9ca3af';
 const BODY_COLOR = '#1f2937';
 
-// Tailles de police proportionnelles à fontScale ; espacements fixes, comme dans resume-ats.css.
+// Tailles de police proportionnelles à fontScale ; marges et espacements selon les réglages,
+// comme dans resume-ats.css (--margin-scale, --spacing-scale).
 // En-tête centré et texte justifié suivent les options d'apparence (classes is-header-centered
 // et is-justified du template HTML).
 function createStyles(settings) {
   const base = bodyTextPt(settings.fontScale, 'ats');
   const headerAlign = settings.headerAlign === 'center' ? 'center' : 'left';
   const textAlign = settings.textAlign === 'justify' ? 'justify' : 'left';
+  const marginX = MARGIN_X * marginScale(settings);
+  const gap = spacingScale(settings);
   return {
     page: {
-      paddingTop: 14 * MM,
-      paddingBottom: 14 * MM,
-      paddingHorizontal: MARGIN_X,
+      paddingTop: MARGIN_Y * marginScale(settings),
+      paddingBottom: MARGIN_Y * marginScale(settings),
+      paddingHorizontal: marginX,
       fontFamily: 'Helvetica',
       fontSize: base,
       lineHeight: 1.4,
@@ -73,7 +88,7 @@ function createStyles(settings) {
     // À un saut de page, la part qui tient reste en bas de page et le bloc suivant démarre
     // en haut de la page suivante, comme à l'impression HTML. Une marge suivrait le bloc
     // reporté et décalerait tout le haut de page.
-    sectionGap: { height: 4.5 * MM },
+    sectionGap: { height: 4.5 * MM * gap },
     sectionTitle: {
       fontSize: base * 1.15,
       fontWeight: 'bold',
@@ -86,7 +101,7 @@ function createStyles(settings) {
       borderBottomColor: RULE_COLOR,
     },
     objective: { fontSize: base * 1.05, lineHeight: 1.45, textAlign },
-    entryGap: { height: 3.5 * MM },
+    entryGap: { height: 3.5 * MM * gap },
     itemHeader: { marginBottom: 2.25 },
     itemTitle: { fontSize: base * 1.1, fontWeight: 'bold', lineHeight: 1.3, color: settings.textColor },
     itemMeta: { fontSize: base * 0.95, lineHeight: 1.35, marginTop: 0.75, color: META_COLOR },
@@ -104,7 +119,7 @@ function createStyles(settings) {
     twoLines: base * 1.05 * 1.45 * 2,
     // Largeur (en em) au-delà de laquelle un mot est coupé plutôt que de déborder : ligne la plus
     // étroite (une puce) rapportée au plus grand texte courant (titres, 1,15 × base), gras compris.
-    maxWordEm: (A4_WIDTH - 2 * MARGIN_X - BULLET_WIDTH) / (base * 1.2),
+    maxWordEm: (A4_WIDTH - 2 * marginX - BULLET_WIDTH) / (base * 1.2),
   };
 }
 
@@ -178,7 +193,7 @@ function experienceEntries(list, { styles, text, texts }) {
       itemEntry(
         exp.id,
         [text(exp.title), text(exp.company), text(exp.location), unbroken(text(exp.period))],
-        bullets(texts(exp.details), styles),
+        bullets(texts(shownList(exp.details, exp.hiddenDetails)), styles),
         styles,
       ),
     )
@@ -189,7 +204,7 @@ function educationEntries(list, { styles, labels, lang, text, texts }) {
   return list
     .filter(isShownItem)
     .map((edu) => {
-      const body = bullets(texts(edu.details), styles, 'd');
+      const body = bullets(texts(shownList(edu.details, edu.hiddenDetails)), styles, 'd');
       const objectives = texts(edu.objectives);
       if (objectives.length) {
         body.push(
@@ -226,7 +241,7 @@ function skillEntries(groups, { styles, lang, text, texts }) {
   return groups
     .filter((group) => !group.hidden)
     .map((group) => {
-      const skills = texts(group.skills);
+      const skills = texts(shownSkills(group));
       if (!skills.length) return null;
       return {
         key: group.id,
@@ -243,6 +258,7 @@ function skillEntries(groups, { styles, lang, text, texts }) {
 // « Français : Langue maternelle · Anglais : C1 », comme dans le template HTML.
 function languageEntries(languages, { styles, lang, text }) {
   const parts = languages
+    .filter((language) => !language.hidden)
     .map((language) => {
       const name = text(language.name);
       const level = text(language.level);
@@ -255,7 +271,7 @@ function languageEntries(languages, { styles, lang, text }) {
 
 function certificationEntries(certifications, { styles, text }) {
   return certifications
-    .filter((cert) => !isBlankItem(cert))
+    .filter(isShownItem)
     .map((cert) => {
       const line = joinNonEmpty([cert.name, cert.issuer, cert.date].map(text), SEP);
       return line ? { key: cert.id, body: [<Text key="line" style={styles.line}>{line}</Text>] } : null;
@@ -265,7 +281,7 @@ function certificationEntries(certifications, { styles, text }) {
 
 // « Sur une ligne » : éléments séparés par « · », comme les langues.
 function customEntries(custom, { styles, texts }) {
-  const items = texts(custom?.items);
+  const items = texts(custom ? shownList(custom.items, custom.hiddenItems) : []);
   if (!items.length) return [];
   const body =
     custom.layout === 'inline' ? [<Text key="line" style={styles.line}>{items.join(SEP)}</Text>] : bullets(items, styles);
@@ -352,6 +368,7 @@ function contactItems(personalInfo, socialLinks, text) {
   if (location) list.push({ key: 'location', text: location, href: '' });
   // L'URL elle-même est affichée (et non le libellé) : elle doit rester lisible une fois imprimée.
   for (const link of socialLinks) {
+    if (link.hidden) continue;
     const url = text(prettyUrl(link.url));
     if (url) list.push({ key: link.id, text: url, href: safeHref(absoluteUrl(link.url)) });
   }

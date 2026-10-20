@@ -58,9 +58,11 @@ export default function CustomSection({ custom, entry, update, onRemove }) {
         label="Éléments"
         placeholder="Ex. Course à pied (semi-marathon)"
         addLabel="Ajouter un élément"
-        onChange={(items, opts) =>
+        hidden={custom.hiddenItems}
+        onChange={(items, opts, hiddenItems) =>
           mutate((target) => {
             target.items = items;
+            if (hiddenItems) target.hiddenItems = hiddenItems;
           }, opts)
         }
       />

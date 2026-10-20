@@ -4,15 +4,20 @@ import {
   fontCss,
   isBlankItem,
   isShownItem,
+  marginScale,
   normalizeData,
   normalizeSettings,
+  shownList,
+  shownSkills,
+  spacingScale,
   visibleSections,
 } from '../../lib/schema';
 import { absoluteUrl, prettyUrl, telHref } from '../../lib/files';
 import { nbspText } from '../../lib/typography';
 
 // Données prêtes à afficher, communes aux deux templates.
-// Règle : rien de vide ne s'affiche (élément vierge, puce vide, rubrique sans contenu).
+// Règle : rien de vide ne s'affiche (élément vierge, puce vide, rubrique sans contenu),
+// ni rien de masqué (élément, puce ou compétence).
 
 export function prepare(data, settings) {
   return { data: normalizeData(data), settings: normalizeSettings(settings) };
@@ -26,6 +31,9 @@ export function themeStyle(settings) {
     '--sidebar-bg': settings.sidebarBg,
     '--text-dark': settings.textColor,
     '--resume-font': fontCss(settings),
+    // Lue aussi par measurePrintLayout() (marges @page du modèle ATS).
+    '--margin-scale': String(marginScale(settings)),
+    '--spacing-scale': String(spacingScale(settings)),
   };
 }
 
@@ -101,7 +109,7 @@ export function sectionContent(data, sectionId) {
       return nonEmpty(
         data.mainSkills
           .filter((group) => !group.hidden)
-          .map((group) => ({ id: group.id, category: group.category.trim(), skills: tidyList(group.skills) }))
+          .map((group) => ({ id: group.id, category: group.category.trim(), skills: tidyList(shownSkills(group)) }))
           .filter((group) => group.skills.length),
       );
     case 'experiences':
@@ -109,7 +117,9 @@ export function sectionContent(data, sectionId) {
       return nonEmpty(
         data[sectionId]
           .filter(isShownItem)
-          .map((item) => ({ ...trimStrings(item), details: tidyList(item.details) })),
+          .map((item) => ({ ...trimStrings(item), details: tidyList(shownList(item.details, item.hiddenDetails)) }))
+          // Toutes ses puces masquées et rien d'autre : l'élément n'a plus rien à montrer.
+          .filter((item) => !isBlankItem(item)),
       );
     case 'education':
       return nonEmpty(
@@ -117,22 +127,28 @@ export function sectionContent(data, sectionId) {
           .filter(isShownItem)
           .map((item) => ({
             ...trimStrings(item),
-            details: tidyList(item.details),
+            details: tidyList(shownList(item.details, item.hiddenDetails)),
             objectives: tidyList(item.objectives),
             tools: tidyList(item.tools),
             linkHref: absoluteUrl(item.link),
             linkText: prettyUrl(item.link),
-          })),
+          }))
+          .filter((item) => !isBlankItem(item)),
       );
     case 'links':
-      return nonEmpty(data.socialLinks.filter((link) => link.url.trim()).map(linkView));
+      return nonEmpty(data.socialLinks.filter((link) => !link.hidden && link.url.trim()).map(linkView));
     case 'languages':
-      return nonEmpty(data.languages.map(trimStrings).filter((lang) => lang.name || lang.level));
+      return nonEmpty(
+        data.languages
+          .filter((lang) => !lang.hidden)
+          .map(trimStrings)
+          .filter((lang) => lang.name || lang.level),
+      );
     case 'certifications':
-      return nonEmpty(data.certifications.filter((cert) => !isBlankItem(cert)).map(trimStrings));
+      return nonEmpty(data.certifications.filter(isShownItem).map(trimStrings));
     default: {
       const custom = data.customSections.find((c) => customSectionKey(c) === sectionId);
-      const items = custom ? tidyList(custom.items) : [];
+      const items = custom ? tidyList(shownList(custom.items, custom.hiddenItems)) : [];
       return items.length ? { title: custom.title.trim(), column: custom.column, layout: custom.layout, items } : null;
     }
   }

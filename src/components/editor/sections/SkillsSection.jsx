@@ -2,7 +2,7 @@ import { newSkillGroup } from '../../../lib/schema';
 import ItemList from '../ItemList';
 import TagInput from '../TagInput';
 import TextField from '../TextField';
-import { fieldId } from '../listUtils';
+import { carryHidden, fieldId } from '../listUtils';
 
 // Section « Compétences » : groupes au nom facultatif, compétences en étiquettes.
 export default function SkillsSection({ groups, update }) {
@@ -32,8 +32,21 @@ export default function SkillsSection({ groups, update }) {
             tags={group.skills}
             placeholder="Ex. Gestion de projet, puis Entrée"
             morePlaceholder="Autre compétence…"
-            hint="Entrée ou virgule pour ajouter · cliquez sur une compétence pour la modifier."
-            onChange={(skills) => patch({ skills }, { checkpoint: true })}
+            hint="Entrée ou virgule pour ajouter · cliquez sur une compétence pour la modifier · l’œil la masque sur le CV."
+            hiddenTags={group.hiddenSkills}
+            onToggleHidden={(skill) =>
+              patch(
+                {
+                  hiddenSkills: group.hiddenSkills.includes(skill)
+                    ? group.hiddenSkills.filter((s) => s !== skill)
+                    : [...group.hiddenSkills, skill],
+                },
+                { checkpoint: true },
+              )
+            }
+            onChange={(skills) =>
+              patch({ skills, hiddenSkills: carryHidden(group.skills, skills, group.hiddenSkills) }, { checkpoint: true })
+            }
           />
         </>
       )}

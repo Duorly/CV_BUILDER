@@ -15,21 +15,33 @@ export const PRINT_MARGINS_MM = {
   letter: { top: 20, bottom: 20 },
 };
 
-export function printMargins(mode = 'design') {
-  return PRINT_MARGINS_MM[mode] || PRINT_MARGINS_MM.design;
+// `marginScale` : réglage « Marges » du CV (schema.js, MARGIN_OPTIONS). Seules les marges
+// @page du modèle ATS en dépendent ; dans « design », ce sont les paddings des colonnes.
+const roundMm = (mm) => Math.round(mm * 10) / 10;
+
+export function printMargins(mode = 'design', marginScale = 1) {
+  const base = PRINT_MARGINS_MM[mode] || PRINT_MARGINS_MM.design;
+  if (mode !== 'ats' || marginScale === 1) return base;
+  return { top: roundMm(base.top * marginScale), bottom: roundMm(base.bottom * marginScale) };
 }
 
 // Règle CSS @page d'un mode (rendue par <PrintStyles />).
-export function printPageRule(mode = 'design') {
-  const { top, bottom } = printMargins(mode);
+export function printPageRule(mode = 'design', marginScale = 1) {
+  const { top, bottom } = printMargins(mode, marginScale);
   const margin = top === bottom ? (top ? `${top}mm 0` : '0') : `${top}mm 0 ${bottom}mm`;
   return `@page { size: A4; margin: ${margin}; }`;
 }
 
 // Hauteur de contenu utile par page imprimée.
-export function usablePageHeightMm(mode = 'design') {
-  const m = printMargins(mode);
+export function usablePageHeightMm(mode = 'design', marginScale = 1) {
+  const m = printMargins(mode, marginScale);
   return PAGE_HEIGHT_MM - m.top - m.bottom;
+}
+
+// Réglage « Marges » posé sur la racine du document (themeStyle, --margin-scale).
+function marginScaleOf(element) {
+  const value = Number(element.style?.getPropertyValue('--margin-scale'));
+  return Number.isFinite(value) && value > 0 ? value : 1;
 }
 
 // Estimation sans DOM, à partir de la hauteur NON transformée du contenu.
@@ -78,7 +90,8 @@ function canSimulate(element) {
 
 function withPrintSimulation(element, mode, read) {
   const doc = element.ownerDocument;
-  const margins = printMargins(mode);
+  const scale = marginScaleOf(element);
+  const margins = printMargins(mode, scale);
   const host = doc.createElement('div');
   host.className = MEASURE_HOST_CLASS;
   host.setAttribute('aria-hidden', 'true');
@@ -97,7 +110,7 @@ function withPrintSimulation(element, mode, read) {
     // À l'impression, Chrome arrondit la hauteur utile de la page au px supérieur
     // (297 mm = 1122,52 px → 1123 px) : même arrondi ici, sinon un élément qui
     // tient de justesse serait annoncé sur la page suivante.
-    `height: ${Math.ceil(usablePageHeightMm(mode) * PX_PER_MM)}px`,
+    `height: ${Math.ceil(usablePageHeightMm(mode, scale) * PX_PER_MM)}px`,
     `column-width: ${PAGE_WIDTH_MM}mm`,
     'column-gap: 0',
     'column-fill: auto',

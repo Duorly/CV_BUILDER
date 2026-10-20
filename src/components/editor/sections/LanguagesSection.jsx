@@ -15,6 +15,7 @@ export default function LanguagesSection({ items, update, levelsListId }) {
       firstField="name"
       addLabel="Ajouter une langue"
       emptyText="Aucune langue pour l'instant."
+      hiddenNote="Cette langue est masquée : elle reste enregistrée mais n'apparaît pas sur le CV."
       renderBody={(language, { patch }) => (
         <div className="editor-grid">
           <TextField

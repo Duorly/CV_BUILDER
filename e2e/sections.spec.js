@@ -174,3 +174,65 @@ test('Apparence : en-tête centré et texte justifié dans les deux modèles', a
   const lib = await app.waitForSaved((l) => l?.cvs[0].settings.textAlign === 'justify');
   expect(lib.cvs[0].settings.headerAlign).toBe('center');
 });
+
+test('masquer une puce, une compétence et un lien sans les supprimer', async ({ page, app }) => {
+  await app.loadExample();
+
+  const exp = await app.openPanel('experiences');
+  await exp.locator('.editor-card-toggle').first().click();
+  await exp.getByRole('button', { name: 'Masquer la puce 2 sur le CV' }).click();
+  await expect(exp.getByRole('button', { name: 'Afficher la puce 2 sur le CV' })).toBeVisible();
+  await expect(app.resume).not.toContainText('Animation des réseaux sociaux');
+  await expect(app.resume).toContainText('Organisation de 6 événements');
+
+  // La puce masquée suit son texte quand on déplace la première vers le bas.
+  await exp.getByRole('button', { name: 'Descendre la puce 1' }).click();
+  await expect(exp.getByRole('button', { name: 'Afficher la puce 1 sur le CV' })).toBeVisible();
+  await expect(app.resume).not.toContainText('Animation des réseaux sociaux');
+
+  const skills = await app.openPanel('skills');
+  await skills.locator('.editor-card-toggle').first().click();
+  await skills.getByRole('button', { name: 'Masquer « Relations presse » sur le CV' }).click();
+  await expect(app.resume).not.toContainText('Relations presse');
+  await expect(skills.locator('.editor-panel-meta')).toContainText('dont 1 masquée');
+
+  const links = await app.openPanel('links');
+  await links.getByRole('button', { name: /^Masquer « Portfolio/ }).click();
+  await expect(app.resume).not.toContainText('camille-martin.exemple.fr');
+
+  await app.setTemplate('ATS (sobre)');
+  await expect(app.resume).not.toContainText('Animation des réseaux sociaux');
+  await expect(app.resume).not.toContainText('Relations presse');
+  await expect(app.resume).not.toContainText('camille-martin.exemple.fr');
+
+  const lib = await app.waitForSaved((l) => l?.cvs[0].data.socialLinks[1]?.hidden);
+  const saved = lib.cvs[0].data;
+  expect(saved.experiences[0].hiddenDetails).toEqual([0]);
+  expect(saved.experiences[0].details[0]).toContain('Animation des réseaux sociaux');
+  expect(saved.mainSkills[0].hiddenSkills).toEqual(['Relations presse']);
+});
+
+test('Apparence : marges et espacement dans les deux modèles', async ({ page, app }) => {
+  await app.loadExample();
+  const px = (selector, prop) =>
+    app.resume.locator(selector).first().evaluate((el, p) => parseFloat(getComputedStyle(el)[p]), prop);
+  const sidebarPad = await px('.sidebar', 'paddingLeft');
+  const sectionGap = await px('.main-section', 'marginBottom');
+
+  await app.toolbarButton('Apparence').click();
+  await page.getByRole('radio', { name: 'Étroites' }).click();
+  await page.getByRole('radio', { name: 'Aéré' }).click();
+  await page.keyboard.press('Escape');
+  expect(await px('.sidebar', 'paddingLeft')).toBeCloseTo(sidebarPad * 0.7, 0);
+  expect(await px('.main-section', 'marginBottom')).toBeCloseTo(sectionGap * 1.4, 0);
+
+  await app.setTemplate('ATS (sobre)');
+  expect(await px(':scope', 'paddingTop')).toBeCloseTo(14 * 0.7 * (96 / 25.4), 0);
+  const printRules = await page.evaluate(() =>
+    [...document.querySelectorAll('style[media="print"]')].map((style) => style.textContent),
+  );
+  expect(printRules).toContain('@page { size: A4; margin: 9.8mm 0; }');
+
+  const lib = await app.waitForSaved((l) => l?.cvs[0].settings.margins === 'narrow');
+  expect(lib.cvs[0].settings.spacing).toBe('airy');
+});

@@ -6,6 +6,7 @@ import { LINK_ICONS } from '../linkIcons';
 import {
   applySectionTitle,
   applyTagDraft,
+  carryHidden,
   deleteConfirmMessage,
   fieldId,
   hasTagSeparator,
@@ -221,5 +222,25 @@ describe('icônes de liens', () => {
   it('couvre les icônes du CV d’exemple', () => {
     const ids = new Set(LINK_ICONS.map((i) => i.id));
     for (const link of example.socialLinks) expect(ids.has(link.icon)).toBe(true);
+  });
+});
+
+describe('masquage fin', () => {
+  it('carryHidden : une compétence renommée reste masquée, une retirée est oubliée', () => {
+    expect(carryHidden(['Excel', 'Word'], ['Excel', 'Word 365'], ['Word'])).toEqual(['Word 365']);
+    expect(carryHidden(['Excel', 'Word'], ['Excel'], ['Word'])).toEqual([]);
+    expect(carryHidden(['Excel', 'Word'], ['Excel', 'Word', 'Access'], ['Word'])).toEqual(['Word']);
+    expect(carryHidden(['Excel', 'Word'], ['Excel 2', 'Word'], ['Word'])).toEqual(['Word']);
+  });
+
+  it('sectionContentSummary compte les éléments masqués avec le bon accord', () => {
+    const d = normalizeData({
+      socialLinks: [{ url: 'a.fr', hidden: true }, { url: 'b.fr' }],
+      mainSkills: [{ skills: ['Excel', 'Word'], hiddenSkills: ['Word'] }],
+      customSections: [{ id: 's', items: ['x', 'y', ''], hiddenItems: [0] }],
+    });
+    expect(sectionContentSummary(d, 'links').text).toBe('2 liens dont 1 masqué');
+    expect(sectionContentSummary(d, 'skills').text).toBe('2 compétences dont 1 masquée');
+    expect(sectionContentSummary(d, 'custom:s').text).toBe('2 éléments dont 1 masqué');
   });
 });

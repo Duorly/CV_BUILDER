@@ -999,3 +999,66 @@ describe('garde-fous : chiffres modifiés, puces ajoutées, synonymes', () => {
     expect(citedInCv('SEO', normalizeTerm('Séoul'))).toBe(false);
   });
 });
+
+describe('masquage fin et IA', () => {
+  function partlyHidden() {
+    const d = normalizeData(example);
+    d.experiences[0].hiddenDetails = [1];
+    d.mainSkills[0].hiddenSkills = ['Relations presse'];
+    d.customSections[0].hiddenItems = [0];
+    d.languages[2].hidden = true;
+    d.certifications[1].hidden = true;
+    return d;
+  }
+
+  it('stripForAI n’envoie ni puce, ni compétence, ni élément masqués', () => {
+    const json = JSON.stringify(stripForAI(partlyHidden()));
+    expect(json).not.toContain('Animation des réseaux sociaux');
+    expect(json).toContain('Organisation de 6 événements');
+    expect(json).not.toContain('Relations presse');
+    expect(json).not.toContain('Photographie argentique');
+    expect(json).not.toContain('Espagnol');
+    expect(json).not.toContain('Permis B');
+  });
+
+  it('les propositions ignorent les puces masquées et les conservent', () => {
+    const d = partlyHidden();
+    const exp0 = d.experiences[0];
+    const visible = exp0.details.filter((_, i) => i !== 1);
+    const rewrite = (details) =>
+      normalizePatch({
+        summary: { text: '', reason: '' },
+        targetTitle: { text: '', reason: '' },
+        skillCategoryOrder: [],
+        skillAdditions: [],
+        experiences: [{ id: exp0.id, details, reason: 'r' }],
+      });
+
+    // Même nombre de puces visibles : modification puce par puce, à l’indice d’origine.
+    const one = rewrite(visible.map((t, i) => (i === 1 ? 'Organisation de 6 événements par an en boutique.' : t)));
+    expect(buildChanges(d, one).map((c) => c.id)).toEqual([`bullet:${exp0.id}:2`]);
+    const applied = applyChanges(d, one).experiences[0];
+    expect(applied.details[2]).toBe('Organisation de 6 événements par an en boutique.');
+    expect(applied.hiddenDetails).toEqual([1]);
+
+    // Nombre différent : les puces visibles sont remplacées, la puce masquée reste (masquée).
+    const all = rewrite(['Pilotage du plan de communication (budget de 80 000 €).', "Encadrement d'une alternante."]);
+    const after = applyChanges(d, all).experiences[0];
+    expect(after.details).toEqual([
+      'Pilotage du plan de communication (budget de 80 000 €).',
+      "Encadrement d'une alternante.",
+      exp0.details[1],
+    ]);
+    expect(after.hiddenDetails).toEqual([2]);
+  });
+
+  it('la traduction garde masquées les mêmes compétences', () => {
+    const d = partlyHidden();
+    const source = buildTranslationSource(d);
+    const translated = structuredClone(source);
+    translated.skills[0].skills = ['Editorial strategy', 'Press relations', 'Web writing', 'Events'];
+    const { data } = mergeTranslation(d, translated);
+    expect(data.mainSkills[0].skills[1]).toBe('Press relations');
+    expect(data.mainSkills[0].hiddenSkills).toEqual(['Press relations']);
+  });
+});

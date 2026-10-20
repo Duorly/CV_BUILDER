@@ -16,6 +16,7 @@ export default function CertificationsSection({ items, update }) {
       firstField="name"
       addLabel="Ajouter une certification"
       emptyText="Certificats, habilitations, permis… (facultatif)."
+      hiddenNote="Cette certification est masquée : elle reste enregistrée mais n'apparaît pas sur le CV."
       renderBody={(cert, { patch }) => (
         <>
           <TextField

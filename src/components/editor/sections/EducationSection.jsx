@@ -92,7 +92,8 @@ function EducationBody({ edu, patch }) {
         items={edu.details}
         label="Points marquants (facultatif)"
         placeholder="Ex. Mention bien, stage de huit semaines en magasin"
-        onChange={(details, opts) => patch({ details }, opts)}
+        hidden={edu.hiddenDetails}
+        onChange={(details, opts, hiddenDetails) => patch(hiddenDetails ? { details, hiddenDetails } : { details }, opts)}
       />
       {BLOCKS.filter((b) => isShown(b.key)).map((block) => (
         <div key={block.key} id={fieldId(edu.id, block.key, 'block')} className="editor-block">

@@ -83,7 +83,10 @@ export default function ExperienceSection({ field, items, update }) {
             items={exp.details}
             label="Missions et réalisations"
             placeholder={config.bullet}
-            onChange={(details, opts) => patch({ details }, opts)}
+            hidden={exp.hiddenDetails}
+            onChange={(details, opts, hiddenDetails) =>
+              patch(hiddenDetails ? { details, hiddenDetails } : { details }, opts)
+            }
           />
         </>
       )}

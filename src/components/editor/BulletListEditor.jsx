@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ArrowDown, ArrowUp, Circle, GripVertical, Plus, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, Circle, Eye, EyeOff, GripVertical, Plus, X } from 'lucide-react';
 import AutoTextarea from './AutoTextarea';
 import SortableList, { useSortableRow } from './SortableList';
 import { focusSoon } from './editorUi';
@@ -25,8 +25,13 @@ function useStableKeys(length) {
   return ref;
 }
 
+const indexesOf = (flags) => flags.flatMap((flag, i) => (flag ? [i] : []));
+
 // Éditeur de puces : Entrée crée la puce suivante, Retour arrière sur une puce vide
 // la supprime, Alt+↑/↓ (ou les flèches, ou la poignée) la déplace.
+// Avec `hidden` (indices des puces masquées sur le CV), chaque puce a un bouton œil ;
+// les indices suivent les puces déplacées, ajoutées ou supprimées et sont rendus
+// en troisième argument de onChange(items, opts, hidden).
 export default function BulletListEditor({
   idBase,
   items,
@@ -34,17 +39,23 @@ export default function BulletListEditor({
   label,
   placeholder,
   addLabel = 'Ajouter une puce',
+  hidden,
 }) {
   const keysRef = useStableKeys(items.length);
   const keys = keysRef.current;
+  const hideable = Array.isArray(hidden);
+  const flags = items.map((_, i) => hideable && hidden.includes(i));
   const inputId = (i) => `${idBase}-${i}`;
   const hintId = `${idBase}-hint`;
   const labelId = `${idBase}-label`;
 
-  const commit = (nextItems, nextKeys, opts) => {
+  const commit = (nextItems, nextKeys, opts, nextFlags = flags) => {
     keysRef.current = nextKeys;
-    onChange(nextItems, opts);
+    onChange(nextItems, opts, hideable ? indexesOf(nextFlags) : undefined);
   };
+
+  const toggleHidden = (i) =>
+    commit(items, keys, { checkpoint: true }, flags.map((flag, k) => (k === i ? !flag : flag)));
 
   const setText = (i, value) => {
     // Une puce = un paragraphe : les retours à la ligne (glisser-déposer) deviennent des espaces.
@@ -52,19 +63,19 @@ export default function BulletListEditor({
   };
 
   const append = () => {
-    commit([...items, ''], [...keys, newKey()], { checkpoint: true });
+    commit([...items, ''], [...keys, newKey()], { checkpoint: true }, [...flags, false]);
     focusSoon(inputId(items.length));
   };
 
   const remove = (i) => {
-    commit(removeAt(items, i), removeAt(keys, i), { checkpoint: true });
+    commit(removeAt(items, i), removeAt(keys, i), { checkpoint: true }, removeAt(flags, i));
     if (items.length > 1) focusSoon(inputId(Math.max(0, i - 1)), { caret: 'end' });
     else focusSoon(`${idBase}-add`);
   };
 
   const move = (from, to, focusTarget) => {
     if (to < 0 || to >= items.length || from === to) return;
-    commit(moveItem(items, from, to), moveItem(keys, from, to), { checkpoint: true });
+    commit(moveItem(items, from, to), moveItem(keys, from, to), { checkpoint: true }, moveItem(flags, from, to));
     if (focusTarget === 'input') focusSoon(inputId(to));
     else if (focusTarget) {
       const other = focusTarget === 'up' ? 'down' : 'up';
@@ -78,11 +89,11 @@ export default function BulletListEditor({
     if (e.key === 'Enter') {
       e.preventDefault();
       const { items: next, focusIndex } = splitBulletAt(items, i, el.selectionStart, el.selectionEnd);
-      commit(next, insertAt(keys, i + 1, newKey()), { checkpoint: true });
+      commit(next, insertAt(keys, i + 1, newKey()), { checkpoint: true }, insertAt(flags, i + 1, false));
       focusSoon(inputId(focusIndex), { caret: 0 });
     } else if (e.key === 'Backspace' && items[i] === '' && items.length > 1) {
       e.preventDefault();
-      commit(removeAt(items, i), removeAt(keys, i), { checkpoint: true });
+      commit(removeAt(items, i), removeAt(keys, i), { checkpoint: true }, removeAt(flags, i));
       if (i > 0) focusSoon(inputId(i - 1), { caret: 'end' });
       else focusSoon(inputId(0), { caret: 0 });
     } else if (e.altKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
@@ -96,9 +107,9 @@ export default function BulletListEditor({
     const result = pasteIntoBullet(items, i, el.selectionStart, el.selectionEnd, e.clipboardData.getData('text'));
     if (!result) return;
     e.preventDefault();
-    const added = result.items.length - items.length;
-    const nextKeys = insertAt(keys, i + 1, ...Array.from({ length: Math.max(0, added) }, newKey));
-    commit(result.items, nextKeys, { checkpoint: true });
+    const added = Math.max(0, result.items.length - items.length);
+    const nextKeys = insertAt(keys, i + 1, ...Array.from({ length: added }, newKey));
+    commit(result.items, nextKeys, { checkpoint: true }, insertAt(flags, i + 1, ...Array(added).fill(false)));
     focusSoon(inputId(result.focusIndex), { caret: result.caret });
   };
 
@@ -127,6 +138,8 @@ export default function BulletListEditor({
               onPaste={(e) => handlePaste(e, i)}
               onMove={(to, focusTarget) => move(i, to, focusTarget)}
               onRemove={() => remove(i)}
+              isHidden={flags[i]}
+              onToggleHidden={hideable ? () => toggleHidden(i) : undefined}
             />
           ))}
         </SortableList>
@@ -158,6 +171,8 @@ function BulletRow({
   onPaste,
   onMove,
   onRemove,
+  isHidden,
+  onToggleHidden,
 }) {
   const { rowProps, handleProps, isDragging } = useSortableRow(sortId);
   const length = text.trim().length;
@@ -165,7 +180,10 @@ function BulletRow({
   const counterId = `${id}-count`;
 
   return (
-    <li {...rowProps} className={`detail-row premium${isDragging ? ' is-dragging' : ''}${tooLong ? ' is-long' : ''}`}>
+    <li
+      {...rowProps}
+      className={`detail-row premium${isDragging ? ' is-dragging' : ''}${tooLong ? ' is-long' : ''}${isHidden ? ' is-hidden' : ''}`}
+    >
       <button
         type="button"
         className="detail-drag-handle"
@@ -193,6 +211,7 @@ function BulletRow({
           onKeyDown={onKeyDown}
           onPaste={onPaste}
         />
+        {isHidden && <span className="editor-bullet-hidden">Masquée : n’apparaît pas sur le CV</span>}
         {tooLong && (
           <span id={counterId} className="editor-bullet-warn">
             {`${length} caractères : un peu long, visez moins de ${BULLET_WARN}.`}
@@ -228,6 +247,18 @@ function BulletRow({
             <ArrowDown size={12} aria-hidden="true" />
           </button>
         </div>
+        {onToggleHidden && (
+          <button
+            type="button"
+            id={`${id}-visibility`}
+            className={`detail-hide-btn${isHidden ? ' is-active' : ''}`}
+            aria-label={isHidden ? `Afficher la puce ${index + 1} sur le CV` : `Masquer la puce ${index + 1} sur le CV`}
+            title={isHidden ? 'Afficher sur le CV' : 'Masquer sur le CV'}
+            onClick={onToggleHidden}
+          >
+            {isHidden ? <EyeOff size={14} aria-hidden="true" /> : <Eye size={14} aria-hidden="true" />}
+          </button>
+        )}
         <button
           type="button"
           id={`${id}-remove`}

@@ -139,3 +139,36 @@ describe('ResumePdfDocument', () => {
     expect(pageCount(pdf)).toBeGreaterThanOrEqual(3);
   });
 });
+
+describe('ResumePdfDocument : masquage fin et marges', () => {
+  it('omet puces, compétences, liens, langues et certifications masqués', async () => {
+    const data = structuredClone(example);
+    data.experiences[0].hiddenDetails = [1];
+    data.mainSkills[0].hiddenSkills = ['Relations presse'];
+    data.socialLinks[1].hidden = true;
+    data.languages[2].hidden = true;
+    data.certifications[1].hidden = true;
+    data.customSections[0].hiddenItems = [0];
+    const pdf = await render(data);
+    const text = drawnLines(pdf).join('\n');
+    expect(text).not.toContain('Animation des r');
+    expect(text).toContain('Organisation de 6');
+    expect(text).not.toContain('Relations presse');
+    expect(text).not.toContain('Espagnol');
+    expect(text).not.toContain('Permis B');
+    expect(text).not.toContain('Photographie argentique');
+    expect(pdf).not.toContain('camille-martin.exemple.fr');
+    expect(pdf).toContain('linkedin.com/in/camille-martin-exemple');
+  });
+
+  it('des marges étroites et un espacement serré font tenir plus de contenu par page', async () => {
+    const long = structuredClone(example);
+    long.experiences = Array.from({ length: 8 }, (_, i) => ({ ...example.experiences[i % example.experiences.length] }));
+    const normal = pageCount(await render(long));
+    const compact = pageCount(await render(long, { margins: 'narrow', spacing: 'compact' }));
+    const airy = pageCount(await render(long, { margins: 'wide', spacing: 'airy' }));
+    expect(compact).toBeLessThanOrEqual(normal);
+    expect(airy).toBeGreaterThanOrEqual(normal);
+    expect(airy).toBeGreaterThan(compact);
+  });
+});

@@ -437,3 +437,68 @@ describe('géométrie et impression', () => {
     expect(root.slice(0, root.indexOf('}'))).toMatch(/overflow-wrap:\s*anywhere/);
   });
 });
+
+describe('masquage fin et mise en page', () => {
+  // Une puce, une compétence, un élément de section libre, un lien, une langue et une certification masqués.
+  function partlyHidden() {
+    const d = normalizeData(example);
+    d.experiences[0].hiddenDetails = [1];
+    d.mainSkills[0].hiddenSkills = ['Relations presse'];
+    d.customSections[0].hiddenItems = [0];
+    d.socialLinks[1].hidden = true;
+    d.languages[2].hidden = true;
+    d.certifications[1].hidden = true;
+    return d;
+  }
+
+  for (const [name, Template] of TEMPLATES) {
+    it(`${name} : n’affiche ni puce, ni compétence, ni élément masqués`, () => {
+      const html = render(Template, partlyHidden());
+      expect(html).not.toContain('Animation des réseaux sociaux');
+      expect(html).toContain('Organisation de 6 événements');
+      expect(html).not.toContain('Relations presse');
+      expect(html).toContain('Stratégie éditoriale');
+      expect(html).not.toContain('Photographie argentique');
+      expect(html).toContain('Théâtre amateur');
+      expect(html).not.toContain('camille-martin.exemple.fr');
+      expect(html).toContain('linkedin.com/in/camille-martin-exemple');
+      expect(html).not.toContain('Espagnol');
+      expect(html).not.toContain('Permis B');
+      expect(html).toContain('Google Analytics 4');
+      expectNothingEmpty(html);
+    });
+
+    it(`${name} : une expérience dont toutes les puces sont masquées garde son en-tête`, () => {
+      const d = normalizeData(example);
+      d.experiences[0].hiddenDetails = [0, 1, 2, 3];
+      const html = render(Template, d);
+      expect(html).toContain('Chargée de communication');
+      expect(html).not.toContain('Définition et pilotage');
+      expectNothingEmpty(html);
+    });
+
+    it(`${name} : marges et espacement posés en variables CSS`, () => {
+      const html = render(Template, normalizeData(example), { margins: 'narrow', spacing: 'airy' });
+      expect(html).toContain('--margin-scale:0.7');
+      expect(html).toContain('--spacing-scale:1.4');
+      expect(render(Template, normalizeData(example))).toContain('--margin-scale:1;--spacing-scale:1');
+    });
+  }
+
+  it('marges @page du modèle ATS selon le réglage ; « design » et la lettre n’en dépendent pas', () => {
+    expect(printPageRule('ats', 0.7)).toBe('@page { size: A4; margin: 9.8mm 0; }');
+    expect(printPageRule('ats', 1.3)).toBe('@page { size: A4; margin: 18.2mm 0; }');
+    expect(printPageRule('design', 0.7)).toBe('@page { size: A4; margin: 0; }');
+    expect(printPageRule('letter', 1.3)).toBe('@page { size: A4; margin: 20mm 0; }');
+    expect(renderToStaticMarkup(createElement(PrintStyles, { mode: 'ats', marginScale: 0.7 }))).toBe(
+      '<style media="print">@page { size: A4; margin: 9.8mm 0; }</style>',
+    );
+  });
+
+  it('les paddings et écarts des modèles suivent les réglages', () => {
+    const read = (file) => fs.readFileSync(path.join(repo, 'src/styles', file), 'utf8');
+    expect(read('resume-ats.css')).toMatch(/padding: calc\(14mm \* var\(--m\)\) calc\(16mm \* var\(--m\)\)/);
+    expect(read('resume.css')).toMatch(/padding: calc\(10mm \* var\(--m\)\) calc\(6mm \* var\(--m\)\)/);
+    expect(read('resume.css')).toMatch(/margin-bottom: calc\(5mm \* var\(--s\)\)/);
+  });
+});
