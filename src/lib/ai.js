@@ -82,11 +82,11 @@ export const DEFAULT_MODELS = {
   gemini: 'gemini-3.8-flash',
 };
 
-// Effort de réflexion par tâche : l’analyse et la traduction sont simples,
-// la réécriture et la lettre demandent plus de soin.
+// Effort de réflexion par tâche : la traduction est simple ; l’analyse (tri des mots-clés,
+// conseils ciblés) et la lettre demandent du soin, la réécriture du CV le plus.
 const TASK_EFFORT = {
-  analyze: 'low',
-  rewrite: 'medium',
+  analyze: 'medium',
+  rewrite: 'high',
   translate: 'low',
   letter: 'medium',
 };
@@ -839,30 +839,51 @@ export const ANALYSIS_SCHEMA = {
         additionalProperties: false,
         required: ['term', 'importance', 'present', 'evidence'],
         properties: {
-          term: { type: 'string', description: "Mot-clé formulé comme dans l’offre (2 à 5 mots)." },
+          term: { type: 'string', description: "Mot-clé formulé comme dans l’offre (1 à 4 mots, sans verbe)." },
           importance: { type: 'string', enum: IMPORTANCE_LEVELS },
-          present: { type: 'boolean', description: 'true seulement si le CV le mentionne explicitement ou par un synonyme évident.' },
+          present: { type: 'boolean', description: 'true seulement si le CV le mentionne explicitement ou par un équivalent incontestable.' },
           evidence: { type: 'string', description: 'Si présent : où il apparaît dans le CV, en quelques mots. Sinon chaîne vide.' },
         },
       },
     },
-    strengths: { type: 'array', items: { type: 'string' } },
-    improvements: { type: 'array', items: { type: 'string' } },
+    strengths: {
+      type: 'array',
+      description: 'Atouts du CV pour ce poste, chacun appuyé sur un élément nommé du CV.',
+      items: { type: 'string' },
+    },
+    improvements: {
+      type: 'array',
+      description: 'Conseils ciblés : un endroit précis du CV et ce qu’il faut y changer.',
+      items: { type: 'string' },
+    },
     fit: { type: 'string', enum: FIT_LEVELS },
     fitComment: { type: 'string' },
   },
 };
 
-const ANALYSIS_SYSTEM = `Vous êtes conseiller ou conseillère en recrutement. Vous comparez le CV d’une personne qui postule à une offre d’emploi, pour l’aider à adapter sa candidature.
+const ANALYSIS_SYSTEM = `Vous êtes conseiller ou conseillère en recrutement. Une personne vous montre son CV et une offre d’emploi : vous l’aidez à voir ce que le recruteur va chercher et ce que son CV montre déjà. Vos réponses s’affichent telles quelles dans l’application : la liste des mots-clés (présents ou manquants), puis vos points forts et vos points à renforcer. Une étape suivante proposera des réécritures du CV à partir de votre analyse.
 
 ${DATA_RULE}
 
-Consignes :
-- Relevez de 8 à 25 mots-clés de l’offre : compétences, outils, logiciels, méthodes, savoir-être, diplômes, langues, secteurs. Formulez chacun comme dans l’offre et classez-les du plus au moins important.
-- Un mot-clé est « présent » uniquement si le CV le mentionne explicitement ou par un synonyme évident. Dans le doute, il est absent. N’inventez rien sur le parcours de la personne.
-- Points forts et points à renforcer : 2 à 5 phrases courtes chacun, en français, en vouvoyant la personne (« Vous… »), concrètes et liées à l’offre.
-- L’adéquation (fit) est une estimation qualitative, pas une note ; fitComment la justifie en une ou deux phrases en français.
-- jobTitle et company : reprenez ce que dit l’offre, sinon chaîne vide.`;
+Mots-clés (keywords)
+- Retenez ce qu’un recruteur ou un logiciel de tri (ATS) vérifierait vraiment : métier et missions, compétences techniques, outils et logiciels, méthodes, diplômes ou certifications exigés, langues, permis, secteur. Un savoir-être seulement s’il est clairement demandé (répété ou présenté comme indispensable) ; jamais les qualités passe-partout citées en passant (« dynamique », « motivé », « bon relationnel »).
+- Ignorez la présentation de l’entreprise, les avantages, le salaire, les horaires et les formules toutes faites de l’annonce.
+- 8 à 20 mots-clés, sans doublon : regroupez les variantes d’une même idée (« Excel » et « maîtrise d’Excel » donnent « Excel »). Gardez la formulation de l’offre, en 1 à 4 mots, sans verbe.
+- importance : « essentielle » = exigé ou au cœur du poste ; « importante » = demandé ; « secondaire » = un plus.
+- present : true seulement si le CV le dit explicitement ou par un équivalent qu’aucun recruteur ne contesterait (« Pack Office » couvre « Word »). Une expérience voisine ne suffit pas ; dans le doute, false. evidence indique où, en quelques mots (« puce de l’expérience Vendeuse »).
+
+Points forts (strengths) : 2 à 4 atouts du CV pour ce poste précis. Chacun s’appuie sur un élément nommé du CV (expérience, résultat, compétence) et le relie à une exigence de l’offre.
+
+Points à renforcer (improvements) : 2 à 4 conseils, le plus utile en premier. Chaque conseil :
+- vise un endroit précis du CV, nommé (le titre, le résumé, une puce d’une expérience nommée, un groupe de compétences), et dit ce qu’il faut y changer ;
+- s’appuie sur ce que la personne a déjà fait : mettre en avant, reformuler avec les mots de l’offre, préciser l’objet ou le résultat d’une mission. Pour une information que le CV ne donne pas, formulez une question (« Si vous avez déjà…, précisez-le dans… ») ;
+- ne répète pas les mots-clés manquants : ils sont déjà listés à côté, avec une case pour que la personne confirme ceux qu’elle possède.
+Écartez les conseils qui conviendraient à n’importe quel CV (« ajoutez des chiffres », « adaptez votre CV à l’offre », « soignez la mise en page ») et ceux qui sortent du CV (se former, passer une certification, écrire une lettre).
+Exemple de bon conseil : « L’offre insiste sur l’encaissement : votre expérience en boulangerie le mentionne en dernière puce, remontez-la et nommez-le “tenue de caisse”. » Exemple de conseil inutile : « Mettez davantage en valeur vos compétences. »
+
+Adéquation (fit) : « forte » si les exigences essentielles sont toutes couvertes, « bonne » s’il en manque une, « moyenne » s’il en manque plusieurs mais que le métier est proche, « faible » si le parcours est éloigné. fitComment : une ou deux phrases franches et bienveillantes, qui citent le principal écart s’il y en a un.
+
+Tout le texte est en français et vouvoie la personne (« Vous… »). jobTitle et company : repris de l’offre, sinon chaîne vide.`;
 
 export function normalizeAnalysis(raw) {
   const seen = new Set();
@@ -942,7 +963,7 @@ export const PATCH_SCHEMA = {
       required: ['text', 'reason'],
       properties: {
         text: { type: 'string', description: 'Nouveau résumé, ou chaîne vide pour ne pas le modifier.' },
-        reason: { type: 'string' },
+        reason: { type: 'string', description: 'Exigence de l’offre servie par ce résumé.' },
       },
     },
     targetTitle: {
@@ -980,33 +1001,48 @@ export const PATCH_SCHEMA = {
         required: ['id', 'details', 'reason'],
         properties: {
           id: { type: 'string' },
-          details: { type: 'array', items: { type: 'string' } },
-          reason: { type: 'string' },
+          details: {
+            type: 'array',
+            description: 'Toutes les puces, même ordre et même nombre ; celles qui ne changent pas recopiées à l’identique.',
+            items: { type: 'string' },
+          },
+          reason: { type: 'string', description: 'Exigence de l’offre servie par ces modifications.' },
         },
       },
     },
   },
 };
 
-const REWRITE_SYSTEM = `Vous adaptez le CV d’une personne à une offre d’emploi, pour qu’il ressorte mieux dans les logiciels de tri (ATS) et convainque un recruteur, sans jamais mentir.
+const REWRITE_SYSTEM = `Vous adaptez le CV d’une personne à une offre d’emploi précise. Le but : qu’un recruteur qui lit le CV en trente secondes, et un logiciel de tri (ATS), y trouvent vite ce que l’offre demande, sans que rien ne devienne faux. La personne relit chaque proposition et coche celles qu’elle garde : proposez peu de modifications, mais des modifications qu’elle aura envie d’accepter.
 
 ${DATA_RULE}
 
-Règles absolues :
-1. N’ajoutez aucune compétence, aucun outil, chiffre, diplôme, certification, intitulé de poste, responsabilité ou résultat absent du CV ou de la liste des compétences confirmées par la personne. Ne modifiez jamais un chiffre existant.
-2. Écrivez dans la langue du CV (si le CV est en français, écrivez en français, même si l’offre est en anglais). Gardez la personne grammaticale du résumé d’origine.
-3. Reprenez le vocabulaire exact de l’offre quand il décrit fidèlement une expérience réelle.
-4. Les mots-clés manquants non confirmés ne doivent ni être ajoutés ni être suggérés.
-5. Ne touchez pas aux entreprises, dates, lieux, diplômes, langues et liens : ils ne font pas partie de la réponse.
+Règles absolues (honnêteté)
+1. N’ajoutez aucune compétence, aucun outil, chiffre, diplôme, certification, intitulé de poste, responsabilité ou résultat absent du CV ou des compétences confirmées par la personne. Ne modifiez jamais un chiffre existant.
+2. Les mots-clés « manquants NON confirmés » de <mots_cles> ne doivent apparaître nulle part, même reformulés ou suggérés.
+3. Écrivez dans la langue du CV (un CV en français reste en français, même si l’offre est en anglais). Gardez la personne grammaticale du résumé d’origine.
+4. Ne touchez pas aux entreprises, dates, lieux, diplômes, langues et liens : ils ne font pas partie de la réponse.
 
-Format de la réponse (ne renvoyez que ce qui change) :
-- summary.text : résumé réécrit (3 à 5 phrases) ou chaîne vide s’il convient déjà.
-- targetTitle.text : titre du CV reprenant l’intitulé de l’offre s’il correspond réellement au parcours, sinon chaîne vide.
-- skillCategoryOrder : id des catégories de compétences dans l’ordre le plus pertinent pour l’offre, ou tableau vide.
-- skillAdditions : uniquement des termes de <competences_autorisees>, recopiés à l’identique et absents des compétences actuelles, avec l’id de la catégorie existante la plus logique (ou newCategory si aucune ne convient).
-- experiences : pour chaque expérience à améliorer (id de experiences ou otherExperiences), TOUTES ses puces réécrites, dans le même ordre et en même nombre. N’incluez pas les expériences inchangées. Une puce : une idée, commençant par un verbe ou un nom d’action, sans symbole de puce.
-- reason : une phrase courte en français, en vouvoyant la personne, qui dit quel besoin de l’offre la modification sert.`;
+Ce qui justifie une modification — au moins une de ces raisons :
+- reprendre le terme exact de l’offre pour une compétence ou une mission que le CV décrit déjà avec d’autres mots (le CV dit « conseil à la clientèle », l’offre « relation client ») ;
+- faire ressortir une mission ou un résultat du CV qui répond à une exigence essentielle de l’offre (le mettre en tête de phrase, nommer son objet, citer le résultat déjà donné ailleurs dans la même expérience) ;
+- rendre concrète une formulation vague grâce à des informations déjà présentes dans le CV.
+Ne proposez pas : de simples synonymes ou retouches de style, des formules creuses (« dynamique », « force de proposition », « avec rigueur et professionnalisme », « contribuer activement à »), une phrase plus longue sans information nouvelle, plusieurs mots-clés empilés dans une même phrase. Dans le doute, ne changez rien : une réponse avec deux ou trois modifications fortes vaut mieux que dix retouches.
 
+Résumé (summary.text) : chaîne vide s’il sert déjà bien l’offre. Sinon 2 à 4 phrases (300 à 600 caractères) : le métier de la personne et son expérience, tirés du CV, présentés sous l’angle du poste visé ; deux ou trois compétences ou résultats du CV qui répondent aux exigences essentielles ; ce qu’elle recherche. Aucune qualité que le CV ne démontre, aucun cliché.
+
+Titre (targetTitle.text) : l’intitulé de l’offre, ou une forme proche, seulement si le parcours y correspond réellement et que le titre actuel ne convient pas. Sinon chaîne vide.
+
+Compétences :
+- skillCategoryOrder : id des catégories dans un nouvel ordre seulement si l’ordre actuel ne met pas en premier ce que l’offre demande ; sinon tableau vide.
+- skillAdditions : uniquement des termes de <competences_autorisees>, recopiés à l’identique, absents des compétences actuelles et utiles pour l’offre, avec l’id de la catégorie existante la plus logique (ou newCategory si aucune ne convient).
+
+Expériences (experiences) : traitez d’abord les expériences en rapport avec l’offre, les plus récentes en premier ; laissez de côté celles qui n’apportent rien pour ce poste. Pour chaque expérience modifiée (id pris dans experiences ou otherExperiences), renvoyez TOUTES ses puces, dans le même ordre et en même nombre, et recopiez caractère pour caractère celles qui ne changent pas. Une puce : une idée, qui commence par un verbe d’action ou un nom d’action, d’une longueur proche de l’original, sans symbole de puce.
+
+reason : une phrase courte en français, qui vouvoie la personne et nomme l’exigence de l’offre servie (« L’offre demande la gestion des stocks : votre puce le dit désormais avec ses mots. »). Pas de justification passe-partout (« pour mieux correspondre à l’offre »).`;
+
+// Mots-clés classés selon ce que la personne a confirmé, puis les conseils de l’analyse :
+// la réécriture les suit quand le CV le permet, et reste cohérente avec ce que la personne a lu.
 function keywordsBlock(analysis, confirmations) {
   const present = [];
   const confirmed = [];
@@ -1023,6 +1059,10 @@ function keywordsBlock(analysis, confirmations) {
     section('Mots-clés déjà présents dans le CV :', present),
     section('Mots-clés confirmés par la personne (elle possède réellement ces compétences) :', confirmed),
     section('Mots-clés manquants NON confirmés (interdits) :', missing),
+    section(
+      'Conseils donnés à la personne lors de l’analyse (à suivre seulement s’ils respectent les règles absolues) :',
+      strList(analysis?.improvements).map((tip) => `- ${tip}`),
+    ),
   ].join('\n\n');
 }
 
@@ -1228,6 +1268,13 @@ function numbersWarning(numbers) {
  *   d’un synonyme par l’IA : un texte
  *   qui en introduit un est signalé, donc pas coché d’avance.
  */
+// Même texte à la casse, la ponctuation et les espaces près : une telle « modification »
+// n’apporte rien à la personne, on ne la lui propose pas.
+const sameWording = (a, b) => {
+  const key = (text) => str(text).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+  return key(a) === key(b);
+};
+
 export function buildChanges(data, patch, { allowedSkills = [], forbiddenTerms = [], lang = 'fr' } = {}) {
   const changes = [];
   if (!data || !patch) return changes;
@@ -1243,7 +1290,7 @@ export function buildChanges(data, patch, { allowedSkills = [], forbiddenTerms =
   };
 
   const title = fix(str(patch.targetTitle?.text));
-  if (title && title !== str(pi.title)) {
+  if (title && !sameWording(title, pi.title)) {
     changes.push(
       flag(
         {
@@ -1263,7 +1310,7 @@ export function buildChanges(data, patch, { allowedSkills = [], forbiddenTerms =
   }
 
   const summary = fix(str(patch.summary?.text));
-  if (summary && summary !== str(pi.objective)) {
+  if (summary && !sameWording(summary, pi.objective)) {
     // Le résumé peut reprendre un chiffre cité ailleurs dans le CV (« +40 % » d’une puce).
     changes.push(
       flag(
@@ -1369,7 +1416,7 @@ export function buildChanges(data, patch, { allowedSkills = [], forbiddenTerms =
     const reference = itemTexts(item).map(str);
     if (proposed.length === original.length) {
       proposed.forEach((after, i) => {
-        if (after === original[i].text) return;
+        if (sameWording(after, original[i].text)) return;
         byGroup[group].push({
           order,
           change: flag(

@@ -208,7 +208,7 @@ describe('requêtes Anthropic', () => {
     expect(body.model).toBe('claude-opus-5-5');
     expect(body.max_tokens).toBeGreaterThanOrEqual(8000);
     expect(body.fallbacks).toBe('default');
-    expect(body.output_config).toEqual({ effort: 'low', format: { type: 'json_schema', schema: ANALYSIS_SCHEMA } });
+    expect(body.output_config).toEqual({ effort: 'medium', format: { type: 'json_schema', schema: ANALYSIS_SCHEMA } });
     expect(body).not.toHaveProperty('temperature');
     expect(body).not.toHaveProperty('thinking');
 
@@ -365,7 +365,7 @@ describe('requêtes Gemini', () => {
     const body = lastBody();
     expect(body.generationConfig.responseMimeType).toBe('application/json');
     expect(body.generationConfig.responseJsonSchema).toEqual(ANALYSIS_SCHEMA);
-    expect(body.generationConfig.thinkingConfig).toEqual({ thinkingLevel: 'LOW' });
+    expect(body.generationConfig.thinkingConfig).toEqual({ thinkingLevel: 'MEDIUM' });
     expect(body.generationConfig).not.toHaveProperty('temperature');
     expect(body.systemInstruction.parts[0].text).toMatch(/<offre>/);
     expect(JSON.stringify(body)).not.toContain('base64');
@@ -460,6 +460,7 @@ describe('propositions : buildChanges / applyChanges', () => {
       { id: 'kw_2', term: 'HubSpot', present: false, evidence: '' },
       { id: 'kw_3', term: 'Gestion de budget', present: true, evidence: '' },
     ],
+    improvements: ['Vous ne mentionnez pas la publicité payante.'],
   };
   const confirmations = { kw_1: { owned: true, context: 'campagnes locales' }, kw_2: { owned: false } };
 
@@ -613,12 +614,37 @@ describe('propositions : buildChanges / applyChanges', () => {
     const patch = await proposeChanges({ data: d, jobOffer: 'Offre', company: 'Decathlon', jobTitle: 'Chargée', analysis, confirmations });
     const body = lastBody();
     expect(body.output_config.format.schema).toEqual(PATCH_SCHEMA);
-    expect(body.output_config.effort).toBe('medium');
+    expect(body.output_config.effort).toBe('high');
     const content = body.messages[0].content;
     expect(content).toContain('<competences_autorisees>\n["SEO","Google Ads","Gestion de budget"]');
     expect(content).toContain('Google Ads — précision de la personne : campagnes locales');
     expect(content).toMatch(/NON confirmés \(interdits\) :\n- HubSpot/);
+    // Les conseils de l’analyse guident la réécriture.
+    expect(content).toContain('- Vous ne mentionnez pas la publicité payante.');
     expect(buildChanges(d, patch, { allowedSkills: [] })).toEqual([]);
+  });
+
+  it('écarte les retouches de casse, de ponctuation ou d’espaces', () => {
+    const d = sampleData();
+    const exp0 = d.experiences[0];
+    const patch = {
+      summary: { text: `${d.personalInfo.objective.toUpperCase()} `, reason: '' },
+      targetTitle: { text: `${d.personalInfo.title}.`, reason: '' },
+      skillCategoryOrder: [],
+      skillAdditions: [],
+      experiences: [
+        {
+          id: exp0.id,
+          details: exp0.details
+            .filter(Boolean)
+            .map((t, i) => (i === 0 ? `${t.replace(/\.$/, '')} !` : i === 1 ? `Nouvelle formulation ${t}` : t)),
+          reason: 'r',
+        },
+      ],
+    };
+    const changes = buildChanges(d, patch);
+    // Index 2 dans data : la puce vide de sampleData() occupe l’index 1.
+    expect(changes.map((c) => c.id)).toEqual([`bullet:${exp0.id}:2`]);
   });
 });
 
