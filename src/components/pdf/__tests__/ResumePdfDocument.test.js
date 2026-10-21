@@ -172,3 +172,29 @@ describe('ResumePdfDocument : masquage fin et marges', () => {
     expect(airy).toBeGreaterThan(compact);
   });
 });
+
+describe('ResumePdfDocument : en-tête coloré', () => {
+  it('dessine un bandeau de la couleur principale, texte blanc', async () => {
+    const plain = await render(example);
+    const colored = await render(example, { headerStyle: 'colored', primaryColor: '#2563eb' });
+    expect(drawnLines(colored).join('\n')).toContain('Camille Martin');
+    // Remplissage du bandeau : 37 99 235 (#2563eb) en composantes 0-1, absent de la version sobre.
+    const fill = /0\.145098\d* 0\.388235\d* 0\.921568\d* scn/;
+    const contents = (pdf) => {
+      const buffer = Buffer.from(pdf, 'latin1');
+      return [...pdf.matchAll(/stream\r?\n/g)]
+        .map((m) => {
+          const start = m.index + m[0].length;
+          try {
+            return inflateSync(buffer.subarray(start, pdf.indexOf('endstream', start))).toString('latin1');
+          } catch {
+            return '';
+          }
+        })
+        .join('\n');
+    };
+    expect(contents(colored)).toMatch(/\b1 1 1 scn/);
+    expect(contents(plain)).not.toMatch(/\b1 1 1 scn/);
+    expect(contents(colored)).toMatch(fill);
+  });
+});

@@ -57,10 +57,9 @@
   margin-bottom: 0;
 }
 
+/* Titres de section sans filet : seul l'en-tête est souligné (ou coloré). */
 .resume-ats-template .ats-section > h2 {
   margin-bottom: 6px;
-  padding-bottom: 2px;
-  border-bottom: 1px solid #9ca3af;
   color: var(--primary-color);
   font-size: calc(11.5pt * var(--font-scale));
   font-weight: 800;
@@ -155,6 +154,20 @@
 /* ── Options de mise en page (Apparence) ─────────────────────────────── */
 .resume-ats-template.is-header-centered .ats-header {
   text-align: center;
+}
+
+/* En-tête coloré : bandeau de la couleur principale sur toute la largeur de la page
+   (il déborde sur les marges latérales), texte blanc ou foncé selon la couleur. */
+.resume-ats-template.is-header-colored .ats-header {
+  margin-right: calc(-16mm * var(--m));
+  margin-left: calc(-16mm * var(--m));
+  padding: 5mm calc(16mm * var(--m));
+  border-bottom: 0;
+  background: var(--primary-color);
+}
+
+.resume-ats-template.is-header-colored .ats-header :is(h1, .ats-title, .ats-contact-line) {
+  color: var(--header-text);
 }
 
 .resume-ats-template.is-justified :is(.ats-objective, .ats-detail-list li, .ats-line) {

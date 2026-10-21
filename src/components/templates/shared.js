@@ -7,6 +7,7 @@ import {
   marginScale,
   normalizeData,
   normalizeSettings,
+  readableTextOn,
   shownList,
   shownSkills,
   spacingScale,
@@ -34,13 +35,15 @@ export function themeStyle(settings) {
     // Lue aussi par measurePrintLayout() (marges @page du modèle ATS).
     '--margin-scale': String(marginScale(settings)),
     '--spacing-scale': String(spacingScale(settings)),
+    '--header-text': readableTextOn(settings.primaryColor),
   };
 }
 
-// Classes de mise en page posées sur la racine : en-tête centré, texte justifié.
+// Classes de mise en page posées sur la racine : en-tête centré ou coloré (modèle ATS), texte justifié.
 export function layoutClasses(settings) {
   return [
     settings.headerAlign === 'center' ? 'is-header-centered' : '',
+    settings.headerStyle === 'colored' ? 'is-header-colored' : '',
     settings.textAlign === 'justify' ? 'is-justified' : '',
   ]
     .filter(Boolean)

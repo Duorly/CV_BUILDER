@@ -93,7 +93,20 @@ export const defaultSettings = () => ({
   textAlign: 'left', // 'left' | 'justify' : paragraphes et puces
   margins: 'normal', // MARGIN_OPTIONS
   spacing: 'normal', // SPACING_OPTIONS
+  headerStyle: 'plain', // modèle ATS : 'plain' (filet sous l'en-tête) | 'colored' (bandeau de couleur)
 });
+
+// Couleur de texte lisible sur un fond (#rgb ou #rrggbb) : blanc sur un fond foncé, sinon presque noir.
+export function readableTextOn(background) {
+  let hex = String(background || '').replace('#', '');
+  if (hex.length === 3 || hex.length === 4) hex = [...hex.slice(0, 3)].map((c) => c + c).join('');
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  if ([r, g, b].some(Number.isNaN)) return '#ffffff';
+  const linear = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  const luminance = 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+  // Contraste avec le blanc ≥ 4,5 (lecture courante) tant que la luminance reste sous 0,18.
+  return luminance < 0.18 ? '#ffffff' : '#111827';
+}
 
 export function fontCss(settings) {
   return (FONT_OPTIONS.find((f) => f.id === settings?.fontFamily) || FONT_OPTIONS[0]).css;
@@ -339,6 +352,7 @@ export function normalizeSettings(input) {
     textAlign: src.textAlign === 'justify' ? 'justify' : 'left',
     margins: MARGIN_OPTIONS.some((o) => o.id === src.margins) ? src.margins : d.margins,
     spacing: SPACING_OPTIONS.some((o) => o.id === src.spacing) ? src.spacing : d.spacing,
+    headerStyle: src.headerStyle === 'colored' ? 'colored' : 'plain',
   };
 }
 

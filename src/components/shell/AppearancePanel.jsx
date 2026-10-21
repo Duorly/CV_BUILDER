@@ -141,7 +141,7 @@ export default function AppearancePanel({ settings, hasPhoto, updateSettings }) 
       </div>
 
       <div className="field">
-        <span className="field-label">Couleurs (modèle Design)</span>
+        <span className="field-label">Couleurs</span>
         <div className="ap-colors">
           {COLORS.map(({ key, label }) => (
             <label key={key} className="ap-color">
@@ -174,6 +174,22 @@ export default function AppearancePanel({ settings, hasPhoto, updateSettings }) 
           ]}
           onChange={(headerAlign) => updateSettings({ headerAlign })}
         />
+      </div>
+
+      <div className="field">
+        <span className="field-label">Fond de l’en-tête (modèle ATS)</span>
+        <Segmented
+          label="Fond de l’en-tête du modèle ATS"
+          value={settings.headerStyle}
+          options={[
+            { value: 'plain', label: 'Sobre' },
+            { value: 'colored', label: 'Coloré' },
+          ]}
+          onChange={(headerStyle) => updateSettings({ headerStyle })}
+        />
+        <span className="field-hint">
+          Coloré : un bandeau de la couleur principale. Le texte reste lisible par les logiciels de tri.
+        </span>
       </div>
 
       <div className="field">

@@ -7,6 +7,7 @@ import {
   emptyResume,
   FONT_OPTIONS,
   marginScale,
+  readableTextOn,
   spacingScale,
 } from '../schema';
 import {
@@ -341,5 +342,21 @@ describe('masquage fin et réglages de page', () => {
     expect(normalizeSettings({ margins: 'narrow', spacing: 'airy' })).toMatchObject({ margins: 'narrow', spacing: 'airy' });
     expect(normalizeSettings({ margins: 'xl', spacing: 0 })).toMatchObject({ margins: 'normal', spacing: 'normal' });
     expect([marginScale({ margins: 'narrow' }), marginScale({}), spacingScale({ spacing: 'compact' })]).toEqual([0.7, 1, 0.65]);
+  });
+});
+
+describe('en-tête coloré (modèle ATS)', () => {
+  it('sobre par défaut, coloré sur demande', () => {
+    expect(normalizeSettings({}).headerStyle).toBe('plain');
+    expect(normalizeSettings({ headerStyle: 'colored' }).headerStyle).toBe('colored');
+    expect(normalizeSettings({ headerStyle: 'rainbow' }).headerStyle).toBe('plain');
+  });
+
+  it('texte blanc sur une couleur foncée, foncé sur une couleur claire', () => {
+    expect(readableTextOn('#2563eb')).toBe('#ffffff');
+    expect(readableTextOn('#111827')).toBe('#ffffff');
+    expect(readableTextOn('#fde047')).toBe('#111827');
+    expect(readableTextOn('#fff')).toBe('#111827');
+    expect(readableTextOn('n’importe quoi')).toBe('#ffffff');
   });
 });

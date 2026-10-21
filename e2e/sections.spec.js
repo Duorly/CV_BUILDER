@@ -236,3 +236,26 @@ test('Apparence : marges et espacement dans les deux modèles', async ({ page, a
   const lib = await app.waitForSaved((l) => l?.cvs[0].settings.margins === 'narrow');
   expect(lib.cvs[0].settings.spacing).toBe('airy');
 });
+
+test('modèle ATS : en-tête coloré en option, titres de section sans filet', async ({ page, app }) => {
+  await app.loadExample();
+  await app.setTemplate('ATS (sobre)');
+  const css = (selector, prop) =>
+    app.resume.locator(selector).first().evaluate((el, p) => getComputedStyle(el)[p], prop);
+  expect(await css('.ats-section > h2', 'borderBottomStyle')).toBe('none');
+  expect(await css('.ats-header', 'borderBottomStyle')).toBe('solid');
+
+  await app.toolbarButton('Apparence').click();
+  await page.getByRole('radio', { name: 'Coloré' }).click();
+  await page.keyboard.press('Escape');
+  expect(await css('.ats-header', 'backgroundColor')).toBe('rgb(37, 99, 235)');
+  expect(await css('.ats-header h1', 'color')).toBe('rgb(255, 255, 255)');
+  expect(await css('.ats-header', 'borderBottomStyle')).toBe('none');
+  // Le bandeau va d'un bord à l'autre de la page.
+  const [header, page_] = await Promise.all([
+    app.resume.locator('.ats-header').boundingBox(),
+    app.resume.boundingBox(),
+  ]);
+  expect(Math.abs(header.width - page_.width)).toBeLessThan(2);
+  await app.waitForSaved((l) => l?.cvs[0].settings.headerStyle === 'colored');
+});

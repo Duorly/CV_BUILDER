@@ -5,6 +5,7 @@ import {
   isShownItem,
   joinNonEmpty,
   marginScale,
+  readableTextOn,
   shownList,
   shownSkills,
   spacingScale,
@@ -34,19 +35,21 @@ const SEP = ' · ';
 const NBSP = '\u00A0';
 const CONTACT_COLOR = '#374151';
 const META_COLOR = '#4b5563';
-const RULE_COLOR = '#9ca3af';
 const BODY_COLOR = '#1f2937';
 
 // Tailles de police proportionnelles à fontScale ; marges et espacements selon les réglages,
 // comme dans resume-ats.css (--margin-scale, --spacing-scale).
-// En-tête centré et texte justifié suivent les options d'apparence (classes is-header-centered
-// et is-justified du template HTML).
+// En-tête centré ou coloré et texte justifié suivent les options d'apparence (classes
+// is-header-centered, is-header-colored et is-justified du template HTML).
 function createStyles(settings) {
   const base = bodyTextPt(settings.fontScale, 'ats');
   const headerAlign = settings.headerAlign === 'center' ? 'center' : 'left';
   const textAlign = settings.textAlign === 'justify' ? 'justify' : 'left';
   const marginX = MARGIN_X * marginScale(settings);
   const gap = spacingScale(settings);
+  const colored = settings.headerStyle === 'colored';
+  const onHeader = readableTextOn(settings.primaryColor);
+  const contactColor = colored ? onHeader : CONTACT_COLOR;
   return {
     page: {
       paddingTop: MARGIN_Y * marginScale(settings),
@@ -57,19 +60,33 @@ function createStyles(settings) {
       lineHeight: 1.4,
       color: BODY_COLOR,
     },
-    header: {
-      paddingBottom: 3 * MM,
-      borderBottomWidth: 1.1,
-      borderBottomStyle: 'solid',
-      borderBottomColor: CONTACT_COLOR,
+    // Bandeau coloré : déborde sur les marges latérales, comme .is-header-colored en CSS.
+    header: colored
+      ? {
+          marginHorizontal: -marginX,
+          paddingVertical: 5 * MM,
+          paddingHorizontal: marginX,
+          backgroundColor: settings.primaryColor,
+        }
+      : {
+          paddingBottom: 3 * MM,
+          borderBottomWidth: 1.1,
+          borderBottomStyle: 'solid',
+          borderBottomColor: CONTACT_COLOR,
+        },
+    name: {
+      fontSize: base * 1.8,
+      fontWeight: 'bold',
+      lineHeight: 1.15,
+      color: colored ? onHeader : settings.textColor,
+      textAlign: headerAlign,
     },
-    name: { fontSize: base * 1.8, fontWeight: 'bold', lineHeight: 1.15, color: settings.textColor, textAlign: headerAlign },
     headline: {
       fontSize: base * 1.15,
       fontWeight: 'bold',
       lineHeight: 1.3,
       marginTop: 1.5,
-      color: settings.primaryColor,
+      color: colored ? onHeader : settings.primaryColor,
       textAlign: headerAlign,
     },
     contactRow: {
@@ -79,11 +96,11 @@ function createStyles(settings) {
       marginTop: 3.75,
       fontSize: base * 0.95,
       lineHeight: 1.45,
-      color: CONTACT_COLOR,
+      color: contactColor,
     },
     contactItem: { flexDirection: 'row' },
     contactSeparator: { marginHorizontal: base * 0.28 },
-    contactLink: { color: CONTACT_COLOR, textDecoration: 'none' },
+    contactLink: { color: contactColor, textDecoration: 'none' },
     // Espacements avant une section ou un élément : des blocs vides plutôt que des marges.
     // À un saut de page, la part qui tient reste en bas de page et le bloc suivant démarre
     // en haut de la page suivante, comme à l'impression HTML. Une marge suivrait le bloc
@@ -94,11 +111,7 @@ function createStyles(settings) {
       fontWeight: 'bold',
       lineHeight: 1.3,
       color: settings.primaryColor,
-      paddingBottom: 1.5,
       marginBottom: 4.5,
-      borderBottomWidth: 0.75,
-      borderBottomStyle: 'solid',
-      borderBottomColor: RULE_COLOR,
     },
     objective: { fontSize: base * 1.05, lineHeight: 1.45, textAlign },
     entryGap: { height: 3.5 * MM * gap },

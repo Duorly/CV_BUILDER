@@ -502,3 +502,23 @@ describe('masquage fin et mise en page', () => {
     expect(read('resume.css')).toMatch(/margin-bottom: calc\(5mm \* var\(--s\)\)/);
   });
 });
+
+describe('modèle ATS : en-tête et titres de section', () => {
+  it('en-tête coloré en option, texte lisible sur la couleur principale', () => {
+    const plain = render(ResumeATS, normalizeData(example));
+    expect(plain).not.toContain('is-header-colored');
+    const colored = render(ResumeATS, normalizeData(example), { headerStyle: 'colored', primaryColor: '#fde047' });
+    expect(colored).toMatch(/class="resume-container resume-ats-template is-header-colored"/);
+    expect(colored).toContain('--header-text:#111827');
+  });
+
+  it('seul l’en-tête garde un filet : les titres de section n’en ont plus', () => {
+    const css = fs.readFileSync(path.join(repo, 'src/styles/resume-ats.css'), 'utf8');
+    const block = (selector) => {
+      const start = css.indexOf(`${selector} {`);
+      return css.slice(start, css.indexOf('}', start));
+    };
+    expect(block('.resume-ats-template .ats-section > h2')).not.toMatch(/border/);
+    expect(block('.resume-ats-template .ats-header')).toMatch(/border-bottom: 1\.5px solid/);
+  });
+});
