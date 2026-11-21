@@ -1,0 +1,195 @@
+/* Après toutes les autres feuilles de l'interface : ces règles les adaptent aux écrans plus étroits. */
+
+/* ── Écrans moyens et petits ─────────────────────────────────────────── */
+@media screen and (max-width: 1440px) {
+  .tb-brand-text {
+    display: none;
+  }
+}
+
+/* Portables (1280–1366 px) : la barre tient sur une ligne avec « Enregistré à HH:MM ». */
+@media screen and (min-width: 721px) and (max-width: 1366px) {
+  .tb-view svg {
+    display: none;
+  }
+
+  .vm-trigger {
+    max-width: 240px;
+  }
+}
+
+/* Plus étroit : icône seule (le texte reste lu par les lecteurs d'écran). */
+@media screen and (max-width: 1279px) {
+  .save-ind:not(.save-ind-error) .save-ind-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+/* Sous 1100 px : un seul panneau à la fois (Éditer / Aperçu). Écran seulement :
+   à l'impression, la largeur de la page est aussi inférieure à 1100 px. */
+@media screen and (max-width: 1099px) {
+  .pane-switch {
+    display: flex;
+    gap: 3px;
+    margin: 10px 16px 0;
+    padding: 3px;
+    border: 1px solid var(--ui-border);
+    border-radius: 10px;
+    background: var(--ui-surface);
+  }
+
+  .pane-switch button {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 34px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--ui-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .pane-switch button.is-active {
+    background: var(--ui-accent-soft);
+    color: var(--ui-accent);
+  }
+
+  .main-layout {
+    padding-top: 10px;
+  }
+
+  .main-layout[data-pane='edit'] > .preview-pane,
+  .main-layout[data-pane='preview'] > .editor-pane,
+  .pane-resizer {
+    display: none;
+  }
+
+  .editor-pane {
+    flex: 1 1 auto;
+  }
+
+  /* Écran étroit : l'Apparence glisse par-dessus le contenu, à droite. */
+  .appearance-pane {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    z-index: 95;
+    width: min(360px, calc(100vw - 16px));
+    max-width: none;
+    box-shadow: var(--ui-shadow-lg);
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .toolbar {
+    margin: 8px 8px 0;
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .tb-label {
+    display: none;
+  }
+
+  .tb-start,
+  .tb-views {
+    flex: 1 1 100%;
+  }
+
+  .tb-view {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .tb-start .tb-dropdown {
+    flex: 1 1 auto;
+  }
+
+  .vm-trigger {
+    justify-content: flex-start;
+    width: 100%;
+    max-width: none;
+  }
+
+  .vm-trigger .tb-chevron {
+    margin-left: auto;
+  }
+
+  /* Icône et libellé court l'un sous l'autre : l'aide renvoie au « menu Fichier »,
+     à « IA → Traduire »… et un bouton réduit à une icône ne se devine pas au toucher. */
+  .tb-actions .tb-dropdown > .btn,
+  .tb-download,
+  .save-ind-ok {
+    flex-direction: column;
+    gap: 2px;
+    min-height: 40px;
+    padding: 3px 5px;
+  }
+
+  .tb-download-text {
+    display: none;
+  }
+
+  .tb-actions .tb-label,
+  .tb-download-short,
+  .save-ind-short {
+    display: block;
+    font-size: 0.64rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .tb-actions .tb-chevron {
+    display: none;
+  }
+
+  .tb-end {
+    gap: 4px;
+  }
+
+  .pane-switch {
+    margin: 8px 8px 0;
+  }
+
+  .main-layout {
+    padding: 8px;
+  }
+
+  .app-banner {
+    margin: 8px 8px 0;
+  }
+
+  .welcome-card {
+    padding: 24px 18px;
+  }
+
+  .welcome h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .tb-view svg {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "personalInfo": {
+    "name": "Sophie Laurent-Garnier",
+    "title": "Assistante commerciale",
+    "email": "sophie.laurent@exemple.fr",
+    "phone": "+33 6 98 76 54 32",
+    "location": "Nantes, France",
+    "photo": "",
+    "objective": "Assistante commerciale depuis six ans dans la distribution, j'accompagne les équipes de vente au quotidien : suivi des commandes, relation clients, préparation des salons et tableaux de bord. Rigoureuse et à l'écoute, je cherche à rejoindre une entreprise où je pourrai prendre davantage de responsabilités dans l'administration des ventes et la satisfaction client."
+  },
+  "mainSkills": [
+    { "category": "Ventes", "skills": ["Devis", "Facturation", "Relances", "Suivi des commandes", "CRM"] },
+    { "category": "Relation", "skills": ["Accueil", "Téléphone", "Réclamations", "Fidélisation", "Salons"] },
+    { "category": "Outils", "skills": ["Excel", "Word", "PowerPoint", "Sage", "Salesforce"] },
+    { "category": "Gestion", "skills": ["Plannings", "Stocks", "Inventaires", "Reporting", "Archivage"] },
+    { "category": "Langues", "skills": ["Anglais", "Espagnol", "Rédaction", "Synthèse", "Traduction"] },
+    { "category": "Qualités", "skills": ["Rigueur", "Écoute", "Autonomie", "Organisation", "Discrétion"] },
+    { "category": "Logistique", "skills": ["Livraisons", "Transporteurs", "Litiges", "Douanes", "Retours"] }
+  ],
+  "socialLinks": [
+    { "name": "Linkedin", "url": "https://www.linkedin.com/in/sophie-laurent-exemple", "label": "linkedin.com/in/sophie-laurent", "icon": "Link" },
+    { "name": "Github", "url": "https://github.com/sophie-exemple", "label": "github.com/sophie-exemple", "icon": "CodeXml" },
+    { "name": "Portfolio", "url": "https://sophie-laurent.exemple.fr", "label": "sophie-laurent.exemple.fr", "icon": "Globe" }
+  ],
+  "languages": [
+    { "name": "Anglais", "level": "Courant (C1)" },
+    { "name": "Espagnol", "level": "Intermédiaire (B1)" }
+  ],
+  "experiences": [
+    {
+      "title": "Assistante commerciale sédentaire",
+      "company": "Maison Bleu",
+      "location": "Nantes",
+      "period": "Mars 2021 - Aujourd'hui",
+      "details": [
+        "Gestion de 120 comptes clients professionnels : devis, commandes, facturation et relances, en lien direct avec quatre commerciaux terrain.",
+        "Mise en place d'un tableau de suivi des commandes sous Excel qui a réduit de moitié les retards de livraison signalés par les clients.",
+        "Organisation de la présence de l'entreprise sur trois salons professionnels par an : réservation, logistique et accueil sur le stand.",
+        "Traitement des réclamations et des retours, avec un taux de résolution sous 48 heures supérieur à 90 % depuis deux ans."
+      ]
+    },
+    {
+      "title": "Assistante administration des ventes",
+      "company": "Atelier Vert",
+      "location": "Rennes",
+      "period": "Sept. 2018 - Fév. 2021",
+      "details": [
+        "Saisie et suivi des commandes dans Sage, contrôle des prix et des remises avant validation par la direction commerciale.",
+        "Coordination avec les transporteurs et le service logistique pour les livraisons urgentes et la gestion des litiges.",
+        "Préparation des tableaux de bord mensuels des ventes pour le comité de direction.",
+        "Accueil téléphonique et orientation des clients vers les bons interlocuteurs."
+      ]
+    }
+  ],
+  "otherExperiences": [
+    {
+      "title": "Vendeuse en prêt-à-porter",
+      "company": "Boutique Les Galeries du Port, centre commercial de la ville",
+      "location": "Saint-Nazaire, Loire-Atlantique",
+      "period": "Juin 2016 - Août 2018",
+      "details": [
+        "Conseil et vente auprès d'une clientèle variée, encaissement et tenue de la caisse en fin de journée.",
+        "Réception des livraisons, mise en rayon et participation aux inventaires semestriels du magasin.",
+        "Mise en valeur des nouvelles collections en vitrine, en suivant les consignes de l'enseigne."
+      ]
+    },
+    {
+      "title": "Hôtesse d'accueil événementielle",
+      "company": "Agence Rivage Événements",
+      "location": "Nantes",
+      "period": "2015 - 2016",
+      "details": [
+        "Accueil et orientation des visiteurs lors de congrès et de salons.",
+        "Gestion des badges et des listes d'invités."
+      ]
+    },
+    {
+      "title": "Équipière polyvalente",
+      "company": "Restaurant Le Quai",
+      "location": "Nantes",
+      "period": "Été 2014",
+      "details": ["Service en salle et préparation des commandes à emporter."]
+    }
+  ],
+  "education": [
+    {
+      "title": "Assistante de gestion PME-PMI",
+      "school": "CCI Ouest",
+      "degree": "Titre RNCP de niveau 7 (bac+5)",
+      "period": "2019 - 2020"
+    },
+    {
+      "title": "BTS Négociation et relation client",
+      "school": "Lycée Gaspard",
+      "degree": "Brevet de technicien supérieur",
+      "period": "2014 - 2016",
+      "details": []
+    }
+  ],
+  "certifications": [
+    { "name": "Certificat Voltaire (orthographe)", "issuer": "Projet Voltaire", "date": "2022" },
+    { "name": "TOEIC 905 points", "issuer": "ETS Global", "date": "2021" }
+  ]
+}

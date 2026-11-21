@@ -1,0 +1,371 @@
+/* ── Modèle « Expert » (ResumeExpert.jsx) : un long parcours sur une colonne ─────────
+   S'appuie sur la base .resume-container de resume.css. Une seule colonne pleine largeur ;
+   dates et lieux dans une marge à gauche (--ex-gutter), pour lire la chronologie d'un coup d'œil.
+   Imprimé en mode « design » (pas de marge @page) : le padding du haut et du bas est répété sur
+   chaque page (box-decoration-break: clone), comme les colonnes du modèle Design.
+   --margin-scale et --spacing-scale : réglages Marges et Espacement (themeStyle). */
+
+.resume-container.resume-expert {
+  --m: var(--margin-scale, 1);
+  --s: var(--spacing-scale, 1);
+  --ex-gutter: 27mm;
+  --ex-gap: 5mm;
+  display: block;
+  padding: calc(12mm * var(--m)) calc(15mm * var(--m));
+  color: var(--text-ink);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ── En-tête : photo, nom, poste, sous-titre, coordonnées et liens ─────────────── */
+.resume-expert .ex-header {
+  display: flex;
+  align-items: center;
+  gap: 6mm;
+  margin-bottom: calc(5mm * var(--s));
+  padding-bottom: 4mm;
+  border-bottom: 2px solid var(--accent);
+  break-inside: avoid;
+}
+
+.resume-expert .ex-photo {
+  flex: 0 0 26mm;
+  width: 26mm;
+  height: 26mm;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.resume-expert .ex-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resume-expert .ex-identity {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.resume-expert h1 {
+  color: var(--text-dark);
+  font-size: calc(22pt * var(--font-scale));
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.resume-expert .ex-title {
+  margin-top: 1.5mm;
+  color: var(--accent-text);
+  font-size: calc(12.5pt * var(--font-scale));
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.resume-expert .ex-subtitle {
+  margin-top: 0.6mm;
+  color: var(--text-muted);
+  font-size: calc(10.5pt * var(--font-scale));
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.resume-expert .ex-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2mm 5mm;
+  margin-top: 3mm;
+  color: var(--text-body);
+  font-size: calc(9.5pt * var(--font-scale));
+  line-height: 1.35;
+}
+
+.resume-expert .ex-contact li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.6mm;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.resume-expert .ex-contact a {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.resume-expert .icon {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+  margin-top: 0.12em;
+  color: var(--accent);
+}
+
+/* Morceaux d'une URL ou d'une adresse (BreakableText, parts.jsx) : chacun reste entier s'il tient
+   sur la ligne ; plus large qu'elle, il se coupe au dernier caractère qui tient. */
+.resume-expert .break-seg,
+.resume-expert .break-chunk {
+  display: inline-block;
+  max-width: 100%;
+  line-break: anywhere;
+}
+
+/* ── Sections ─────────────────────────────────────────────────────────────── */
+.resume-expert .ex-section {
+  margin-bottom: calc(5mm * var(--s));
+}
+
+/* Pas de marge finale : elle pourrait déborder seule sur une page blanche. */
+.resume-expert .ex-section:last-child,
+.resume-expert .ex-entry:last-child,
+.resume-expert :is(ul, ol) > li:last-child {
+  margin-bottom: 0;
+}
+
+.resume-expert .ex-section > h2 {
+  margin-bottom: calc(2.8mm * var(--s));
+  padding-bottom: 1.2mm;
+  border-bottom: 1px solid #d1d5db;
+  color: var(--accent-text);
+  font-size: calc(11pt * var(--font-scale));
+  font-weight: 700;
+  line-height: 1.2;
+  /* Espacement modéré : au-delà, les extracteurs de texte lisent « P R OF IL » (vu sous Linux). */
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.resume-expert .ex-profile {
+  color: var(--text-ink);
+  font-size: calc(10.5pt * var(--font-scale));
+  line-height: 1.5;
+}
+
+/* Compétences clés : un bloc par catégorie, trois colonnes au plus (une seule catégorie prend
+   toute la largeur). */
+.resume-expert .ex-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(52mm, 1fr));
+  gap: calc(2.5mm * var(--s)) 6mm;
+}
+
+.resume-expert .ex-skill-group {
+  min-width: 0;
+  padding-left: 2.5mm;
+  border-left: 2px solid var(--accent);
+  break-inside: avoid;
+}
+
+.resume-expert .ex-skill-category {
+  margin-bottom: 0.6mm;
+  color: var(--text-dark);
+  font-size: calc(9.5pt * var(--font-scale));
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.resume-expert .ex-skill-list {
+  color: var(--text-body);
+  font-size: calc(9.5pt * var(--font-scale));
+  line-height: 1.4;
+}
+
+/* ── Éléments datés : la date dans la marge, le reste à droite ───────────────── */
+.resume-expert .ex-entry {
+  display: grid;
+  grid-template-columns: var(--ex-gutter) minmax(0, 1fr);
+  column-gap: var(--ex-gap);
+  margin-bottom: calc(3.5mm * var(--s));
+}
+
+.resume-expert .ex-entry.is-compact {
+  margin-bottom: calc(1.4mm * var(--s));
+}
+
+.resume-expert .ex-when {
+  grid-column: 1;
+  align-self: start;
+  padding-top: 0.35mm;
+  break-inside: avoid;
+}
+
+.resume-expert .ex-what {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.resume-expert .ex-period {
+  color: var(--text-muted);
+  font-size: calc(9.5pt * var(--font-scale));
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.resume-expert .ex-nobreak {
+  white-space: nowrap;
+}
+
+.resume-expert .ex-place {
+  margin-top: 0.5mm;
+  color: var(--text-light);
+  font-size: calc(9pt * var(--font-scale));
+  line-height: 1.3;
+}
+
+/* L'intitulé et l'organisme restent avec la première puce. */
+.resume-expert .ex-head {
+  break-inside: avoid;
+  break-after: avoid;
+}
+
+.resume-expert .ex-head h3 {
+  color: var(--text-dark);
+  font-size: calc(11pt * var(--font-scale));
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.resume-expert .ex-org {
+  color: var(--accent-text);
+  font-size: calc(10pt * var(--font-scale));
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.resume-expert .ex-org-extra {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.resume-expert .ex-bullets {
+  margin-top: 1.2mm;
+}
+
+.resume-expert .ex-bullets li {
+  position: relative;
+  margin-bottom: 0.8mm;
+  padding-left: 4mm;
+  color: var(--text-ink);
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.45;
+  break-inside: avoid;
+}
+
+/* Puce ronde de la couleur principale, centrée sur la première ligne. */
+.resume-expert .ex-bullets li::before {
+  content: '';
+  position: absolute;
+  top: calc(0.725em - 0.7mm);
+  left: 0.6mm;
+  width: 1.4mm;
+  height: 1.4mm;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.resume-expert .ex-line {
+  margin-top: 1mm;
+  color: var(--text-muted);
+  font-size: calc(9.5pt * var(--font-scale));
+  line-height: 1.4;
+}
+
+.resume-expert .ex-label {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.resume-expert .ex-program a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent-text);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.resume-expert .icon-inline {
+  flex-shrink: 0;
+  width: 1.05em;
+  height: 1.05em;
+}
+
+.resume-expert .ex-cert {
+  color: var(--text-ink);
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.4;
+}
+
+.resume-expert .ex-cert strong {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* Langues côte à côte, en colonnes alignées. */
+.resume-expert .ex-langs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52mm, 1fr));
+  gap: 1mm 6mm;
+  color: var(--text-ink);
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.4;
+}
+
+.resume-expert .ex-langs li {
+  break-inside: avoid;
+}
+
+.resume-expert .ex-langs strong {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* Section libre « sur une ligne » ou en texte simple. */
+.resume-expert :is(.ex-inline, .ex-text) {
+  color: var(--text-ink);
+  font-size: calc(10pt * var(--font-scale));
+  line-height: 1.45;
+}
+
+.resume-expert .ex-text {
+  break-inside: avoid;
+}
+
+.resume-expert .ex-text + .ex-text {
+  margin-top: 1mm;
+}
+
+/* ── Options de mise en page (Apparence) ─────────────────────────────────────── */
+/* En-tête centré : la photo au-dessus du nom, coordonnées centrées. */
+.resume-expert.is-header-centered .ex-header {
+  flex-direction: column;
+  gap: 3mm;
+  text-align: center;
+}
+
+.resume-expert.is-header-centered .ex-contact {
+  justify-content: center;
+}
+
+/* En-tête coloré : bandeau de la couleur principale jusqu'aux bords de la page (il déborde sur les
+   marges), texte blanc ou foncé selon la couleur. */
+.resume-expert.is-header-colored .ex-header {
+  margin: calc(-12mm * var(--m)) calc(-15mm * var(--m)) calc(6mm * var(--s));
+  padding: calc(10mm * var(--m)) calc(15mm * var(--m)) 7mm;
+  border-bottom: 0;
+  background: var(--primary-color);
+}
+
+.resume-expert.is-header-colored .ex-header :is(h1, .ex-title, .ex-subtitle, .ex-contact, .icon) {
+  color: var(--header-text);
+}
+
+/* Texte justifié : profil, puces et sections libres. */
+.resume-expert.is-justified :is(.ex-profile, .ex-bullets li, .ex-inline, .ex-text) {
+  text-align: justify;
+}

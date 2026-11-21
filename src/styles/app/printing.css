@@ -1,0 +1,31 @@
+/* ── Impression : seul le document (.print-area) sort ────────────────── */
+@media print {
+  .toolbar,
+  .pane-switch,
+  .app-banner,
+  .editor-pane,
+  .appearance-pane,
+  .pane-resizer,
+  .preview-toolbar,
+  .toast-stack,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  .app-container,
+  .main-layout,
+  .preview-pane,
+  .preview-scale {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}

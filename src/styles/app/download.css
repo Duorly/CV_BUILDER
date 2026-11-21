@@ -1,0 +1,143 @@
+/* ── Fenêtre « Télécharger » ─────────────────────────────────────────── */
+.dl-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dl-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 12px;
+  background: var(--ui-surface);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.dl-option:hover:not(:disabled) {
+  border-color: var(--ui-accent);
+  background: var(--ui-accent-soft);
+}
+
+.dl-option:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus);
+}
+
+.dl-option:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.dl-option[aria-busy='true'] {
+  opacity: 1;
+  cursor: progress;
+  border-color: var(--ui-accent);
+}
+
+.dl-option-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
+
+.dl-option-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  color: var(--ui-text);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.dl-option-desc {
+  display: block;
+  margin-top: 2px;
+  color: var(--ui-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.dl-option-pages {
+  display: block;
+  margin-top: 4px;
+  color: var(--ui-text-2);
+  font-weight: 600;
+}
+
+.dl-option-pages.is-warn {
+  color: var(--ui-warn-text);
+}
+
+.dl-option-file {
+  display: block;
+  margin-top: 4px;
+  color: var(--ui-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.dl-option-file code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  overflow-wrap: anywhere;
+}
+
+.dl-option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dl-option-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 10px;
+  margin: 0 2px;
+  color: var(--ui-muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.dl-help {
+  padding: 12px 14px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-surface-2);
+  color: var(--ui-text-2);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.dl-help ol {
+  margin: 6px 0 8px 20px;
+}
+
+.dl-help code {
+  padding: 1px 5px;
+  border: 1px solid var(--ui-border);
+  border-radius: 5px;
+  background: var(--ui-surface);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+
+.dl-option-note--warn {
+  color: var(--ui-warn-text);
+}

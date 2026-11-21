@@ -1,0 +1,16 @@
+/* ══ Interface de l'application (barre d'outils, panneaux, fenêtres) ═══════
+   Classes génériques utilisables par tous les lots : .btn…, .icon-btn,
+   .modal…, .field…, .input/.textarea/.select, .badge…, .empty-state.
+   Le CV et la lettre ont leurs propres feuilles (resume*.css, letter.css).
+   L'ordre des feuilles compte : les règles pour écrans étroits et pour l'impression
+   viennent après celles qu'elles adaptent. */
+
+@import './app/base.css';
+@import './app/layout.css';
+@import './app/toolbar.css';
+@import './app/appearance.css';
+@import './app/banners.css';
+@import './app/download.css';
+@import './app/screens.css';
+@import './app/responsive.css';
+@import './app/printing.css';

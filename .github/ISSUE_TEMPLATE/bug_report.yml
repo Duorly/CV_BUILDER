@@ -1,0 +1,56 @@
+name: Bug report / Signaler un problème
+description: Something does not work as expected. / Quelque chose ne fonctionne pas comme prévu.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! English or French are both fine.
+        Merci de signaler ce problème ! Vous pouvez écrire en français ou en anglais.
+
+        **Never paste real personal data** (your CV, e-mail, phone, API key) in an issue.
+        **Ne collez jamais de données personnelles** (votre CV, e-mail, téléphone, clé d'API) dans un ticket.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened? / Que s'est-il passé ?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce / Étapes pour reproduire
+      placeholder: |
+        1. Charger l'exemple
+        2. Apparence → modèle Classique
+        3. Télécharger → PDF design via l'impression
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area / Partie concernée
+      options:
+        - Editor / Éditeur
+        - Preview and templates / Aperçu et modèles
+        - PDF download or printing / Téléchargement ou impression du PDF
+        - Cover letter / Lettre de motivation
+        - Job tracker / Suivi des candidatures
+        - AI features / Fonctions d'IA
+        - Backup, import, export / Sauvegarde, import, export
+        - Other / Autre
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and system / Navigateur et système
+      placeholder: Chrome 142, macOS 26
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots, files, console errors / Captures, fichiers, erreurs
+      description: A screenshot or a CV export made with the fictional example (Charger l'exemple) helps a lot.

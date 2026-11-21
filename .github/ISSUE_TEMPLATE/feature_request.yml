@@ -1,0 +1,23 @@
+name: Feature request / Suggérer une idée
+description: Suggest an improvement or a new feature. / Proposer une amélioration ou une nouvelle fonction.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would it help with? / À quoi cela servirait-il ?
+      description: The situation or need behind the idea, from the point of view of someone writing a CV.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea / Votre idée
+      description: How it could work. Sketches and examples of other CVs are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives / Autres solutions
+      description: Anything you tried or considered instead.

@@ -1,0 +1,211 @@
+/* Écran d'accueil et écran de secours. */
+
+/* ── Écran d'accueil ─────────────────────────────────────────────────── */
+.welcome {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+.welcome-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 860px;
+  margin: auto;
+  padding: 36px 32px;
+  border: 1px solid var(--ui-border);
+  border-radius: 20px;
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow);
+}
+
+.welcome-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ui-accent);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.welcome h1 {
+  color: var(--ui-text);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.welcome-lead {
+  color: var(--ui-muted);
+  font-size: 1rem;
+}
+
+.welcome-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.welcome-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 14px;
+  background: var(--ui-surface);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+
+.welcome-choice:hover {
+  border-color: var(--ui-accent);
+  background: var(--ui-accent-soft);
+  transform: translateY(-1px);
+}
+
+.welcome-choice:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus);
+}
+
+.welcome-choice svg {
+  color: var(--ui-accent);
+}
+
+.welcome-choice strong {
+  color: var(--ui-text);
+  font-size: 0.98rem;
+}
+
+.welcome-choice span {
+  color: var(--ui-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.welcome-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--ui-ok-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-ok-soft);
+  color: var(--ui-text-2);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.welcome-safari {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.welcome-note svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--ui-ok);
+}
+
+/* ── Écran de secours (ErrorBoundary) ────────────────────────────────── */
+.crash-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 24px 16px;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+}
+
+.crash-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 620px;
+  padding: 28px;
+  border: 1px solid var(--ui-border);
+  border-radius: 18px;
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow);
+}
+
+.crash-card h1 {
+  color: var(--ui-text);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.crash-card p {
+  color: var(--ui-text-2);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.crash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.crash-actions button {
+  min-height: 34px;
+  padding: 7px 14px;
+  border: 1px solid var(--ui-border-strong);
+  border-radius: 8px;
+  background: var(--ui-surface);
+  color: var(--ui-text-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.crash-actions button:first-child {
+  border-color: var(--ui-accent);
+  background: var(--ui-accent);
+  color: #fff;
+}
+
+.crash-actions button:hover {
+  filter: brightness(0.96);
+}
+
+.crash-actions .crash-danger {
+  border-color: var(--ui-danger-border);
+  color: var(--ui-danger);
+}
+
+.crash-card details {
+  color: var(--ui-muted);
+  font-size: 0.78rem;
+}
+
+.crash-card summary {
+  cursor: pointer;
+}
+
+.crash-card pre {
+  max-height: 220px;
+  margin-top: 8px;
+  padding: 10px;
+  overflow: auto;
+  border-radius: 8px;
+  background: var(--ui-surface-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

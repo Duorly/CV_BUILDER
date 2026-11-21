@@ -1,0 +1,137 @@
+/* ── Bandeaux et messages ────────────────────────────────────────────── */
+.app-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 10px 16px 0;
+  padding: 10px 14px;
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.app-banner > svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.app-banner p {
+  flex: 1 1 320px;
+}
+
+.app-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-banner-warn {
+  border-color: var(--ui-warn-border);
+  background: var(--ui-warn-soft);
+  color: var(--ui-warn-text);
+}
+
+.app-banner-warn > svg {
+  color: var(--ui-warn);
+}
+
+.app-banner-info {
+  border-color: var(--ui-accent-border);
+  background: var(--ui-accent-soft);
+  color: var(--ui-text);
+}
+
+.app-banner-info > svg {
+  color: var(--ui-accent);
+}
+
+.toast-stack {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  z-index: 900; /* sous les fenêtres modales : un message ne cache jamais leurs boutons */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(560px, calc(100vw - 32px));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 10px 10px 14px;
+  border-radius: 12px;
+  background: #111827;
+  box-shadow: var(--ui-shadow-lg);
+  color: #f9fafb;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  pointer-events: auto;
+  animation: toast-in 0.18s ease-out;
+}
+
+.toast-icon {
+  flex: none;
+  margin-top: 2px;
+  color: #93c5fd;
+}
+
+.toast-success .toast-icon {
+  color: #34d399;
+}
+
+.toast-error {
+  background: #7f1d1d;
+}
+
+.toast-error .toast-icon {
+  color: #fca5a5;
+}
+
+.toast-message {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.toast-action {
+  flex: none;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: #93c5fd;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toast-close {
+  display: inline-flex;
+  flex: none;
+  padding: 3px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.toast-close:hover,
+.toast-action:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

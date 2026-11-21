@@ -1,0 +1,280 @@
+/* Structure de la page : éditeur, aperçu (zoom compris), panneau Apparence, poignées. */
+
+/* ── Structure de la page ────────────────────────────────────────────── */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+}
+
+.main-layout {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 16px;
+  min-height: 0;
+  padding: 12px 16px 16px;
+}
+
+.editor-pane {
+  display: flex;
+  flex-direction: column;
+  /* Largeur réglable avec la poignée (PaneResizer, PANES.editor dans paneWidth.js). */
+  flex: 0 1 var(--editor-width, 460px);
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Panneau Apparence, à droite de l'aperçu : largeur réglable avec sa poignée (PANES.appearance). */
+.appearance-pane {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 var(--appearance-width, 320px);
+  min-width: 0;
+  max-width: 640px;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--ui-border);
+  border-radius: 16px;
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow);
+  outline: none;
+}
+
+.appearance-pane:focus-visible {
+  box-shadow: var(--ui-focus);
+}
+
+.ap-pane-header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 10px 10px 16px;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+.ap-pane-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ui-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.ap-pane-title svg {
+  color: var(--ui-accent);
+}
+
+.ap-pane-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  padding: 14px 16px 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+
+/* Poignée de redimensionnement : elle occupe exactement l'espace entre l'éditeur et
+   l'aperçu (ses marges négatives annulent les deux gap qui l'entourent). */
+.pane-resizer {
+  position: relative;
+  flex: none;
+  width: 16px;
+  margin-inline: -16px;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+
+/* Trait sur toute la hauteur, visible au survol, au clavier et pendant le glissement */
+.pane-resizer::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background-color 0.15s;
+}
+
+/* Petite prise toujours visible : indique qu'on peut saisir la séparation */
+.pane-resizer::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 40px;
+  margin: -20px 0 0 -2px;
+  border-radius: 4px;
+  background: var(--ui-border-strong);
+  transition: background-color 0.15s, transform 0.15s;
+}
+
+.pane-resizer:hover::before,
+.pane-resizer.is-dragging::before {
+  background: var(--ui-accent-border);
+}
+
+.pane-resizer:hover::after,
+.pane-resizer.is-dragging::after {
+  background: var(--ui-accent);
+  transform: scaleY(1.2);
+}
+
+.pane-resizer:focus-visible::before {
+  background: var(--ui-accent);
+}
+
+.pane-resizer:focus-visible::after {
+  background: var(--ui-accent);
+  box-shadow: var(--ui-focus);
+}
+
+/* Pendant le glissement : même curseur partout, et pas de texte sélectionné au passage */
+html.is-resizing-panes,
+html.is-resizing-panes * {
+  cursor: col-resize !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Le panneau d'édition (éditeur du CV ou de la lettre) remplit la colonne et
+   défile seul, quelle que soit sa mise en forme d'origine. */
+.main-layout > .editor-pane > * {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  position: static;
+  overflow-y: auto;
+}
+
+/* Le document est centré tant qu'il tient ; zoomé au-delà de la colonne, il part du bord gauche
+   (« safe ») pour que le défilement horizontal en montre tout. */
+.preview-pane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: safe center;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 0 8px 24px;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+/* Écrans larges, panneaux côte à côte : chacun garde une largeur utilisable. Quand la place
+   manque (fenêtre réduite), l'éditeur et l'Apparence se resserrent avant l'aperçu. */
+@media screen and (min-width: 1100px) {
+  .editor-pane {
+    min-width: 360px; /* PANES.editor.min */
+  }
+
+  .preview-pane {
+    min-width: 360px; /* MIN_PREVIEW_WIDTH */
+  }
+
+  .appearance-pane {
+    min-width: 280px; /* PANES.appearance.min */
+  }
+}
+
+.preview-toolbar {
+  position: sticky;
+  top: 0;
+  left: 0; /* reste en place quand l'aperçu zoomé défile horizontalement */
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-self: stretch;
+  gap: 8px;
+  min-height: 40px;
+  padding: 4px 4px 8px;
+  background: var(--ui-bg);
+  font-size: 0.78rem;
+}
+
+.preview-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ui-warn);
+  font-weight: 600;
+}
+
+/* Zoom de l'aperçu : − / pourcentage / + et « Taille réelle » ou « Adapter » */
+.preview-zoom {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.preview-zoom .btn {
+  margin-left: 4px;
+}
+
+.preview-zoom-value {
+  min-width: 3.4em;
+  color: var(--ui-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.preview-scale {
+  flex: none;
+  width: max-content;
+}
+
+.tracker-pane {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.safe-boundary {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 520px;
+  margin: 24px auto;
+  padding: 16px 18px;
+  border: 1px solid var(--ui-warn-border);
+  border-radius: 12px;
+  background: var(--ui-warn-soft);
+  color: var(--ui-warn-text);
+  font-size: 0.88rem;
+}
+
+.safe-boundary svg {
+  flex: none;
+  color: var(--ui-warn);
+}
+
+.safe-boundary p {
+  margin: 4px 0 10px;
+}
+
+.pane-switch {
+  display: none;
+}
